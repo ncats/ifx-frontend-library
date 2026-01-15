@@ -5,14 +5,11 @@
     },
     {
       "url": "https://ramp-api-alpha.ncats.io"
-    },
-    {
-      "url": "http://127.0.0.1:5762"
     }
   ],
   "openapi": "3.1.0",
   "info": {
-    "description": "Relational Database of Metabolic Pathways (RaMP) API",
+    "description": "Relational Database of Metabolic Pathways (RaMP) API. Please note that this API is designed for testing the RaMP R package functionality, and is not designed for production or research usage. For that, we recommend installing and utilizing the RaMP R package.",
     "title": "RaMP API v1.0.1",
     "version": "1.0.1",
     "contact": {
