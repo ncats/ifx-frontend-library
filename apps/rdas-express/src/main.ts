@@ -36,17 +36,7 @@ const app = express();
 const httpServer = http.createServer(app);
 
 
-
-const environment = {
-  //MEMGRAPH_HOST: "mg-rdas-dev.ncats.nih.gov",
-  MEMGRAPH_HOST:  "bolt+ssc://10.198.34.81",
-  MEMGRAPH_PORT: 7687,
-  MEMGRAPH_USERNAME: "admin",
-  MEMGRAPH_KEY: "m3mgRapde5HPasswD",
-  MEMGRAPH_SCHEMA: "./assets/rdas-schema.graphql"
-};
-
-// function startSchema(instance) {
+function startSchema(instance) {
 console.log(typeDefs)
   const driver = neo4j.driver(
     environment.MEMGRAPH_HOST + ':' + environment.MEMGRAPH_PORT,
