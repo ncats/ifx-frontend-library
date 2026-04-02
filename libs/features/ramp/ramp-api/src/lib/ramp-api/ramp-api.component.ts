@@ -11,7 +11,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import SwaggerUI from 'swagger-ui';
+import { SwaggerUIBundle } from 'swagger-ui-dist';
 
 @Component({
   selector: 'lib-ramp-ramp-api',
@@ -32,7 +32,7 @@ export class RampApiComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.isBrowser()) {
-      SwaggerUI({
+      SwaggerUIBundle({
         url: this.url,
         domNode: this.el.nativeElement,
       });

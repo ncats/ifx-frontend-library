@@ -1,13 +1,10 @@
 .force-directed-graph {
   min-height: 75vh;
   height: 75vh;
+  overflow-y: hidden;
 }
 
 .graph-label-text {
   display: none;
   font-size: 0.25em;
-}
-
-line.edgeLinks.hoveredEdge {
-  opacity: 1;
 }

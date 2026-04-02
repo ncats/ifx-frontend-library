@@ -11,7 +11,7 @@ describe('ChartWrapperComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChartWrapperComponent, ],
+      imports: [ChartWrapperComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ChartWrapperComponent);

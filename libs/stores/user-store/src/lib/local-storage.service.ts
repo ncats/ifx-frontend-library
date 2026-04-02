@@ -2,7 +2,6 @@ import { isPlatformBrowser } from '@angular/common';
 import {
   computed,
   inject,
-  Inject,
   Injectable,
   InjectionToken,
   PLATFORM_ID,

@@ -1,0 +1,121 @@
+scalar JSON
+extend schema @mutation(operations: [])
+
+type ClinicalTrial @node {
+  lastKnownStatus: String
+  lastUpdatePostDateType: String
+  lastUpdatedRDAS: String
+  dateCreatedRDAS: String
+  lastUpdatePostDate: String
+  briefTitle: String
+  nctId: String
+  lastUpdateSubmitDate: String
+  officialTitle: String
+  phase: String
+  studyType: String
+  startDateType: String
+  completionDateType: String
+  resultsFirstPostDate: String
+  overallStatus: String
+  patientRegistry: String
+  primaryCompletionDate: String
+  primaryCompletionDateType: String
+  completionDate: String
+  briefSummary: String
+  resultsFirstPostDateType: String
+  resultsFirstPostedQCCommentsDate: String
+  startDate: String
+  hasAnnotation: [Annotation!]!
+    @relationship(type: "has_annotation", direction: OUT)
+  hasContact: [Agent!]! @relationship(type: "has_contact", direction: OUT)
+  hasInvestigator: [Agent!]!
+    @relationship(type: "has_investigator", direction: OUT)
+  hasStudyDesign: [StudyDesign!]!
+    @relationship(type: "has_study_design", direction: OUT)
+  hasIndividualPatientData: [IndividualPatientData!]!
+    @relationship(type: "has_individual_patient_data", direction: OUT)
+  hasIntervention: [Intervention!]!
+    @relationship(type: "has_intervention", direction: OUT)
+  hasPrimaryOutcome: [PrimaryOutcome!]!
+    @relationship(type: "has_primary_outcome", direction: OUT)
+  hasParticipant: [Participant!]!
+    @relationship(type: "has_participant", direction: OUT)
+  hasOrganization: [Organization!]!
+    @relationship(type: "has_associated_organization", direction: OUT)
+  hasTrialLocation: [Location!]!
+    @relationship(type: "has_trial_location", direction: OUT)
+  hasInvestigatedCondition: [Condition!]!
+    @relationship(type: "has_investigated_condition", direction: OUT)
+}
+
+type Query {
+  clinicalTrials: [ClinicalTrial]
+}
+
+type StudyDesign @node {
+  studyType: String
+  designPrimaryPurpose: String
+  hasExpandedAccess: String
+  designAllocation: String
+  designInterventionModel: String
+  designTimePerspective: String
+  designMasking: String
+  designInterventionModelDescription: String
+  designObservationalModel: String
+  detailedDescription: String
+}
+
+type IndividualPatientData @node {
+  ipdSharingAccessCriteria: String
+  ipdSharingTimeFrame: String
+  ipdSharingDescription: String
+  ipdSharingInfoType: String
+  ipdSharing: String
+}
+
+type Intervention @node {
+  _intervention_name_key: String
+  interventionDescription: String
+  interventionType: String
+  interventionName: String
+  _composite_key: String
+  hasDrug: [Drug!]! @relationship(type: "has_drug", direction: OUT)
+}
+
+type Drug @node {
+  vuid: String
+  usp: String
+  unii: String
+  tty: String
+  strength: String
+  splSetId: String
+  snomedCt: String
+  rxnormVetDrug: String
+  rxnavHumanDrug: String
+  quantity: String
+  prescribable: String
+  mmslCode: String
+  drugBank: String
+  availableStrength: String
+  RxCUI: String
+  rxnormID: String
+  rxnormName: String
+  atc: String
+  rxNormSynonym: String
+}
+
+type PrimaryOutcome @node {
+  primaryOutcomeMeasure: String
+  primaryOutcomeTimeFrame: String
+  primaryOutcomeDescription: String
+}
+
+type Participant @node {
+  enrollmentCount: String
+  healthyVolunteers: String
+  enrollmentType: String
+  maximumAge: String
+  stdAges: String
+  eligibilityCriteria: String
+  minimumAge: String
+}

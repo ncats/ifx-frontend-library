@@ -13,13 +13,13 @@
         <a
           class="mat-h1 disease-link"
           href="https://rarediseases.info.nih.gov/diseases/{{ parsedId() }}/{{
-            this.disease()?.name | lowercase
+            this.disease()?.gardName | lowercase
           }}"
           target="_blank"
           rel="noreferrer"
           aria-label="Link to GARD website"
           ><div class="disease-title">
-            {{ this.disease()?.name
+            {{ this.disease()?.gardName
             }}<mat-icon class="exit-disclaimer">open_in_new</mat-icon>
           </div></a
         >
@@ -27,7 +27,7 @@
       <div class="width-sm-5 width-15">
         <lib-subscribe-button
           class="subscribed-button"
-          [subscriptionName]="disease()?.name"
+          [subscriptionName]="disease()?.gardName"
           [subscriptionId]="disease()?.gardId"
         ></lib-subscribe-button>
       </div>

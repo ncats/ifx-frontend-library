@@ -22,9 +22,15 @@
         @if (results().noMatches && results().noMatches.length > 0) {
           <div class="row">
             <div class="width-95">
-              There were no matches for the following
-              {{ results()!.inputType }}:
-              {{ results()!.noMatches?.join(', ') }}
+              @if (results().noMatches.length === 1) {
+                There were no matches for the following
+                {{ getSingular(results()!.inputType!) }}:
+                {{ results()!.noMatches?.join(', ') }}
+              } @else {
+                There were no matches for the following
+                {{ results()!.inputType }}:
+                {{ results()!.noMatches?.join(', ') }}
+              }
             </div>
           </div>
         }

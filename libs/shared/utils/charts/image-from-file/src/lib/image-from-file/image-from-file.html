@@ -1,9 +1,14 @@
 @if(svg()) {
-<lib-image-download
-  [showTSV]="false"
-  [svg]="svgExport()"
-  [dataUrl]="dataUrl()"
-></lib-image-download>
+<div class="row space-between-row">
+  <div>
+    <button matButton="filled" (click)="resetScale()">Reset Zoom</button>
+  </div>
+  <lib-image-download
+    [showTSV]="false"
+    [svg]="svgExport()"
+    [dataUrl]="dataUrl()"
+  ></lib-image-download>
+</div>
 }
 <div #chartElement id="chartElement"></div>
 `

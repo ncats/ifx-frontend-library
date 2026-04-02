@@ -17,7 +17,7 @@ describe('DiseaseHeaderComponent', () => {
       imports: [
         MatIconModule,
         DiseaseHeaderComponent,
-        
+
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),

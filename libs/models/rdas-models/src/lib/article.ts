@@ -20,7 +20,7 @@ export class Article {
   annotations?: PubtatorAnnotation[];
   epidemiologies?: Epidemiology[];
   sources!: Source[];
-  substances?: { name: string }[];
+  // substances?: { name: string }[];
 
   constructor(obj: Partial<Article> = {}) {
     Object.assign(this, obj);
@@ -60,7 +60,7 @@ export class Article {
     if (obj.diseases) {
       this.diseases = obj.diseases
         .map((disease: Partial<Disease> = {}) => new Disease(disease))
-        .sort((a: Disease, b: Disease) => a.name.localeCompare(b.name));
+        .sort((a: Disease, b: Disease) => a.gardName.localeCompare(b.gardName));
     }
 
     if (obj.sources) {

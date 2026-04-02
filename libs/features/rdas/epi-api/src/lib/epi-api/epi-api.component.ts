@@ -11,7 +11,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import SwaggerUI from 'swagger-ui';
+import { SwaggerUIBundle } from 'swagger-ui-dist';
 
 @Component({
   selector: 'lib-epi-api',
@@ -32,7 +32,7 @@ export class EpiApiComponent {
   constructor() {
     afterNextRender(() => {
       if (this.isBrowser()) {
-        SwaggerUI({
+        SwaggerUIBundle({
           url: '/assets/epi-api/epi4rdas.json',
           domNode: this.el()?.nativeElement,
         });

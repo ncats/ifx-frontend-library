@@ -10,8 +10,8 @@ import { getTestBed } from '@angular/core/testing';
 import { FilterCategory } from 'utils-models';
 
 getTestBed().initTestEnvironment(
-    BrowserTestingModule,
-    platformBrowserTesting(),
+  BrowserTestingModule,
+  platformBrowserTesting(),
 );
 
 export const BARDATA: FilterCategory = new FilterCategory({

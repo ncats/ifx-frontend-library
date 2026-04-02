@@ -11,7 +11,7 @@ export class Disease {
   dataSourceId!: string;
   diseaseOntology?: string[];
   disorderType?: string[];
-  name!: string;
+  gardName!: string;
   gardId!: string;
   geneticAlliance?: string[];
   geneticsHomeReference?: string[];
@@ -28,29 +28,34 @@ export class Disease {
   allArticles?: Article[];
   epiArticles?: Article[];
   nhsArticles?: Article[];
+  countArticles = 0;
+  countTrials = 0;
+  countProjects = 0;
+  countGenes = 0;
+  countPhenotypes = 0;
   allEpiCount = 0; //todo need 2 counts to preserve counts in sidebar for filtering
   epiCount = 0;
   allArticleCount = 0;
-  articleCount = 0;
+  // articleCount = 0;
   allNhsCount = 0;
   nhsCount = 0;
   projects?: CoreProject[];
-  projectCount = 0;
+  //projectCount = 0;
   allProjectCount = 0;
   clinicalTrials?: ClinicalTrial[];
-  allClinicalTrialCount = 0;
-  clinicalTrialCount = 0;
+  // allClinicalTrialCount = 0;
+  // clinicalTrialCount = 0;
   geneAssociations?: GeneAssociation[];
   _geneAssociations?: { edges?: Partial<GeneAssociation>[] };
   phenotypeAssociations?: PhenotypeAssociation[];
   _phenotypeAssociations?: { edges?: Partial<PhenotypeAssociation>[] };
-  geneCount: number | undefined = 0;
-  phenotypeCount = 0;
+  // geneCount: number | undefined = 0;
+  // phenotypeCount = 0;
   parentId?: string;
-  _genesCount?: { count?: number; low: 0 };
-  _phenotypesCount?: { count: number; low: 0 };
+  // _genesCount?: { count?: number; low: 0 };
+  //  _phenotypesCount?: { count: number; low: 0 };
   _epiCount?: { count: number };
-  _allArticleCount?: { count: number };
+  // _allArticleCount?: { count: number };
   _nhsCount?: { count: number };
   _childrenCount?: { count?: number; low: 0 };
 
@@ -63,10 +68,10 @@ export class Disease {
       );
     }
 
-    if (obj._allArticleCount) {
+    /*  if (obj._allArticleCount) {
       this.allArticleCount = obj._allArticleCount.count;
       delete this._allArticleCount;
-    }
+    }*/
     if (obj.epiArticles) {
       this.epiArticles = obj.epiArticles.map(
         (article: Partial<Article> = {}) => new Article(article),
@@ -119,7 +124,7 @@ export class Disease {
       delete this._phenotypeAssociations;
     }
 
-    if (obj._genesCount && obj._genesCount.count) {
+    /*if (obj._genesCount && obj._genesCount.count) {
       this.geneCount = obj._genesCount.count;
       delete this._genesCount;
     }
@@ -127,7 +132,7 @@ export class Disease {
     if (obj._phenotypesCount && obj._phenotypesCount.count) {
       this.phenotypeCount = obj._phenotypesCount.count;
       delete this._phenotypesCount;
-    }
+    }*/
 
     if (obj.synonyms) {
       this.synonyms = [...new Set(obj.synonyms)];

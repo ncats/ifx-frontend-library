@@ -7,7 +7,10 @@
 dist.zip
 *.bk
 #environments
+apps/rdas-express/.env*
 apps/ramp-client/src/environments/*.ts
+apps/ramp-client/src/environments/environment.prod.ts
+apps/ramp-client/src/environments/environment.ts
 /apps/rdas/src/environments/
 /apps/resolver/src/environments/
 apps/rdas/src/environments/environment.ts
@@ -63,5 +66,5 @@ Thumbs.db
 .git
 *.git/
 apps/rdas-e2e
-
+.env*
 vitest.config.*.timestamp*

@@ -24,7 +24,8 @@ export class SharedUtilsSelectedFilterListComponent {
   filterChange = output<{ label: string; values: string[] }[]>();
 
   removeFilterFamily(family: string): void {
-    this.filters()?.set(family, []);
+    this.filters()?.delete(family);
+
     this.filterChange.emit(this._flattenMap());
   }
 
@@ -32,7 +33,7 @@ export class SharedUtilsSelectedFilterListComponent {
     const vals = this.filters()
       ?.get(label)
       ?.filter((val) => val !== value);
-    if (vals && vals.length) {
+    if (vals && vals.length > 0) {
       this.filters()?.set(label, vals);
     } else {
       this.removeFilterFamily(label);

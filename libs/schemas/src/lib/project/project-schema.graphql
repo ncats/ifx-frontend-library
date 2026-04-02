@@ -1,0 +1,52 @@
+scalar JSON
+extend schema @mutation(operations: [])
+
+type CoreProject @node {
+  coreProjectNumber: String
+  totalCost: String
+  applicationId: String
+  hasPublishedArticle: [Article!]!
+    @relationship(type: "has_published_article", direction: OUT)
+  hasFundingOrganization: [Organization!]!
+    @relationship(type: "has_funding_organization", direction: OUT)
+  hasPatent: [Patent!]! @relationship(type: "has_patent", direction: OUT)
+  hasContact: [Agent!]! @relationship(type: "has_contact", direction: OUT)
+  hasInvestigator: [Agent!]!
+    @relationship(type: "has_investigator", direction: OUT)
+  hasClinicalStudy: [ClinicalStudy!]!
+    @relationship(type: "has_clinical_study", direction: OUT)
+  hasSubproject: [Project!]!
+    @relationship(type: "has_subproject", direction: OUT)
+}
+
+type Project @node {
+  fundingMechanism: String
+  supportYear: String
+  serialNumber: String
+  coreProjectNumber: String
+  applicationType: String
+  activity: String
+  cfdaCode: String
+  totalCost: String
+  terms: String
+  fundingYear: String
+  fullProjectNumber: String
+  applicationId: String
+  abstract: String
+  title: String
+  dateCreatedRDAS: String
+  phr: String
+  studySectionName: String
+  studySection: String
+  foaNumber: String
+  hasAnnotation: [Annotation!]!
+    @relationship(type: "has_annotation", direction: OUT)
+}
+
+type ClinicalStudy @node {
+  id: String
+}
+
+type Patent @node {
+  id: String
+}

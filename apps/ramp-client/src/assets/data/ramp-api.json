@@ -60,7 +60,7 @@
     },
     {
       "name": "identifier-harmonization",
-      "description": "Uses MetLinkR R package to automatically cross-link metabolite identifiers across multiple studies and attribute them a common name. MetLinkR runs in minutes and allows for simultaneous querying of 6 commonly reported identifier types. It is recommended that users inspect outputs to ensure that mappings maintain the desired level of chemical structural resolution.",
+      "description": "Uses MetLinkR R package to automatically cross-link metabolite identifiers across multiple studies and attribute them a common name. MetLinkR runs in minutes and allows for simultaneous querying of 6 commonly reported identifier types (HMDB id, KEGG id, LIPIDMAPS id, Chebi id, common name, PubChem id). It is recommended that users inspect outputs to ensure that mappings maintain the desired level of chemical structural resolution. All uploaded files are deleted after completion.",
       "sections": ["identifier-harmonization"]
     },
     {
@@ -307,7 +307,6 @@
       "post": {
         "tags": ["biochemical-pathways"],
         "summary": "Get Pathways From Input Analytes",
-        "x-section-title": "pathways-from-analytes",
         "x-allowedTypes": {
           "metabolites": [
             "CAS",
@@ -368,7 +367,6 @@
       "post": {
         "tags": ["biochemical-pathways"],
         "summary": "Retrieve Analytes From Input Pathways",
-        "x-section-title": "analytes-from-pathways",
         "responses": {
           "200": {
             "description": "OK"
@@ -438,8 +436,8 @@
     "/api/pathway-enrichment": {
       "post": {
         "tags": ["biochemical-pathways"],
-        "x-section-title": "biochemical-pathway-analysis",
         "x-subsections": [
+          "custom-background",
           "filter-enrichment-results",
           "cluster-enrichment-results"
         ],
@@ -495,6 +493,7 @@
                   },
                   "background": {
                     "type": "string",
+                    "hidden": true,
                     "enum": [
                       "Blood",
                       "Adipose",
@@ -508,17 +507,18 @@
                     ],
                     "label": "Background Biospecimen",
                     "description": "For analyses with metabolites only as input: select tissue-specific background to be used for enrichment analyses.  All RaMP metabolites are used as default.",
-                    "required": false,
-                    "filter": true
+                    "required": false
                   },
                   "backgroundFile": {
                     "label": "Custom Background",
+                    "hidden": true,
                     "description": "Supply excel file containing custom pathway definitions. Pathways should be defined in the GMX format. GMX files contain one analyte set per column, with the name of the set in the first row, and constituent analytes in subsequent rows. The first sheet of the excel file should contain metabolite pathway definitions, while the second sheet should contain gene pathway definitions. Take care to ensure that analyte identifiers used to define pathways are the same as the identifiers used in the dataset.",
                     "type": "string",
                     "format": "binary"
                   },
                   "dataSourceExclusion": {
                     "type": "array",
+                    "hidden": true,
                     "items": {
                       "type": "string"
                     },
@@ -533,8 +533,8 @@
                       "pfocr",
                       "refmet"
                     ],
-                    "label": "Excluded Data Sources",
-                    "description": "An optional list of data sources to exclude (removing pfocr can streamline the enrichment clusters)"
+                    "label": "Exclude Data Sources",
+                    "description": "Select sources to exclude from analysis"
                   }
                 },
                 "example": {
@@ -562,7 +562,8 @@
                     "hmdb:HMDBP00283",
                     "hmdb:HMDBP00284",
                     "hmdb:HMDBP00850"
-                  ]
+                  ],
+                  "dataSourceExclusion": ["pfocr"]
                 }
               }
             }
@@ -1292,6 +1293,7 @@
         "requestBody": {
           "description": "Filter Pathway Enrichment. This is primarily used after running `combined-fisher-test` as the required input is the output from that call.",
           "required": true,
+          "filter": true,
           "content": {
             "application/json": {
               "schema": {
@@ -1749,6 +1751,7 @@
         "requestBody": {
           "description": "Cluster Pathway Enrichment. This is primarily used after running `combined-fisher-test` or `filter-fisher-test` as the required input is the output from that call. Uses the findCluster agglomerative clustering method from the R package (see documentation for more details).",
           "required": true,
+          "filter": true,
           "content": {
             "application/json": {
               "schema": {
@@ -2181,8 +2184,7 @@
     "/api/identifier-harmonization": {
       "post": {
         "tags": ["identifier-harmonization"],
-        "x-section-title": "identifier-harmonization",
-        "x-HTMLDescription": "The R package and vignette are open-source and freely available at our <a href= 'https://github.com/ncats/MetLinkR' target='_blank'> GitHub site</a>.",
+        "x-HTMLDescription": "The R package and vignette are open-source and freely available at our <a href= 'https://github.com/ncats/MetLinkR' target='_blank'> GitHub site</a>,  and are described in this <a href= 'https://pmc.ncbi.nlm.nih.gov/articles/PMC12053952/' target='_blank'>publication</a>.",
         "summary": "Run MetLinkr Identifier Harmonization",
         "responses": {
           "200": {
@@ -2222,6 +2224,85 @@
                   }
                 },
                 "example": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/custom-background": {
+      "post": {
+        "summary": "Add a custom background for enrichment",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "deprecated": true,
+        "requestBody": {
+          "description": "Add a custom background for enrichment. *** Note: this is not a separate API call, it is used in tandem with enrichment analysis",
+          "filter": false,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "background": {
+                    "type": "string",
+                    "enum": [
+                      "Blood",
+                      "Adipose",
+                      "Heart",
+                      "Urine",
+                      "Brain",
+                      "Liver",
+                      "Kidney",
+                      "Saliva",
+                      "Feces"
+                    ],
+                    "label": "Background Biospecimen",
+                    "description": "For analyses with metabolites only as input: select tissue-specific background to be used for enrichment analyses.  All RaMP metabolites are used as default.",
+                    "required": false
+                  },
+                  "backgroundFile": {
+                    "label": "Custom Background",
+                    "description": "Supply excel file containing custom pathway definitions. Pathways should be defined in the GMX format. GMX files contain one analyte set per column, with the name of the set in the first row, and constituent analytes in subsequent rows. The first sheet of the excel file should contain metabolite pathway definitions, while the second sheet should contain gene pathway definitions. Take care to ensure that analyte identifiers used to define pathways are the same as the identifiers used in the dataset.",
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "dataSourceExclusion": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "enum": [
+                      "hmdb",
+                      "reactome",
+                      "wiki",
+                      "kegg",
+                      "chebi",
+                      "lipidmaps",
+                      "rhea",
+                      "pfocr",
+                      "refmet"
+                    ],
+                    "label": "Exclude Data Sources",
+                    "description": "Select sources to exclude from analysis"
+                  }
+                },
+                "example": {
+                  "dataSourceExclusion": ["pfocr"]
+                }
               }
             }
           }

@@ -19,11 +19,11 @@
       (optionSelected)="selectDisease($event)"
       class="custom-autocomplete-panel"
     >
-      @for (option of options(); track option.name) {
+      @for (option of options(); track option.gardName) {
         <mat-option [value]="option" class="dynamic-height">
           <span
             class="main-value"
-            [innerHTML]="option.name | highlight: searchFormCtl.value"
+            [innerHTML]="option.gardName | highlight: searchFormCtl.value"
           ></span
           ><br />
           @if (option.synonyms && option.synonyms.length) {
@@ -37,7 +37,12 @@
         </mat-option>
       }
     </mat-autocomplete>
-    <button matSuffix mat-icon-button aria-label="search">
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="search"
+      (click)="searchString()"
+    >
       <mat-icon>search</mat-icon>
     </button>
   </mat-form-field>

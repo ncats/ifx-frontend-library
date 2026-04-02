@@ -2,7 +2,7 @@
   position: absolute;
   top: 5vh;
   right: 2vw;
-  min-width: 20vw;
+  width: 40vw;
   background-color: #ffffff;
   border-radius: 4px;
   z-index: 1;
@@ -16,11 +16,6 @@
 .small-legend {
   width: 20vw;
   height: 25vh;
-}
-
-.table-legend {
-  width: 40vw;
-  height: 95%;
 }
 
 .legend-circle {

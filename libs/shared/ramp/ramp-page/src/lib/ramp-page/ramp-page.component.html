@@ -68,9 +68,7 @@
       </mat-card>
     </div>
   </div>
-  <div class="row space-around-row">
-    <div class="width-95">
-      <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
-    </div>
+  <div class="padded-body">
+    <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
   </div>
 </div>

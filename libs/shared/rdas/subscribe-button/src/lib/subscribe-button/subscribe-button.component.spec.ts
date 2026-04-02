@@ -27,7 +27,7 @@ describe('SubscribeButtonComponent', () => {
         MatCheckboxModule,
         MatIconModule,
         MatButtonModule,
-        
+
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),

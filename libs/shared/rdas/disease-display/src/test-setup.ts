@@ -8,10 +8,9 @@ import {
 import { getTestBed } from '@angular/core/testing';
 
 getTestBed().initTestEnvironment(
-    BrowserTestingModule,
-    platformBrowserTesting(),
+  BrowserTestingModule,
+  platformBrowserTesting(),
 );
-
 
 export const SUBSCRIPTIONLISTMOCK = {
   subscriptions: [

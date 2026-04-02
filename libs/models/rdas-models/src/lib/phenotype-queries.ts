@@ -1,37 +1,22 @@
-
 import { gql } from 'apollo-angular';
+import { RdasQueryParams } from './rdas-utils';
 
-export const PHENOTYPEFILTERPARAMETERS: {
-  skip?: number;
-  limit?: number;
-  term?: string;
-  terms?: string[];
-} = {
-  skip: 0,
+export const PHENOTYPEFILTERPARAMETERS: RdasQueryParams = {
+  offset: 0,
   limit: 200,
-  term: '""',
-  terms: [],
 };
 
 export const PHENOTYPEFILTERS = gql`
   query PhenotypeFilters(
-    $skip: Int
+    $offset: Int
     $limit: Int
-    $term: String
-    $terms: [String]
+    $sort: [PhenotypeSort!]
+    $where: PhenotypeWhere
   ) {
-    searchFilters: phenotypeSearch(skip: $skip, limit: $limit, term: $term) {
-      term
-      count
-    }
-    selectedFilters: phenotypeFilteredCounts(terms: $terms) {
-      term
-      count
-    }
-    allFilters: phenotypeCounts(skip: $skip, limit: $limit, terms: $terms) {
-      term
-      count
+    phenotypes(limit: $limit, offset: $offset, sort: $sort, where: $where) {
+      hpoId
+      term: hpoTerm
+      count: countDiseases
     }
   }
 `;
-

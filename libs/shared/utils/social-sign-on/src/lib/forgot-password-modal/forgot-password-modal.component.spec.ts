@@ -25,7 +25,7 @@ describe('ForgotPasswordModalComponent', () => {
         MatInputModule,
         MatIconModule,
         MatButtonModule,
-        
+
         StoreModule.forRoot({}),
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],

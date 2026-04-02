@@ -28,7 +28,7 @@
           <br />
         }
       </mat-tab>
-      <mat-tab label="Hierarchy">
+      <!-- <mat-tab label="Hierarchy">
         <ng-template matTabContent>
           @if (diseaseTree()) {
             <lib-tree-chart
@@ -36,17 +36,17 @@
               [data]="diseaseTree()"
             >
             </lib-tree-chart>
-            <!-- <lib-rdas-tree
+           <lib-rdas-tree
             (leafExpand)="treeExpand($event)"
             [data]="diseaseTree()"
-          ></lib-rdas-tree>-->
+          ></lib-rdas-tree>
           }
         </ng-template>
-      </mat-tab>
+      </mat-tab>-->
     </mat-tab-group>
   </mat-sidenav>
   <mat-sidenav-content class="drawer-container-content">
-    @if (!filtersidenav.opened) {
+    <!--    @if (!filtersidenav.opened) {
       <div class="row">
         <button
           mat-stroked-button
@@ -57,8 +57,8 @@
           Filters <mat-icon>filter_list</mat-icon>
         </button>
       </div>
-    }
-    <div class="row space-around-row top-align">
+    }-->
+    <!--    <div class="row space-around-row top-align">
       @if (!mobileQuery.matches) {
         @if (filterMap() && filterMap().has('articles')) {
           <div class="width-30">
@@ -88,13 +88,12 @@
           </div>
         }
       }
-    </div>
+    </div>-->
     <br />
     <lib-shared-utils-selected-filter-list
       [filters]="selectedValues"
       (filterChange)="filterSelectionChange($event)"
     ></lib-shared-utils-selected-filter-list>
-
     <div class="row space-between-row">
       <div>
         <mat-form-field
@@ -107,12 +106,12 @@
             (selectionChange)="changeSort($event)"
             [value]="this.sort"
           >
-            <mat-option [value]="'COUNT_ARTICLES'">Articles</mat-option>
-            <mat-option [value]="'COUNT_PROJECTS'">Projects</mat-option>
-            <mat-option [value]="'COUNT_TRIALS'">Clinical Trials</mat-option>
-            <mat-option [value]="'COUNT_GENES'">Genes</mat-option>
-            <mat-option [value]="'COUNT_PHENOTYPES'">Phenotypes</mat-option>
-            <mat-option [value]="'GardName'">Name (A-Z)</mat-option>
+            <mat-option [value]="'countArticles'">Articles</mat-option>
+            <mat-option [value]="'countProjects'">Projects</mat-option>
+            <mat-option [value]="'countTrials'">Clinical Trials</mat-option>
+            <mat-option [value]="'countGenes'">Genes</mat-option>
+            <mat-option [value]="'countPhenotypes'">Phenotypes</mat-option>
+            <mat-option [value]="'gardName'">Name (A-Z)</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

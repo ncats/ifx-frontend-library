@@ -10,8 +10,8 @@ import { CoreProject } from 'rdas-models';
 import { getTestBed } from '@angular/core/testing';
 
 getTestBed().initTestEnvironment(
-    BrowserTestingModule,
-    platformBrowserTesting(),
+  BrowserTestingModule,
+  platformBrowserTesting(),
 );
 
 export const PROJECTMOCK: CoreProject = new CoreProject({

@@ -1,6 +1,7 @@
+/*
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { ApolloQueryResult } from '@apollo/client';
+import { ObservableQuery } from '@apollo/client';
 import {
   CoreProject,
   FETCHGRANTDETAILS,
@@ -16,7 +17,9 @@ import {
   FetchProjectActions,
   FetchProjectsListActions,
 } from './grants.actions';
+*/
 
+/*
 export const fetchProject$ = createEffect(
   (actions$ = inject(Actions), projectService = inject(GrantService)) => {
     return actions$.pipe(
@@ -35,7 +38,7 @@ export const fetchProject$ = createEffect(
         return projectService
           .fetchProjects(FETCHGRANTDETAILS, GRANTDETAILSVARIABLES)
           .pipe(
-            map((projectData: ApolloQueryResult<unknown>) => {
+            map((projectData: ObservableQuery.Result<unknown>) => {
               const data: { coreProjects: CoreProject[] } =
                 projectData.data as {
                   coreProjects: CoreProject[];
@@ -76,7 +79,7 @@ export const fetchProjectList$ = createEffect(
         return projectService
           .fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES)
           .pipe(
-            map((projectsData: ApolloQueryResult<unknown>) => {
+            map((projectsData: ObservableQuery.Result<unknown>) => {
               const projects: {
                 coreProjects: CoreProject[];
                 count: number;
@@ -119,3 +122,4 @@ function _setProjectsOptions(options: {
     PROJECTVARIABLES.offset = <number>options['offset'] * 1;
   }
 }
+ */

@@ -6,8 +6,7 @@ import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig(() => ({
   root: __dirname,
-  cacheDir:
-    '../../../../node_modules/.vite/libs/features/rdas/history-api',
+  cacheDir: '../../../../node_modules/.vite/libs/features/rdas/history-api',
   plugins: [angular(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
   // Uncomment this if you are using workers.
   // worker: {
@@ -22,8 +21,7 @@ export default defineConfig(() => ({
     setupFiles: ['src/test-setup.ts'],
     reporters: ['default'],
     coverage: {
-      reportsDirectory:
-        '../../../../coverage/libs/features/rdas/history-api',
+      reportsDirectory: '../../../../coverage/libs/features/rdas/history-api',
       provider: 'v8' as const,
     },
   },

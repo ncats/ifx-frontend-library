@@ -59,7 +59,9 @@ export class UserService {
   doEmailLogin(email: string, pw: string) {
     const auth: Auth = getAuth();
     return from(
-      signInWithEmailAndPassword(auth, email, pw).catch((error) => error),
+      signInWithEmailAndPassword(auth, email, pw).catch(
+        (error: Error) => error,
+      ),
     );
   }
 
@@ -77,14 +79,11 @@ export class UserService {
     const auth: Auth = getAuth();
     return from(
       sendPasswordResetEmail(auth, email, this.actionCodeSettings).catch(
-        (error) => error,
+        (error: Error) => error,
       ),
     );
   }
 
-  /**
-   * logout user, remove profile via profile service
-   */
   logout() {
     const auth: Auth = getAuth();
     signOut(auth).then(() => {
@@ -92,10 +91,6 @@ export class UserService {
     });
   }
 
-  /**
-   * get profile of user
-   * @param user
-   */
   createUserProfile(user: User) {
     const docRef = doc(this.firestore, 'users', user.uid);
     setDoc(docRef, { ...user });
@@ -112,8 +107,8 @@ export class UserService {
     const docRef = doc(this.firestore, 'users', user.uid);
     return from(getDoc(docRef));
   }
-
-  /*  /!**
+  /*
+  /!**
      * handle errors, if there are multiple accounts, or popups are blocked
      * @param error
      *!/
@@ -178,9 +173,7 @@ export class UserService {
           return '123456789'
         }*!/
     }
-
-  }*/
-
+    */
   getErrorMesssage(code: string): string {
     switch (code) {
       case 'auth/user-not-found': {

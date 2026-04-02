@@ -22,9 +22,9 @@ type Gene @node {
   geneUrl: String
   reference: [String!]
   diseaseAssociatedWithGene: [Disease!]!
-  @relationship(
-    type: "associated_with_gene"
-    direction: IN
-    properties: "AssociatedWithGeneProperties"
-  )
-  }
+    @relationship(
+      type: "associated_with_gene"
+      direction: IN
+      properties: "AssociatedWithGeneProperties"
+    )
+}

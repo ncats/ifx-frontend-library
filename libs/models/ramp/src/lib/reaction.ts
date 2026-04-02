@@ -89,6 +89,7 @@ export class CommonAnalyte extends RampDataGeneric {
     super();
 
     if (obj['input_analyte']) {
+      this.id = <string>obj['input_analyte'];
       this.inputAnalyte = <string>obj['input_analyte'];
     }
 
@@ -101,7 +102,6 @@ export class CommonAnalyte extends RampDataGeneric {
     }
 
     if (obj['input_common_name']) {
-      this.id = <string>obj['input_common_name'];
       this.inputCommonName = <string>obj['input_common_name'];
     }
 

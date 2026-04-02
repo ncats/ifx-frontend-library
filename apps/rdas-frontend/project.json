@@ -1,0 +1,127 @@
+{
+  "name": "rdas-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "rdas",
+  "sourceRoot": "apps/rdas-frontend/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/rdas-frontend",
+        "browser": "apps/rdas-frontend/src/main.ts",
+        "tsConfig": "apps/rdas-frontend/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/rdas-frontend/src/favicon.ico",
+          "apps/rdas-frontend/src/assets",
+          {
+            "input": "libs/shared/utils/social-sign-on/src/assets",
+            "glob": "**/*",
+            "output": "assets/social-sign-on"
+          },
+          {
+            "input": "libs/shared/utils/external-link/src/assets",
+            "glob": "**/*",
+            "output": "assets/external-link"
+          },
+          {
+            "input": "libs/features/rdas/rdas-home/src/assets",
+            "glob": "**/*",
+            "output": "assets/rdas-home"
+          },
+          {
+            "input": "libs/features/rdas/rdas-about/src/assets",
+            "glob": "**/*",
+            "output": "assets/rdas-about"
+          },
+          {
+            "input": "libs/features/rdas/epi-api/src/assets",
+            "glob": "**/*",
+            "output": "assets/epi-api"
+          },
+          {
+            "input": "libs/features/rdas/history-api/src/assets",
+            "glob": "**/*",
+            "output": "assets/history-api"
+          },
+          {
+            "input": "libs/shared/rdas/disease-display/src/assets",
+            "glob": "**/*",
+            "output": "assets/disease-display"
+          },
+          {
+            "input": "libs/shared/utils/charts/bar-chart/src/assets/placeholders",
+            "glob": "**/*",
+            "output": "assets/charts/placeholders"
+          },
+          {
+            "input": "libs/shared/utils/charts/pie-chart/src/assets/placeholders",
+            "glob": "**/*",
+            "output": "assets/charts/placeholders"
+          }
+        ],
+        "styles": ["apps/rdas-frontend/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/styles/src/styles"]
+        },
+        "server": "apps/rdas-frontend/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/rdas-frontend/src/server.ts"
+        },
+        "outputMode": "server"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "rdas-frontend:build:production"
+        },
+        "development": {
+          "buildTarget": "rdas-frontend:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "rdas-frontend:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/rdas-frontend/browser",
+        "spa": true
+      }
+    }
+  }
+}

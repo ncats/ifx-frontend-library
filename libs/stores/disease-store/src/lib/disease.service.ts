@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { ApolloQueryResult, DocumentNode } from '@apollo/client';
+import { ObservableQuery, DocumentNode } from '@apollo/client';
 import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
+import { DiseaseWhereParams } from 'rdas-models';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +12,9 @@ export class DiseaseService {
 
   fetchDiseases(
     query: DocumentNode,
-    variables: { [key: string]: unknown } | undefined,
-  ): Observable<ApolloQueryResult<unknown>> {
+    variables: DiseaseWhereParams,
+  ): Observable<ObservableQuery.Result<unknown>> {
     return this.apollo
-      .use('diseases')
       .watchQuery({
         query,
         variables,
@@ -24,7 +24,6 @@ export class DiseaseService {
 
   fetchArticles(query: DocumentNode, variables: object = {}) {
     return this.apollo
-      .use('articles')
       .watchQuery({
         query,
         variables,
@@ -34,7 +33,6 @@ export class DiseaseService {
 
   fetchTrials(query: DocumentNode, variables: object = {}) {
     return this.apollo
-      .use('trials')
       .watchQuery({
         query,
         variables,
@@ -44,7 +42,6 @@ export class DiseaseService {
 
   fetchProjects(query: DocumentNode, variables: object = {}) {
     return this.apollo
-      .use('projects')
       .watchQuery({
         query,
         variables,

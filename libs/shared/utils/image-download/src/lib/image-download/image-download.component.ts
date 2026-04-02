@@ -1,11 +1,11 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
   inject,
   input,
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,7 @@ import { GenericChartComponent } from 'generic-chart';
   templateUrl: './image-download.component.html',
   styleUrl: './image-download.component.scss',
   standalone: true,
+  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageDownloadComponent {
@@ -123,7 +124,9 @@ export class ImageDownloadComponent {
     element.insertBefore(styleElement, refNode);
   }
 
-  svgString2Image(svgString = '', width = 1000, height = 1000) {
+  svgString2Image(svgString = '') {
+    const width = this.svg().getBoundingClientRect().width;
+    const height = this.svg().getBoundingClientRect().height;
     const imgsrc =
       'data:image/svg+xml;base64,' +
       btoa(unescape(encodeURIComponent(svgString))); // Convert SVG string to data URL

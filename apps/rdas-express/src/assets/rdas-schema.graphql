@@ -1,23 +1,156 @@
 scalar JSON
 extend schema @mutation(operations: [])
 
+type Agent @node {
+  _idx_key: String
+  contactEmail: String
+  orc_id: String
+  lastName: String
+  fullName: String
+  firstName: String
+  pi_id: String
+  hasAffiliation: [Organization!]!
+    @relationship(type: "has_organization", direction: OUT)
+}
+
+type Annotation @node {
+  umlsCui: String
+  umlsConcept: String
+  semanticTypes: String
+  semanticTypeNames: String
+  semanticTypesNames: String
+}
+
+type Article @node {
+  abstractText: String
+  volume: String
+  pubmedId: String
+  publicationYear: String
+  pubType: String
+  lastUpdatedDateByRDAS: String
+  isEpidemiologicalStudy: String
+  inEPMC: String
+  dateCreatedByRDAS: String
+  fullTextUrls: String
+  isOpenAccess: String
+  hasPDF: String
+  citationCount: String
+  issue: String
+  firstPublicationDate: String
+  inPMC: String
+  isNaturalHistoryStudy: String
+  doi: String
+  title: String
+  hasKeyword: [Keyword!]! @relationship(type: "has_keyword", direction: OUT)
+  hasOMIMReference: [OMIMRef!]!
+    @relationship(type: "has_omim_reference", direction: OUT)
+  hasEpidemiologyAnnotation: [EpidemiologyAnnotation!]!
+    @relationship(type: "has_epidemiology_annotation", direction: OUT)
+  hasMeshTerm: [MeshTerm!]! @relationship(type: "has_mesh_term", direction: OUT)
+
+  hasPubtatorAnnotation: [PubtatorAnnotation!]!
+    @relationship(type: "has_pubtator_annotation", direction: OUT)
+  hasAuthor: [Agent!]! @relationship(type: "has_author", direction: OUT)
+  hasAnnotatedSubstance: [Substance!]!
+    @relationship(type: "has_annotated_substance", direction: OUT)
+  hasJournal: [Journal!]! @relationship(type: "has_journal", direction: OUT)
+}
+
 type AssociatedWithGeneProperties @relationshipProperties {
   associationStatus: String
   associationType: String
   reference: [String!]
 }
 
+type ClinicalStudy @node {
+  id: String
+}
+
+type ClinicalTrial @node {
+  lastKnownStatus: String
+  lastUpdatePostDateType: String
+  lastUpdatedRDAS: String
+  dateCreatedRDAS: String
+  lastUpdatePostDate: String
+  briefTitle: String
+  nctId: String
+  lastUpdateSubmitDate: String
+  officialTitle: String
+  phase: String
+  studyType: String
+  startDateType: String
+  completionDateType: String
+  resultsFirstPostDate: String
+  overallStatus: String
+  patientRegistry: String
+  primaryCompletionDate: String
+  primaryCompletionDateType: String
+  completionDate: String
+  briefSummary: String
+  resultsFirstPostDateType: String
+  resultsFirstPostedQCCommentsDate: String
+  startDate: String
+  hasAnnotation: [Annotation!]!
+    @relationship(type: "has_annotation", direction: OUT)
+  hasContact: [Agent!]! @relationship(type: "has_contact", direction: OUT)
+  hasInvestigator: [Agent!]!
+    @relationship(type: "has_investigator", direction: OUT)
+  hasStudyDesign: [StudyDesign!]!
+    @relationship(type: "has_study_design", direction: OUT)
+  hasIndividualPatientData: [IndividualPatientData!]!
+    @relationship(type: "has_individual_patient_data", direction: OUT)
+  hasIntervention: [Intervention!]!
+    @relationship(type: "has_intervention", direction: OUT)
+  hasPrimaryOutcome: [PrimaryOutcome!]!
+    @relationship(type: "has_primary_outcome", direction: OUT)
+  hasParticipant: [Participant!]!
+    @relationship(type: "has_participant", direction: OUT)
+  hasOrganization: [Organization!]!
+    @relationship(type: "has_associated_organization", direction: OUT)
+  hasTrialLocation: [Location!]!
+    @relationship(type: "has_trial_location", direction: OUT)
+  hasInvestigatedCondition: [Condition!]!
+    @relationship(type: "has_investigated_condition", direction: OUT)
+}
+
+type Condition @node {
+  condition: String
+}
+
+type CoreProject @node {
+  coreProjectNumber: String
+  totalCost: String
+  applicationId: String
+  hasPublishedArticle: [Article!]!
+    @relationship(type: "has_published_article", direction: OUT)
+  hasFundingOrganization: [Organization!]!
+    @relationship(type: "has_funding_organization", direction: OUT)
+  hasPatent: [Patent!]! @relationship(type: "has_patent", direction: OUT)
+  hasContact: [Agent!]! @relationship(type: "has_contact", direction: OUT)
+  hasInvestigator: [Agent!]!
+    @relationship(type: "has_investigator", direction: OUT)
+  hasClinicalStudy: [ClinicalStudy!]!
+    @relationship(type: "has_clinical_study", direction: OUT)
+  hasSubproject: [Project!]!
+    @relationship(type: "has_subproject", direction: OUT)
+}
+
 type Disease @node {
   classificationLevel: [String!]
+  countArticles: Int!
+  countTrials: Int!
+  countProjects: Int
+  countGenes: Int!
+  countPhenotypes: Int!
   disorderType: [String!]
   gardId: String!
   gardName: String!
   icd10cm: [String!]
   mesh: [String!]
-  omim: [String!]
-  orphanet: [String!]
+  omim: String
+  orphanet: String
   synonyms: [String!]
-  umls: [String!]
+  umls: String!
   doid: [String!]
   ncit: [String!]
   sctid: [String!]
@@ -25,23 +158,67 @@ type Disease @node {
   medGen: String
   omimps: String
   diseaseType: String
-  associatedWithGeneGenes: [Gene!]!
-  @relationship(
-    type: "associated_with_gene"
-    direction: OUT
-    properties: "AssociatedWithGeneProperties"
-  )
-  diseaseSubClassOf: [Disease!]! @relationship(type: "subClassOf", direction: IN)
-  hasPhenotypePhenotypes: [Phenotype!]!
-  @relationship(
-    type: "has_phenotype"
-    direction: OUT
-    properties: "HasPhenotypeProperties"
-  )
-  subClassOfDisease: [Disease!]! @relationship(type: "subClassOf", direction: OUT)
+  diseaseSubClassOf: [Disease!]!
+    @relationship(type: "subclass_of", direction: IN)
+  subClassOfDisease: [Disease!]!
+    @relationship(type: "subclass_of", direction: OUT)
+  hasAssociatedGene: [Gene!]!
+    @relationship(
+      type: "has_associated_gene"
+      direction: OUT
+      properties: "AssociatedWithGeneProperties"
+    )
+
+  hasPhenotype: [Phenotype!]!
+    @relationship(
+      type: "has_phenotype"
+      direction: OUT
+      properties: "HasPhenotypeProperties"
+    )
+  hasClinicalTrial: [ClinicalTrial!]!
+    @relationship(type: "has_clinical_trial", direction: OUT)
+  hasMappedCondition: [Condition!]!
+    @relationship(type: "has_mapped_condition", direction: OUT)
+  hasMentionIn: [Article!]!
+    @relationship(type: "has_mention_in", direction: OUT)
+}
+
+type Drug @node {
+  vuid: String
+  usp: String
+  unii: String
+  tty: String
+  strength: String
+  splSetId: String
+  snomedCt: String
+  rxnormVetDrug: String
+  rxnavHumanDrug: String
+  quantity: String
+  prescribable: String
+  mmslCode: String
+  drugBank: String
+  availableStrength: String
+  RxCUI: String
+  rxnormID: String
+  rxnormName: String
+  atc: String
+  rxNormSynonym: String
+}
+
+type EpidemiologyAnnotation @node {
+  lastUpdatedByRDAS: String
+  sex: String
+  studyDate: String
+  epidemiologyRate: String
+  ethnicity: String
+  studyLocation: String
+  epidemiologyType: String
+  _composite_key: String
+  dateCreatedByRDAS: String
 }
 
 type Gene @node {
+  countDiseases: Int!
   geneIdentifier: String
   geneSymbol: String
   geneSynonyms: [String!]
@@ -56,28 +233,167 @@ type Gene @node {
   geneUrl: String
   reference: [String!]
   diseaseAssociatedWithGene: [Disease!]!
-  @relationship(
-    type: "associated_with_gene"
-    direction: IN
-    properties: "AssociatedWithGeneProperties"
-  )
-  }
+    @relationship(
+      type: "associated_with_gene"
+      direction: IN
+      properties: "AssociatedWithGeneProperties"
+    )
+}
 
 type HasPhenotypeProperties @relationshipProperties {
-Evidence: String
-HPOFrequency: String
-Reference: [String!]
-ValidationStatus: Boolean
+  Evidence: String
+  HPOFrequency: String
+  Reference: [String!]
+  ValidationStatus: Boolean
+}
+
+type IndividualPatientData @node {
+  ipdSharingAccessCriteria: String
+  ipdSharingTimeFrame: String
+  ipdSharingDescription: String
+  ipdSharingInfoType: String
+  ipdSharing: String
+}
+
+type Intervention @node {
+  _intervention_name_key: String
+  interventionDescription: String
+  interventionType: String
+  interventionName: String
+  _composite_key: String
+  hasDrug: [Drug!]! @relationship(type: "has_drug", direction: OUT)
+}
+
+type Journal @node {
+  nlmid: String
+  essn: String
+  issn: String
+  title: String
+}
+
+type Keyword @node {
+  keyword: String
+}
+
+type Location @node {
+  zip: String
+  country: String
+  facility: String
+  city: String
+  _idx_key: String
+  address: String
+  state: String
+}
+
+type MeshTerm @node {
+  meshTerm: String
+}
+
+type OMIMRef @node {
+  omimName: String
+  omimSections: String
+  omimId: String
+  lastUpdatedByRDAS: String
+  _composite_key: String
+  dateCreatedByRDAS: String
+}
+
+type Organization @node {
+  _idx_key: String
+  name: String
+  hasLocation: [Location!]! @relationship(type: "has_location", direction: OUT)
+}
+
+type Participant @node {
+  enrollmentCount: String
+  healthyVolunteers: String
+  enrollmentType: String
+  maximumAge: String
+  stdAges: String
+  eligibilityCriteria: String
+  minimumAge: String
+}
+
+type Patent @node {
+  id: String
 }
 
 type Phenotype @node {
-hpoId: String
-hpoTerm: String
-diseaseHasPhenotype: [Disease!]!
-@relationship(
-type: "has_phenotype"
-direction: IN
-properties: "HasPhenotypeProperties"
-)
+  countDiseases: Int!
+  hpoId: String
+  hpoTerm: String
+  diseaseHasPhenotype: [Disease!]!
+    @relationship(
+      type: "has_phenotype"
+      direction: IN
+      properties: "HasPhenotypeProperties"
+    )
 }
 
+type Project @node {
+  fundingMechanism: String
+  supportYear: String
+  serialNumber: String
+  coreProjectNumber: String
+  applicationType: String
+  activity: String
+  cfdaCode: String
+  totalCost: String
+  terms: String
+  fundingYear: String
+  fullProjectNumber: String
+  applicationId: String
+  abstract: String
+  title: String
+  dateCreatedRDAS: String
+  phr: String
+  studySectionName: String
+  studySection: String
+  foaNumber: String
+  hasAnnotation: [Annotation!]!
+    @relationship(type: "has_annotation", direction: OUT)
+}
+
+type PubtatorAnnotation @node {
+  annotation: String
+  annotationType: String
+  annotationIdentifier: String
+  lastUpdatedByRDAS: String
+  _composite_key: String
+  dateCreatedByRDAS: String
+}
+
+type PrimaryOutcome @node {
+  primaryOutcomeMeasure: String
+  primaryOutcomeTimeFrame: String
+  primaryOutcomeDescription: String
+}
+
+type StudyDesign @node {
+  studyType: String
+  designPrimaryPurpose: String
+  hasExpandedAccess: String
+  designAllocation: String
+  designInterventionModel: String
+  designTimePerspective: String
+  designMasking: String
+  designInterventionModelDescription: String
+  designObservationalModel: String
+  detailedDescription: String
+}
+
+type Substance @node {
+  registryNumber: String
+}
+
+type Query {
+  diseaseSearch(searchString: String, limit: Int): [Disease]
+    @cypher(
+      statement: """
+      CALL text_search.search_all("name_and_synonyms", $searchString)
+      YIELD node, score
+      RETURN node ORDER BY score DESC, node.countArticles DESC limit $limit
+      """
+      columnName: "node"
+    )
+}

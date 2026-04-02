@@ -8,7 +8,7 @@ describe('SharedUtilsFilterPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ SharedUtilsFilterPanelComponent],
+      imports: [SharedUtilsFilterPanelComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUtilsFilterPanelComponent);

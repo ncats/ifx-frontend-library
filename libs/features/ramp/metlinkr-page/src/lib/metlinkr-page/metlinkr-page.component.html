@@ -26,7 +26,7 @@
           <h3>{{ paths()![0].properties[1]['label'] }}</h3>
           <lib-dnd-file-upload
             (selectedFiles)="setManifestFile($event)"
-            [label]="'optional manifest'"
+            [label]="'manifest'"
           ></lib-dnd-file-upload>
           <div class="help-text">
             {{ paths()![0].properties[1]['description'] }}
@@ -42,14 +42,14 @@
         <div class="width-5">
           <button
             mat-flat-button
-            (click)="submit()"
+            (click)="submitData()"
             [disabled]="!files().length || !manifestFile()"
           >
             Submit
           </button>
         </div>
       </div>
-      @if (ManifestFormMap().size) {
+      <!--  @if (ManifestFormMap().size) {
         <div class="row space-between-row">
           <div class="width-20">
             <h2>Edit Manifest</h2>
@@ -73,7 +73,7 @@
             ></lib-ifx-form>
           }
         </div>
-      }
+      }-->
     </mat-tab>
   </mat-tab-group>
 }

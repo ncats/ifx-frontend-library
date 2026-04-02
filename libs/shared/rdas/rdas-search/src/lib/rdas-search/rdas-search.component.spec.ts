@@ -19,7 +19,7 @@ describe('RdasSearchComponent', () => {
       declarations: [],
       imports: [
         RdasSearchComponent,
-        
+
         MatFormFieldModule,
         ReactiveFormsModule,
         MatInputModule,

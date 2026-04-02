@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ApolloQueryResult, DocumentNode } from '@apollo/client';
+import { ObservableQuery, DocumentNode } from '@apollo/client';
 import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
 
@@ -12,9 +12,8 @@ export class FilterService {
   fetchDiseases(
     query: DocumentNode,
     variables: object = {},
-  ): Observable<ApolloQueryResult<unknown>> {
+  ): Observable<ObservableQuery.Result<unknown>> {
     return this.apollo
-      .use('diseases')
       .watchQuery({
         query,
         variables,

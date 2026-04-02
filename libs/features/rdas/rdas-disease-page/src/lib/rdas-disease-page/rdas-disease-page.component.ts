@@ -1,11 +1,3 @@
-import {
-  animate,
-  group,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ScrollDispatcher, ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule, ViewportScroller } from '@angular/common';
@@ -52,7 +44,7 @@ import { Store } from '@ngrx/store';
   selector: 'lib-rdas-disease-page',
   templateUrl: './rdas-disease-page.component.html',
   styleUrls: ['./rdas-disease-page.component.scss'],
-  animations: [
+  /*   animations: [
     trigger('followOnScroll', [
       state('in', style({ top: '30vh' })),
       state(
@@ -64,7 +56,7 @@ import { Store } from '@ngrx/store';
       transition('in => out', [group([animate('200ms ease-out')])]),
       transition('out => in', [group([animate('200ms ease-in')])]),
     ]),
-  ],
+  ], */
   encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule,

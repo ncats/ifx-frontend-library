@@ -21,7 +21,6 @@ describe('DiseaseDisplayComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        
         MatTabsModule,
         MatCardModule,
         MatIconModule,
