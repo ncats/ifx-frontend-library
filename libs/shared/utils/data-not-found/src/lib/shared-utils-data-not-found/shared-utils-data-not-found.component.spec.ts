@@ -13,7 +13,7 @@ describe('SharedUtilsDataNotFoundComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         SharedUtilsDataNotFoundComponent,
-        
+
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),

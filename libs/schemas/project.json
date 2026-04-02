@@ -13,7 +13,7 @@
         "main": "libs/schemas/src/index.ts",
         "tsConfig": "libs/schemas/tsconfig.lib.json",
         "assets": ["libs/schemas/*.md"],
-        "format": ["cjs"],
+        "format": ["esm"],
         "generatePackageJson": true
       }
     }

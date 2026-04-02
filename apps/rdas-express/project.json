@@ -23,35 +23,17 @@
         "production": {
           "optimization": true,
           "extractLicenses": true,
-          "inspect": false,
-          "fileReplacements": [
-            {
-              "replace": "apps/rdas-express/src/environments/environment.ts",
-              "with": "apps/rdas-express/src/environments/environment.prod.ts"
-            }
-          ]
+          "inspect": false
         },
         "testenv": {
           "optimization": true,
           "extractLicenses": true,
-          "inspect": false,
-          "fileReplacements": [
-            {
-              "replace": "apps/rdas-express/src/environments/environment.ts",
-              "with": "apps/rdas-express/src/environments/environment.ci.ts"
-            }
-          ]
+          "inspect": false
         },
         "local": {
           "optimization": true,
           "extractLicenses": true,
-          "inspect": false,
-          "fileReplacements": [
-            {
-              "replace": "apps/rdas-express/src/environments/environment.ts",
-              "with": "apps/rdas-express/src/environments/environment.local.ts"
-            }
-          ]
+          "inspect": false
         }
       }
     },
@@ -64,8 +46,8 @@
         "production": {
           "buildTarget": "rdas-express:build:production"
         },
-        "testenv": {
-          "buildTarget": "rdas-express:build:testenv"
+        "development": {
+          "buildTarget": "rdas-express:build:development"
         },
         "local": {
           "buildTarget": "rdas-express:build:local"

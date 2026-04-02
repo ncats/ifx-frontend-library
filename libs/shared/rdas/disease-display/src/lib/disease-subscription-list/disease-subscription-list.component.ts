@@ -34,7 +34,7 @@ export class DiseaseSubscriptionListComponent {
       const diseaseArr: Disease[] = [];
       subscriptions.forEach((sub) => {
         diseaseArr.push(
-          new Disease({ gardId: sub.gardID, name: sub.diseaseName }),
+          new Disease({ gardId: sub.gardID, gardName: sub.diseaseName }),
         );
         this.diseases = signal<Disease[]>(diseaseArr);
       });

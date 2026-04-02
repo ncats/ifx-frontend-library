@@ -13,4 +13,12 @@ import { QueryResultsData } from 'utils-models';
 })
 export class ResultsPanelComponent {
   results = input<QueryResultsData>(new QueryResultsData());
+
+  getSingular(value: string) {
+    if (value === 'ontologies') {
+      return 'ontology';
+    } else {
+      return value.slice(0, value.length - 1);
+    }
+  }
 }

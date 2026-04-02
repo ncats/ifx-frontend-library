@@ -17,7 +17,7 @@ export class ForceDirectedGraphService {
   @Output() nodeClicked = new EventEmitter<GraphNode | null>();
 
   customComponent?: InjectionToken<string>;
-  analyteData = signal<
+  inputData = signal<
     | { data: { [key: string]: DataProperty }[]; fields: DataProperty[] }
     | undefined
   >(undefined);

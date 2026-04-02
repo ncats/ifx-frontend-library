@@ -11,7 +11,7 @@ describe('ProjectListCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [ ProjectListCardComponent],
+      imports: [ProjectListCardComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProjectListCardComponent);

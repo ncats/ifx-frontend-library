@@ -8,7 +8,7 @@ describe('MobileHeaderTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ MobileHeaderTemplateComponent],
+      imports: [MobileHeaderTemplateComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MobileHeaderTemplateComponent);

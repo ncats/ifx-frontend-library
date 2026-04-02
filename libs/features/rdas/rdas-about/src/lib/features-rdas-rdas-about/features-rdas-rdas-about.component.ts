@@ -35,7 +35,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   ],
   templateUrl: './features-rdas-rdas-about.component.html',
   styleUrls: ['./features-rdas-rdas-about.component.scss'],
-  encapsulation: ViewEncapsulation.None,
   standalone: true,
 })
 export class FeaturesRdasRdasAboutComponent implements OnInit {

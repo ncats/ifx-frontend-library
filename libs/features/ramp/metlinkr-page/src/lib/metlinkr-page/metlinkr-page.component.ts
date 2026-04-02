@@ -14,7 +14,6 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
 import { DialogModalComponent } from 'dialog-modal';
 import { DndFileUploadComponent } from 'dnd-file-upload';
-import { IfxFormComponent } from 'ifx-form';
 import { QuestionBase, TextboxQuestion } from 'ifx-form-question';
 import { FormSubsection } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
@@ -81,7 +80,6 @@ class ManifestQuestionsService {
     MatTabLabel,
     MatIcon,
     FormsModule,
-    IfxFormComponent,
     MatButton,
     DndFileUploadComponent,
   ],
@@ -123,6 +121,12 @@ export class MetlinkrPageComponent
     this.store.select(RampSelectors.getMetlinkrStatus).subscribe((res) => {
       if (res == true) {
         this.dialog.closeAll();
+        this.dialog.open(DialogModalComponent, {
+          data: {
+            title: 'Mapping Complete',
+            message: 'Output file downloaded.',
+          },
+        });
       }
     });
   }
@@ -144,7 +148,7 @@ export class MetlinkrPageComponent
   }
 
   submit() {
-    const manifest = Array.from(this.formMap.values()).map((form) => {
+    /*    const manifest = Array.from(this.formMap.values()).map((form) => {
       return form.getRawValue() as ManifestRow;
     });
     if (manifest.length !== this.files().length) {
@@ -176,9 +180,9 @@ export class MetlinkrPageComponent
           },
         });
       }
-    } else {
-      this.submitData();
-    }
+    } else {*/
+    this.submitData();
+    // }
   }
 
   private _createManifestForm() {
@@ -288,11 +292,11 @@ export class MetlinkrPageComponent
     return this.sanitizer.bypassSecurityTrustHtml(string);
   }
 
-  private submitData() {
+  protected submitData() {
     this.store.dispatch(
       IdentifierHarmonizationActions.runIdentifierHarmonization({
         files: this.files() as File[],
-        manifest: this.formMapToCSVFile(),
+        manifest: this.manifestFile() as File, //this.formMapToCSVFile(),
       }),
     );
     this.dialog.open(DialogModalComponent, {

@@ -1,32 +1,15 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Params } from '@angular/router';
-import { ApolloQueryResult } from '@apollo/client';
+import { ObservableQuery } from '@apollo/client';
 import {
   Article,
   ClinicalTrial,
   CoreProject,
   Disease,
   DiseaseNode,
-  DISEASEQUERYPARAMETERS,
-  DISEASETYPEAHEAD,
-  FETCHDISEASEQUERY,
-  PROJECTVARIABLES,
-  FETCHTRIALSVARIABLES,
-  EPIARTICLES,
-  DISEASELIST,
-  ARTICLEFILTERS,
-  PROJECTFILTERS,
-  ALLARTICLEFILTERS,
-  ALLPROJECTFILTERS,
-  ALLTRIALFILTERS,
-  TRIALTYPEFILTERS,
-  TRIALSTATUSFILTERS,
-  TRIALPHASEFILTERS,
-  ALLARTICLES,
   DiseaseQueryFactory,
-  FETCHROOT,
-  FETCHPATH,
-  CATEGORYTREEBRANCH,
+  DISEASETYPEAHEAD,
+  DiseaseWhereParams,
 } from 'rdas-models';
 import { Filter, FilterCategory, Page } from 'utils-models';
 import { Store } from '@ngrx/store';
@@ -34,7 +17,15 @@ import { DiseaseService } from '../disease.service';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import { combineLatest, filter, map, mergeMap, switchMap, take } from 'rxjs';
+import {
+  combineLatest,
+  filter,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  take,
+} from 'rxjs';
 import {
   BrowseDiseaseListActions,
   FetchDiseaseActions,
@@ -61,9 +52,8 @@ export const fetchDiseasesList$ = createEffect(
       switchMap((params: Params) => {
         const queryFactory = new DiseaseQueryFactory();
         const query = queryFactory.getQuery(params);
-
         return diseaseService.fetchDiseases(query.query, query.params).pipe(
-          map((res: ApolloQueryResult<unknown>) => {
+          map((res: ObservableQuery.Result<unknown>) => {
             const data: {
               diseases: Disease[];
               total: { count: number } | number;
@@ -75,6 +65,7 @@ export const fetchDiseasesList$ = createEffect(
               const diseaseArr: Disease[] = data.diseases.map(
                 (obj: Partial<Disease>) => new Disease(obj),
               );
+              console.log(diseaseArr);
               return BrowseDiseaseListActions.fetchDiseaseListSuccess({
                 diseases: diseaseArr,
                 page: _makePage(params, data.total),
@@ -97,23 +88,60 @@ export const fetchDiseaseListFromIds$ = createEffect(
     return actions$.pipe(
       ofType(FetchDiseaseListActions.fetchDiseaseList),
       mergeMap((action: { gardIds: string[] }) => {
+        const queryFactory = new DiseaseQueryFactory();
+        const query = queryFactory.getQuery(action);
+        return diseaseService.fetchDiseases(query.query, query.params).pipe(
+          map((res: ObservableQuery.Result<unknown>) => {
+            const data: { diseases: DiseaseNode[] } = res.data as {
+              diseases: DiseaseNode[];
+            };
+            if (data) {
+              const diseaseArr: Disease[] = data.diseases.map(
+                (obj: Partial<Disease>) => new Disease(obj),
+              );
+              return FetchDiseaseListActions.fetchDiseaseListSuccess({
+                diseases: diseaseArr,
+              });
+            } else
+              return FetchDiseaseListActions.fetchDiseaseListFailure({
+                error: 'No Disease found',
+              });
+          }),
+        );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+//disease search typeahead
+export const searchDiseases$ = createEffect(
+  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
+    return actions$.pipe(
+      ofType(SearchDiseasesActions.searchDiseases),
+      mergeMap((action: { term: string }) => {
         return diseaseService
-          .fetchDiseases(DISEASELIST, { where: { GardId_IN: action.gardIds } })
+          .fetchDiseases(DISEASETYPEAHEAD, {
+            searchString: action.term, //.split(' ').join('~ AND ') + '*',
+            limit: 10,
+          } as DiseaseWhereParams)
           .pipe(
-            map((res: ApolloQueryResult<unknown>) => {
-              const data: { diseases: DiseaseNode[] } = res.data as {
-                diseases: DiseaseNode[];
+            map((res: ObservableQuery.Result<unknown>) => {
+              console.log(res);
+              const data: { diseaseSearch: Disease[] } = res.data as {
+                diseaseSearch: Disease[];
               };
               if (data) {
-                const diseaseArr: Disease[] = data.diseases.map(
+                const diseaseArr = data.diseaseSearch.map(
                   (obj: Partial<Disease>) => new Disease(obj),
                 );
-                return FetchDiseaseListActions.fetchDiseaseListSuccess({
-                  diseases: diseaseArr,
+                console.log(diseaseArr);
+                return SearchDiseasesActions.searchDiseasesSuccess({
+                  typeahead: diseaseArr,
                 });
               } else
-                return FetchDiseaseListActions.fetchDiseaseListFailure({
-                  error: 'No Disease found',
+                return SearchDiseasesActions.searchDiseasesFailure({
+                  error: 'No Diseases found',
                 });
             }),
           );
@@ -122,7 +150,7 @@ export const fetchDiseaseListFromIds$ = createEffect(
   },
   { functional: true },
 );
-
+/*
 // bar and pie charts
 export const loadStaticDiseaseFilters$ = createEffect(
   (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
@@ -165,11 +193,11 @@ export const loadStaticDiseaseFilters$ = createEffect(
               trialStatusFilterData,
               trialPhaseFilterData,
             ]: [
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
             ]) => {
               if (
                 articleFilterData ||
@@ -195,7 +223,7 @@ export const loadStaticDiseaseFilters$ = createEffect(
                       trialsByPhase: phaseData.data.trialsByPhase,
                     },
                   },
-                } as ApolloQueryResult<unknown>;
+                } as ObservableQuery.Result<unknown>;
                 const filters = _parseFilterResponse(
                   articleFilterData,
                   projectFilterData,
@@ -269,11 +297,11 @@ export const loadDiseaseFilters$ = createEffect(
               trialStatusFilterData,
               trialPhaseFilterData,
             ]: [
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
             ]) => {
               if (
                 articleFilterData ||
@@ -299,7 +327,7 @@ export const loadDiseaseFilters$ = createEffect(
                       trialsByPhase: phaseData.data.trialsByPhase,
                     },
                   },
-                } as ApolloQueryResult<unknown>;
+                } as ObservableQuery.Result<unknown>;
                 const filters = _parseFilterResponse(
                   articleFilterData,
                   projectFilterData,
@@ -365,7 +393,7 @@ export const loadDisease$ = createEffect(
         return diseaseService
           .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
           .pipe(
-            map((diseaseData: ApolloQueryResult<unknown>) => {
+            map((diseaseData: ObservableQuery.Result<unknown>) => {
               if (diseaseData && diseaseData.data) {
                 const diseaseObj: Disease = _makeDiseaseObj(diseaseData);
                 return FetchDiseaseActions.fetchDiseaseSuccess({
@@ -383,41 +411,9 @@ export const loadDisease$ = createEffect(
   { functional: true },
 );
 
-//disease search typeahead
-export const searchDiseases$ = createEffect(
-  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
-    return actions$.pipe(
-      ofType(SearchDiseasesActions.searchDiseases),
-      mergeMap((action: { term: string }) => {
-        return diseaseService
-          .fetchDiseases(DISEASETYPEAHEAD, {
-            searchString: action.term, //.split(' ').join('~ AND ') + '*',
-            limit: 10,
-          })
-          .pipe(
-            map((res: ApolloQueryResult<unknown>) => {
-              const data: { diseaseSearch: Disease[] } = res.data as {
-                diseaseSearch: Disease[];
-              };
-              if (data) {
-                const diseaseArr = data.diseaseSearch.map(
-                  (obj: Partial<Disease>) => new Disease(obj),
-                );
-                return SearchDiseasesActions.searchDiseasesSuccess({
-                  typeahead: diseaseArr,
-                });
-              } else
-                return SearchDiseasesActions.searchDiseasesFailure({
-                  error: 'No Diseases found',
-                });
-            }),
-          );
-      }),
-    );
-  },
-  { functional: true },
-);
+*/
 
+/*
 //load values for first level of hierarchy tree
 export const fetchTreeParent$ = createEffect(
   (
@@ -436,7 +432,7 @@ export const fetchTreeParent$ = createEffect(
       concatLatestFrom(() => store.select(DiseaseSelectors.getDiseaseTree)),
       mergeMap(([params, tree]) => {
         return diseaseService.fetchDiseases(FETCHROOT, {}).pipe(
-          map((res: ApolloQueryResult<unknown>) => {
+          map((res: ObservableQuery.Result<unknown>) => {
             const data: {
               treeBranch: { nodes: DiseaseNode[] }[];
               diseases: DiseaseNode[];
@@ -552,7 +548,7 @@ export const fetchTreeBranch$ = createEffect(
         }
 
         return diseaseService.fetchDiseases(query, qParams).pipe(
-          map((res: ApolloQueryResult<unknown>) => {
+          map((res: ObservableQuery.Result<unknown>) => {
             const data: {
               treeBranch: { nodes: DiseaseNode[] }[];
               diseases: DiseaseNode[];
@@ -606,9 +602,9 @@ export const loadAllDiseaseFilters$ = createEffect(
         ).pipe(
           map(
             ([articleFilterData, projectFilterData, trialFilterData]: [
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
+              ObservableQuery.Result<unknown>,
             ]) => {
               const filters: FilterCategory[] = [];
               if (articleFilterData || projectFilterData || trialFilterData) {
@@ -787,10 +783,10 @@ export const loadAllDiseaseFilters$ = createEffect(
 );
 
 function _makeDiseaseObj(
-  diseaseData: ApolloQueryResult<unknown>,
-  articleData?: ApolloQueryResult<unknown>,
-  projectsData?: ApolloQueryResult<unknown>,
-  trialsData?: ApolloQueryResult<unknown>,
+  diseaseData: ObservableQuery.Result<unknown>,
+  articleData?: ObservableQuery.Result<unknown>,
+  projectsData?: ObservableQuery.Result<unknown>,
+  trialsData?: ObservableQuery.Result<unknown>,
 ): Disease {
   const disease: { disease: Disease[] } = diseaseData.data as {
     disease: Disease[];
@@ -847,18 +843,6 @@ function _makeDiseaseObj(
   } else return new Disease({});
 }
 
-function _makePage(params: Params, total: { count: number } | number) {
-  const pageSize: number = params['pageSize']
-    ? (params['pageSize'] as number)
-    : 10;
-  const pageIndex: number = params['pageIndex'] ? params['pageIndex'] - 1 : 0;
-  const page: Page = {
-    pageSize: pageSize,
-    pageIndex: pageIndex,
-    total: typeof total !== 'number' ? total.count : total,
-  };
-  return page;
-}
 
 function _addToTree(
   data: DiseaseNode,
@@ -913,7 +897,10 @@ function _setFragment(
   },
 ) {
   switch (origin) {
-    /*    case 'epiArticles': {
+     */ /*
+
+ */
+/*    case 'epiArticles': {
       EPIARTICLES.articleOptions.limit = <number>options['limit']
         ? <number>options['limit']
         : 10;
@@ -945,7 +932,10 @@ function _setFragment(
         ALLARTICLES.articleFilter.publicationYear_IN = options['isNHS'];
       }
       break;
-    }*/
+    }*/ /*
+ */
+/*
+
     case 'projects': {
       PROJECTVARIABLES.limit = <number>options['limit']
         ? <number>options['limit']
@@ -1030,9 +1020,9 @@ function _setArticleVariables(params: Params) {
 }
 
 function _parseFilterResponse(
-  articleFilterData: ApolloQueryResult<unknown>,
-  projectFilterData: ApolloQueryResult<unknown>,
-  trialFilterData: ApolloQueryResult<unknown>,
+  articleFilterData: ObservableQuery.Result<unknown>,
+  projectFilterData: ObservableQuery.Result<unknown>,
+  trialFilterData: ObservableQuery.Result<unknown>,
   params: Params,
 ): FilterCategory[] {
   const filters: FilterCategory[] = [];
@@ -1187,4 +1177,18 @@ function _parseFilterResponse(
     }
   }
   return filters;
+}
+ */
+
+function _makePage(params: Params, total: { count: number } | number) {
+  const pageSize: number = params['pageSize']
+    ? (params['pageSize'] as number)
+    : 10;
+  const pageIndex: number = params['pageIndex'] ? params['pageIndex'] - 1 : 0;
+  const page: Page = {
+    pageSize: pageSize,
+    pageIndex: pageIndex,
+    total: typeof total !== 'number' ? total.count : total,
+  };
+  return page;
 }

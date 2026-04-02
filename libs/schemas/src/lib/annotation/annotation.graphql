@@ -1,0 +1,37 @@
+scalar JSON
+extend schema @mutation(operations: [])
+
+type Annotation @node {
+  umlsCui: String
+  umlsConcept: String
+  semanticTypes: String
+  semanticTypeNames: String
+  semanticTypesNames: String
+}
+
+type PubtatorAnnotation @node {
+  annotation: String
+  annotationType: String
+  annotationIdentifier: String
+  lastUpdatedByRDAS: String
+  _composite_key: String
+  dateCreatedByRDAS: String
+}
+
+type EpidemiologyAnnotation @node {
+  lastUpdatedByRDAS: String
+  sex: String
+  studyDate: String
+  epidemiologyRate: String
+  ethnicity: String
+  studyLocation: String
+  epidemiologyType: String
+  _composite_key: String
+  dateCreatedByRDAS: String
+}
+
+type Query {
+  annotations: [Annotation]
+  pubtatorAnnotations: [PubtatorAnnotation]
+  epidemiologyAnnotations: [EpidemiologyAnnotation]
+}

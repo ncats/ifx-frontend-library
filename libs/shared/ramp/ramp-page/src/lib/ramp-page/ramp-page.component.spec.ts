@@ -18,7 +18,7 @@ describe('RampPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         RampPageComponent,
-        
+
         MatSidenavModule,
         MatSidenavContainer,
         RouterOutlet,

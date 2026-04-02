@@ -1,2 +1,18 @@
+<div class="row space-between-row">
+  <div>
+    <mat-slide-toggle (toggleChange)="setLabels()"
+      >Show all labels</mat-slide-toggle
+    >
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button matButton="filled" (click)="resetScale()">Reset Zoom</button>
+  </div>
+  <div>
+    <lib-image-download
+      [showTSV]="false"
+      [svg]="svgExport()"
+    ></lib-image-download>
+  </div>
+</div>
+
 <div id="3d-graph" class="force-directed-graph" #graphElement></div>
 <ng-template #customOutlet [cdkPortalOutlet]="componentPortal"></ng-template>

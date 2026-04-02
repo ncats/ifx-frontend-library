@@ -64,6 +64,7 @@ export class GenericChartComponent {
   svg!: any; // Selection<BaseType, unknown, null, undefined>;
   tooltip!: Selection<null, undefined, null, undefined>;
   keys!: string[];
+  zoomed: unknown;
 
   // Wraps tooltip text with a callout path of the correct size, as measured in the page.
   size(

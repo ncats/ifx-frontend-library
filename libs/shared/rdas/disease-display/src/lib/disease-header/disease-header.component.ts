@@ -17,13 +17,15 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { Disease } from 'rdas-models';
 import { SubscribeButtonComponent } from 'subscribe-button';
+/*
 import { shrinkOnScroll } from './disease-header-animation';
+ */
 
 @Component({
   selector: 'lib-disease-header',
   templateUrl: './disease-header.component.html',
   styleUrls: ['./disease-header.component.scss'],
-  animations: [shrinkOnScroll],
+  //animations: [shrinkOnScroll],
   encapsulation: ViewEncapsulation.None,
   imports: [
     MatIconModule,

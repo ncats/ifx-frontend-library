@@ -1,0 +1,68 @@
+scalar JSON
+extend schema @mutation(operations: [])
+
+type Article @node {
+  abstractText: String
+  volume: String
+  pubmedId: String
+  publicationYear: String
+  pubType: String
+  lastUpdatedDateByRDAS: String
+  isEpidemiologicalStudy: String
+  inEPMC: String
+  dateCreatedByRDAS: String
+  fullTextUrls: String
+  isOpenAccess: String
+  hasPDF: String
+  citationCount: String
+  issue: String
+  firstPublicationDate: String
+  inPMC: String
+  isNaturalHistoryStudy: String
+  doi: String
+  title: String
+  hasKeyword: [Keyword!]! @relationship(type: "has_keyword", direction: OUT)
+  hasOMIMReference: [OMIMRef!]!
+    @relationship(type: "has_omim_reference", direction: OUT)
+  hasEpidemiologyAnnotation: [EpidemiologyAnnotation!]!
+    @relationship(type: "has_epidemiology_annotation", direction: OUT)
+  hasMeshTerm: [MeshTerm!]! @relationship(type: "has_mesh_term", direction: OUT)
+
+  hasPubtatorAnnotation: [PubtatorAnnotation!]!
+    @relationship(type: "has_pubtator_annotation", direction: OUT)
+  hasAuthor: [Agent!]! @relationship(type: "has_author", direction: OUT)
+  hasAnnotatedSubstance: [Substance!]!
+    @relationship(type: "has_annotated_substance", direction: OUT)
+  hasJournal: [Journal!]! @relationship(type: "has_journal", direction: OUT)
+}
+type Query {
+  articles: [Article]
+}
+
+type OMIMRef @node {
+  omimName: String
+  omimSections: String
+  omimId: String
+  lastUpdatedByRDAS: String
+  _composite_key: String
+  dateCreatedByRDAS: String
+}
+
+type Keyword @node {
+  keyword: String
+}
+
+type MeshTerm @node {
+  meshTerm: String
+}
+
+type Journal @node {
+  nlmid: String
+  essn: String
+  issn: String
+  title: String
+}
+
+type Substance @node {
+  registryNumber: String
+}

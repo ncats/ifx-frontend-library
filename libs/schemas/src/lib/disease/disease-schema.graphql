@@ -1,7 +1,6 @@
 scalar JSON
 extend schema @mutation(operations: [])
 
-
 type Disease @node {
   classificationLevel: [String!]
   disorderType: [String!]
@@ -20,21 +19,33 @@ type Disease @node {
   medGen: String
   omimps: String
   diseaseType: String
-  associatedWithGeneGenes: [Gene!]!
-  @relationship(
-    type: "associated_with_gene"
-    direction: OUT
-    properties: "AssociatedWithGeneProperties"
-  )
-  diseaseSubClassOf: [Disease!]! @relationship(type: "subClassOf", direction: IN)
-  hasPhenotypePhenotypes: [Phenotype!]!
-  @relationship(
-    type: "has_phenotype"
-    direction: OUT
-    properties: "HasPhenotypeProperties"
-  )
-  subClassOfDisease: [Disease!]! @relationship(type: "subClassOf", direction: OUT)
   geneCount: Int!
   phenotypeCount: Int!
+  diseaseSubClassOf: [Disease!]!
+    @relationship(type: "subclass_of", direction: IN)
+  subClassOfDisease: [Disease!]!
+    @relationship(type: "subclass_of", direction: OUT)
+  hasAssociatedGene: [Gene!]!
+    @relationship(
+      type: "has_associated_gene"
+      direction: OUT
+      properties: "AssociatedWithGeneProperties"
+    )
+
+  hasPhenotype: [Phenotype!]!
+    @relationship(
+      type: "has_phenotype"
+      direction: OUT
+      properties: "HasPhenotypeProperties"
+    )
+  hasClinicalTrial: [ClinicalTrial!]!
+    @relationship(type: "has_clinical_trial", direction: OUT)
+  hasMappedCondition: [Condition!]!
+    @relationship(type: "has_mapped_condition", direction: OUT)
+  hasMentionIn: [Article!]!
+    @relationship(type: "has_mention_in", direction: OUT)
 }
 
+type Condition @node {
+  condition: String
+}

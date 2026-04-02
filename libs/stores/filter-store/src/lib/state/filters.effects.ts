@@ -1,11 +1,14 @@
 import { inject } from '@angular/core';
 import { Params } from '@angular/router';
-import { ApolloQueryResult, DocumentNode } from '@apollo/client';
+import { ObservableQuery, DocumentNode } from '@apollo/client';
 import {
-  GENEFILTERPARAMETERS,
-  GENEFILTERS,
+  GENEFILTERSQUERY,
+  GeneQueryFactory,
   PHENOTYPEFILTERPARAMETERS,
   PHENOTYPEFILTERS,
+  QueryParameters,
+  RdasQueryFactory,
+  RdasQueryParams,
 } from 'rdas-models';
 import { Filter, FilterCategory } from 'utils-models';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
@@ -34,33 +37,16 @@ interface FilterResponse {
   };
 }
 
-const filterMap: Map<
+const filterMap: Map<string, RdasQueryFactory> = new Map<
   string,
-  { query: DocumentNode; parameters: { [key: string]: unknown } }
-> = new Map<
-  string,
-  { query: DocumentNode; parameters: { [key: string]: unknown } }
->([
-  [
-    'phenotypes',
-    {
-      query: PHENOTYPEFILTERS,
-      parameters: PHENOTYPEFILTERPARAMETERS,
-    },
-  ],
-  [
-    'genes',
-    {
-      query: GENEFILTERS,
-      parameters: GENEFILTERPARAMETERS,
-    },
-  ],
-]);
+  RdasQueryFactory
+>([['genes', new GeneQueryFactory()]]);
 
 function parseFilterResponse(
   res: FilterResponse,
   currentFilter?: FilterCategory,
 ): FilterCategory[] {
+  console.log(res);
   const filters: FilterCategory[] = [];
   if (Object.keys(res).length) {
     Object.keys(res).forEach((key: string) => {
@@ -70,7 +56,7 @@ function parseFilterResponse(
       ].data as { selectedFilters: Filter[] };
       if (selectedFiltersData) {
         //selected/checked filters always go on top
-        selectedFiltersData.selectedFilters.forEach((obj: Partial<Filter>) => {
+        selectedFiltersData.selectedFilters?.forEach((obj: Partial<Filter>) => {
           retMap.set(
             <string>obj.term,
             new Filter({
@@ -81,6 +67,7 @@ function parseFilterResponse(
         });
       }
       //search term
+      // }
       const searchFiltersData: { searchFilters: Filter[] } = res[key].data as {
         searchFilters: Filter[];
       };
@@ -120,11 +107,13 @@ function parseFilterResponse(
       }
       const filterCategory: FilterCategory = new FilterCategory({
         label: key,
-        //  values: [...retMap.values()],
+        values: [...retMap.values()],
         page: currentFilter?.page || 0,
         query: currentFilter?.query,
       });
-      filterCategory.values = [...retMap.values()];
+      filterCategory.values = [...retMap.values()].sort(
+        (a, b) => Number(b.selected) - Number(a.selected),
+      );
       filters.push(filterCategory as FilterCategory);
     });
   }
@@ -146,20 +135,17 @@ export const loadFilters$ = createEffect(
         (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
       ),
       mergeMap((params: Params) => {
+        console.log('loading filters');
+        console.log(params);
         const queries: { [key: string]: ObservableInput<unknown> } = {};
         [...filterMap.keys()].forEach((selectedFilter: string | undefined) => {
           if (selectedFilter != null) {
-            const queryParams = filterMap.get(selectedFilter);
-            if (queryParams) {
-              if (params[selectedFilter]) {
-                queryParams.parameters['terms'] =
-                  params[selectedFilter].split('&');
-              } else {
-                queryParams.parameters['terms'] = [];
-              }
+            const factory = filterMap.get(selectedFilter);
+            if (factory) {
+              const query = factory.getQuery(params);
               queries[selectedFilter] = filterService.fetchDiseases(
-                queryParams.query,
-                queryParams.parameters,
+                query.query,
+                query.params,
               );
             }
           }
@@ -195,8 +181,9 @@ export const searchFilters$ = createEffect(
       ofType(FetchFiltersActions.fetchFilters),
       concatLatestFrom(() => store.select(FiltersSelectors.selectAllFilters)),
       mergeMap(([action, currentFilters]) => {
+        console.log('search filters');
         const queries: {
-          [key: string]: Observable<ApolloQueryResult<unknown>>;
+          [key: string]: Observable<ObservableQuery.Result<unknown>>;
         } = {};
         let nextPage = 1;
         //map previous filters to sync later
@@ -218,50 +205,45 @@ export const searchFilters$ = createEffect(
             label: action.label,
           });
         }
+        console.log(currentFilters);
+        console.log(filterMatch);
+        console.log(action);
         //get queries and parameters
-        const params = filterMap.get(action.label);
-        if (params) {
-          // get current filters list
-          // sync query parameters
-          if (action.skip) {
-            params.parameters['skip'] = action.skip;
-          }
-          if (action.limit) {
-            params.parameters['limit'] = action.limit;
-          }
+        const factory = filterMap.get(action.label);
+        if (factory) {
+          const query = factory.getQuery(action);
+          queries[action.label] = filterService.fetchDiseases(
+            query.query,
+            query.params,
+          );
           if (action.term) {
-            params.parameters['term'] = action.term;
+            //   params.parameters['term'] = action.term;
             nextPage = 1;
           }
           if (action.terms) {
-            params.parameters['terms'] = action.terms;
+            //     params.parameters['terms'] = action.terms;
             nextPage = 0;
           }
 
           //update next page parameter (is this needed?)
-          if (action.skip && filterMatch?.page >= action.skip / 200) {
+          if (action.skip) {
             nextPage = filterMatch?.page + 1;
-          }
-          //send query and params with current filter
-          if (params.query) {
-            queries[action.label] = filterService.fetchDiseases(
-              params.query,
-              params.parameters,
-            );
           }
         }
         return combineLatest(queries).pipe(
-          map((res: { [key: string]: ApolloQueryResult<unknown> }) => {
+          map((res: { [key: string]: ObservableQuery.Result<unknown> }) => {
             if (res) {
               const tempFilter = new FilterCategory({
                 ...filterMatch,
                 page: nextPage,
                 query: action.term,
               });
+              console.log(tempFilter);
               const filter = parseFilterResponse(
                 res as FilterResponse,
                 tempFilter,
               );
+              console.log(filter);
               return FetchFiltersActions.fetchFiltersSuccess({
                 filters: filter,
               });

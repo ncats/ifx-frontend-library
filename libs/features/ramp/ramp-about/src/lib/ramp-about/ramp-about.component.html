@@ -92,6 +92,15 @@
             mat-list-item
             class="list-button"
             routerLink="/about"
+            fragment="links"
+            [activated]="isActive('links')"
+          >
+            Other Links
+          </a>
+          <a
+            mat-list-item
+            class="list-button"
+            routerLink="/about"
             fragment="license"
             [activated]="isActive('license')"
           >
@@ -347,15 +356,15 @@
             </ul>
             <picture>
               <source
-                srcset="/assets/ramp-about/images/Supported_Queries.webp"
+                srcset="/assets/ramp-about/images/RaMP_components.webp"
                 type="image/webp"
               />
               <source
-                srcset="/assets/ramp-about/images/Supported_Queries.png"
-                type="image/png"
+                srcset="/assets/ramp-about/images/RaMP_components.svg"
+                type="image/svg"
               />
               <img
-                src="/assets/ramp-about/images/Supported_Queries.png"
+                src="/assets/ramp-about/images/RaMP_components.svg"
                 class="ramp-capabilities-image"
                 alt="flow diagram illustrating the RaMP data types, annotations and analysis"
               />
@@ -496,130 +505,25 @@
           </div>
           <div class="section-content">
             <h2 class="contributor-header">Current Contributors</h2>
-            <div class="row space-around-row">
-              <div class="portrait-holder width-20 width-sm-50">
-                <picture>
-                  <source
-                    srcset="/assets/ramp-about/images/team/keith_kelleher.webp"
-                    type="image/webp"
-                  />
-                  <source
-                    srcset="/assets/ramp-about/images/team/keith_kelleher.jpg"
-                    type="image/jpeg"
-                  />
-                  <img
-                    src="/assets/ramp-about/images/team/keith_kelleher.jpg"
-                    alt="Keith Kelleher portrait"
-                    class="ramp-portrait"
-                  />
-                </picture>
-                <br />
-                <h2>Keith Kelleher</h2>
-              </div>
-              <div class="portrait-holder width-20 width-sm-50">
-                <picture>
-                  <source
-                    srcset="/assets/ramp-about/images/team/khyati_mehta.webp"
-                    type="image/webp"
-                  />
-                  <source
-                    srcset="/assets/ramp-about/images/team/khyati_mehta.jpg"
-                    type="image/jpeg"
-                  />
-                  <img
-                    src="/assets/ramp-about/images/team/khyati_mehta.jpg"
-                    alt="Khyati Mehta portrait"
-                    class="ramp-portrait"
-                  />
-                </picture>
-                  <h2>Khyati Mehta</h2>
-              </div>
-              <div class="portrait-holder width-20 width-sm-50">
-                <picture>
-                  <source
-                    srcset="./assets/ramp-about/images/team/ewy_mathe.webp"
-                    type="image/webp"
-                  />
-                  <source
-                    srcset="./assets/ramp-about/images/team/ewy_mathe.jpg"
-                    type="image/jpeg"
-                  />
-                  <img
-                    src="./assets/ramp-about/images/team/ewy_mathe.jpg"
-                    alt="Ewy Mathé portrait"
-                    class="ramp-portrait"
-                  />
-                </picture>
-                  <h2>Ewy Mathé</h2>
-              </div>
-            </div>
-            <div class="row space-around-row">
-              <div class="portrait-holder width-20 width-sm-50">
-                <picture>
-                  <source
-                    srcset="/assets/ramp-about/images/team/andrew_patt.webp"
-                    type="image/webp"
-                  />
-                  <source
-                    srcset="/assets/ramp-about/images/team/andrew_patt.jpg"
-                    type="image/jpeg"
-                  />
-                  <img
-                    src="/assets/ramp-about/images/team/andrew_patt.jpg"
-                    alt="Andrew Patt portrait"
-                    class="ramp-portrait"
-                  />
-                </picture>
-                  <h2>Andrew Patt</h2>
-              </div>
-              <div class="portrait-holder width-20 width-sm-50">
-                <picture>
-                  <source
-                    srcset="/assets/ramp-about/images/team/timothy_sheils.webp"
-                    type="image/webp"
-                  />
-                  <source
-                    srcset="/assets/ramp-about/images/team/timothy_sheils.jpg"
-                    type="image/jpeg"
-                  />
-                  <img
-                    src="/assets/ramp-about/images/team/timothy_sheils.jpg"
-                    alt="Timothy Sheils portrait"
-                    class="ramp-portrait"
-                  />
-                </picture>
-                  <h2>Timothy Sheils</h2>
-              </div>
-            </div>
-            <br />
-            <br />
+            <ul class="name-list">
+              <li>Keith Kelleher</li>
+              <li>Khyati Mehta</li>
+              <li>Ewy Mathé</li>
+              <li>Andrew Patt</li>
+              <li>Timothy Sheils</li>
+            </ul>
+
             <h2>Previous Contributors</h2>
-            <ul>
+            <ul class="name-list">
               <li>John Braisted</li>
-              <li>
-                  Tara Eicher
-              </li>
-              <li>
-                  Jorge Neyra
-              </li>
-              <li>
-                  Kyle Spencer
-              </li>
-              <li>
-                  Cole Tindall
-              </li>
-              <li>
-                Adam Tisch
-              </li>
-              <li>
-                  Rohith Vanam
-              </li>
-              <li>
-                  Shunchao Wang
-              </li>
-              <li>
-                  Bofei Zhang
-              </li>
+              <li>Tara Eicher</li>
+              <li>Jorge Neyra</li>
+              <li>Kyle Spencer</li>
+              <li>Cole Tindall</li>
+              <li>Adam Tisch</li>
+              <li>Rohith Vanam</li>
+              <li>Shunchao Wang</li>
+              <li>Bofei Zhang</li>
             </ul>
             <p>
               For questions or issues, please submit an issue on our
@@ -678,6 +582,27 @@
                 R Plumber API</mat-list-item
               >
             </mat-list>
+          </div>
+        </div>
+
+        <div class="" id="links" #license #scrollSection>
+          <div
+            class="section-header"
+            [ngClass]="{ 'active-header': isActive('links') }"
+          >
+            Other Links
+          </div>
+          <div class="section-content">
+            <p>
+              Other relevant links can be found at our
+              <a
+                href="https://linktr.ee/ramp_db"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Link to the Ramp linktree site"
+                >Linktree</a
+              >
+            </p>
           </div>
         </div>
 

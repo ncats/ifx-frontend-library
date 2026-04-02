@@ -21,7 +21,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subscription } from 'utils-models';
-import { SocialSignOnButtonComponent } from 'social-sign-on';
 import { UpdateUserActions, UserSelectors } from 'user-store';
 import { Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';

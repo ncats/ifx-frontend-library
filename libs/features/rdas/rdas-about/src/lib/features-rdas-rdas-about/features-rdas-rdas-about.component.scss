@@ -1,84 +1,82 @@
-lib-rdas-about {
-  .about-page {
-    margin-top: 1vh;
-  }
+.about-page {
+  margin-top: 1vh;
+}
 
-  .toc-wrapper {
-    padding-left: 0.2vw;
-  }
+.toc-wrapper {
+  padding-left: 0.2vw;
+}
 
-  .navigation-menu-panel {
-    top: calc(60px + 1vh) !important;
-  }
+.navigation-menu-panel {
+  top: calc(60px + 1vh) !important;
+}
 
-  .ramp-list {
-    list-style: none;
-  }
-  .section-content {
-    font:
-      400 1rem/1.5rem Roboto,
-      'Helvetica Neue',
-      sans-serif;
+.ramp-list {
+  list-style: none;
+}
+.section-content {
+  font:
+    400 1rem/1.5rem Roboto,
+    'Helvetica Neue',
+    sans-serif;
+}
+
+.rdas-title {
+  font:
+    300 3rem Roboto,
+    'Helvetica Neue',
+    sans-serif;
+  padding-left: 1vw;
+  margin-top: 2vh;
+  margin-bottom: 0;
+}
+
+.section-header {
+  font:
+    300 2.5rem Roboto,
+    'Helvetica Neue',
+    sans-serif;
+  padding-left: 1vw;
+  margin-top: 5vh;
+  margin-bottom: 2vh;
+}
+
+.spacer {
+  height: 20vh;
+}
+
+.mat-mdc-list-item {
+  margin-bottom: 1vh;
+}
+
+.rdas-capabilities-image {
+  width: auto;
+  height: 400px;
+  max-width: 500px;
+}
+
+.portrait-holder {
+  text-align: center;
+  align-self: center;
+}
+
+.rdas-portrait {
+  margin: 0 auto;
+  border-radius: 100%;
+  height: 8vw;
+  width: 8vw;
+}
+
+@media only screen and (max-width: 768px) {
+  .rdas-portrait {
+    height: 25vw;
+    width: 25vw;
   }
 
   .rdas-title {
     font:
-      300 3rem Roboto,
+      300 2rem Roboto,
       'Helvetica Neue',
       sans-serif;
-    padding-left: 1vw;
     margin-top: 2vh;
-    margin-bottom: 0;
-  }
-
-  .section-header {
-    font:
-      300 2.5rem Roboto,
-      'Helvetica Neue',
-      sans-serif;
-    padding-left: 1vw;
-    margin-top: 5vh;
-    margin-bottom: 2vh;
-  }
-
-  .spacer {
-    height: 20vh;
-  }
-
-  .mat-mdc-list-item {
-    margin-bottom: 1vh;
-  }
-
-  .rdas-capabilities-image {
-    width: auto;
-    height: 400px;
-    max-width: 500px;
-  }
-
-  .portrait-holder {
-    text-align: center;
-    align-self: center;
-  }
-
-  .rdas-portrait {
-    margin: 0 auto;
-    border-radius: 100%;
-    height: 8vw;
-    width: 8vw;
-  }
-
-  @media only screen and (max-width: 768px) {
-    .rdas-portrait {
-      height: 25vw;
-      width: 25vw;
-    }
-
-    .rdas-title {
-      font:
-        300 2rem Roboto,
-        'Helvetica Neue',
-        sans-serif;
-      margin-top: 2vh;
-    }
   }
 }

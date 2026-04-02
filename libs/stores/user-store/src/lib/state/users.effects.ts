@@ -78,17 +78,23 @@ export const loginEmailUser = createEffect(
       ofType(LoginEmailUserActions.loginEmailUser),
       mergeMap((action: { email: string; pw: string }) => {
         return userService.doEmailLogin(action.email, action.pw).pipe(
-          map((res: { code: string; user: User }) => {
-            if (res.code) {
-              const errMessage: string = userService.getErrorMesssage(res.code);
+          //   map((res: { code: string; user: User }) => {
+          map((res: UserCredential | Error) => {
+            const newResponse: { code: string; user: User } = (<unknown>(
+              res
+            )) as { code: string; user: User };
+            if (newResponse.code) {
+              const errMessage: string = userService.getErrorMesssage(
+                newResponse.code,
+              );
               return LoginEmailUserActions.loginEmailUserFailure({
                 error: errMessage,
               });
             } else {
-              if (res.user) {
+              if (newResponse.user) {
                 const u: User = new User({
-                  displayName: res.user?.displayName, //.users.entities[state.users.selectedId || "null"],
-                  uid: res.user?.uid,
+                  displayName: newResponse.user?.displayName, //.users.entities[state.users.selectedId || "null"],
+                  uid: newResponse.user?.uid,
                 });
                 if (u) {
                   return LoginEmailUserActions.loginEmailUserSuccess({
@@ -171,9 +177,14 @@ export const resetEmailPassword = createEffect(
       ofType(ResetPasswordEmailActions.resetPasswordEmail),
       mergeMap((action: { email: string }) => {
         return userService.doResetEmail(action.email).pipe(
-          map((res: { code: string }) => {
-            if (res && res.code) {
-              const errMessage: string = userService.getErrorMesssage(res.code);
+          map((res: void | Error) => {
+            const newResponse: { code: string } = (<unknown>res) as {
+              code: string;
+            };
+            if (res && newResponse.code) {
+              const errMessage: string = userService.getErrorMesssage(
+                newResponse.code,
+              );
               return ResetPasswordEmailActions.resetPasswordEmailFailure({
                 error: errMessage,
               });

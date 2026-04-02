@@ -110,10 +110,10 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   page = this.store.selectSignal(DiseaseSelectors.getDiseasesPage);
   loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
   diseases = this.store.selectSignal(DiseaseSelectors.getAllDiseases);
-  diseaseTree = this.store.selectSignal(DiseaseSelectors.getDiseaseTree);
+  //  diseaseTree = this.store.selectSignal(DiseaseSelectors.getDiseaseTree);
   filters = this.store.selectSignal(FilterSelectors.selectAllFilters);
 
-  sort = 'COUNT_ARTICLES';
+  sort = 'countArticles';
   selectedValues: Map<string, string[]> = new Map<string, string[]>();
   showDownload = false;
 
@@ -170,7 +170,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     this.sort = event.value;
     navigationExtras.queryParams = {
       sort: this.sort,
-      direction: this.sort === 'GardName' ? 'ASC' : 'DESC',
+      direction: this.sort === 'gardName' ? 'ASC' : 'DESC',
       pageIndex: 1,
     };
 

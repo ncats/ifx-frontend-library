@@ -122,7 +122,7 @@ export class RampCorePageComponent {
   dataColumns!: DataProperty[];
 
   fetchData(event: { [key: string]: unknown }, origin: string) {
-    console.log(origin);
+    // console.log(origin);
   }
 
   cleanLabel(label: string): string {

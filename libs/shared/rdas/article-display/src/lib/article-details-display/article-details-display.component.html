@@ -82,11 +82,11 @@
             </div>
           }
         </div>
-        @if (article()?.substances && article()?.substances?.length) {
+        <!--     @if (article()?.substances && article()?.substances?.length) {
           <div>
             <div class="primary-chip-outlined">Substances</div>
             <br />
-            @for (substance of article()!.substances; track substance.name) {
+            @for (substance of article()?.substances; track substance.name) {
               <span>
                 {{ substance.name }}
               </span>
@@ -94,7 +94,7 @@
             <br />
             <br />
           </div>
-        }
+        }-->
         @if (article()?.keywords && article()?.keywords?.length) {
           <div>
             <div class="primary-chip-outlined">Keywords</div>
@@ -132,11 +132,11 @@
                         target="_blank"
                         rel="noreferrer"
                         aria-label="Link to disease details page"
-                        >{{ disease.name }}</a
+                        >{{ disease.gardName }}</a
                       >
                     </div>
                   } @else {
-                    {{ disease.name }}
+                    {{ disease.gardName }}
                   }
 
                   <br />

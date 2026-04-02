@@ -1,77 +1,87 @@
-@if (forceDirectedGraphService.analyteData() || hoveredNode()) {
-  <div class="ramp-graph-legend">
-    <mat-expansion-panel expanded>
-      <mat-expansion-panel-header>
-        <mat-panel-title
-          ><h2>
-            {{ hoveredNode()?.label || clickedNode()?.label }}
-          </h2></mat-panel-title
-        >
-      </mat-expansion-panel-header>
-      @if (
-        forceDirectedGraphService.analyteData() &&
-        forceDirectedGraphService.analyteData()!.data.length
-      ) {
-        <div class="table-legend">
-          <h2>{{ clickedNode()?.label }}</h2>
-          <div class="row space-around-row">
-            <div class="width-95">
-              <lib-ifx-datatable
-                [fieldsConfig]="forceDirectedGraphService.analyteData()?.fields"
-                [data]="forceDirectedGraphService.analyteData()?.data"
-                [internalSort]="true"
-                [useInternalPaginator]="true"
-                [hidePageSize]="true"
-              ></lib-ifx-datatable>
-            </div>
+<div class="ramp-graph-legend">
+  <mat-expansion-panel expanded>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        @if (hoveredNode() && hoveredNode()?.label) {
+          <h2>Hovered Node: {{ hoveredNode()?.label }}</h2>
+        } @else if (clickedNode() && clickedNode()?.label) {
+          <h2>Clicked Node: {{ clickedNode()?.label }}</h2>
+        }
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    @if (
+      clickedNode()?.id &&
+      forceDirectedGraphService.inputData() &&
+        forceDirectedGraphService.inputData()!.data.length
+    ) {
+      <div class="table-legend">
+        @if (clickedNode() && clickedNode()?.label) {
+          <h2>Clicked Node: {{ clickedNode()?.label }}</h2>
+        }
+        <div class="row space-around-row">
+          <div class="width-90">
+            <lib-ifx-datatable
+              [fieldsConfig]="forceDirectedGraphService.inputData()?.fields"
+              [data]="forceDirectedGraphService.inputData()?.data"
+              [internalSort]="true"
+              [useInternalPaginator]="true"
+              [hidePageSize]="true"
+            ></lib-ifx-datatable>
           </div>
         </div>
-      }
-      <div class="legend">
-        <div class="row space-between-row">
-          <div class="width-95">
-            <h3 class="legend-heading">Nodes</h3>
-            <div class="row space-around-row top-align">
-              <div class="width-25">
-                <div class="legend-circle legend-metabolite"></div>
-                Metabolite
-              </div>
-              <div class="width-25">
-                <div class="legend-square legend-gene"></div>
-                Gene/Protein
-              </div>
-              <div class="width-25">
-                <div class="legend-circle legend-input"></div>
-                Input Analyte
-              </div>
-              <div class="width-25">
-                <div class="legend-circle legend-output"></div>
-                Output Analyte
-              </div>
-            </div>
-          </div>
+      </div>
+    }
+    <div class="legend">
+      <div class="row space-between-row">
+        <div class="width-95">
+          Hover over a node to view the full name and highlight relationships.
+          Click on a node to toggle a pageable list featuring additional
+          information about the edge relationships.
         </div>
-
-        <div class="row space-between-row">
-          <div class="width-80">
-            <h3 class="legend-heading">Edges</h3>
-            <div class="row space-around-row">
-              <div class="width-30">
-                <div class="legend-edge legend-hmdb"></div>
-                From HMDB
-              </div>
-              <div class="width-30">
-                <div class="legend-edge legend-rhea"></div>
-                From Rhea
-              </div>
-              <div class="width-30">
-                <div class="legend-edge legend-both"></div>
-                From Both
-              </div>
+      </div>
+      <div class="row space-between-row">
+        <div class="width-95">
+          <h3 class="legend-heading">Nodes</h3>
+          <div class="row space-around-row top-align">
+            <div class="width-25">
+              <div class="legend-circle legend-metabolite"></div>
+              Metabolite
+            </div>
+            <div class="width-25">
+              <div class="legend-square legend-gene"></div>
+              Gene / Protein
+            </div>
+            <div class="width-25">
+              <div class="legend-circle legend-input"></div>
+              Input Analyte
+            </div>
+            <div class="width-25">
+              <div class="legend-circle legend-output"></div>
+              Output Analyte
             </div>
           </div>
         </div>
       </div>
-    </mat-expansion-panel>
-  </div>
-}
+
+      <div class="row space-between-row">
+        <div class="width-80">
+          <h3 class="legend-heading">Edges</h3>
+          <div class="row space-around-row">
+            <div class="width-30">
+              <div class="legend-edge legend-hmdb"></div>
+              From HMDB
+            </div>
+            <div class="width-30">
+              <div class="legend-edge legend-rhea"></div>
+              From Rhea
+            </div>
+            <div class="width-30">
+              <div class="legend-edge legend-both"></div>
+              From Both
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</div>

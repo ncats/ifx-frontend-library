@@ -462,6 +462,7 @@ export class ReactionsPageComponent
         //  this.hoveredNode.set(value);
       }
     });
+
     this.forceDirectedGraphService.nodeClicked.subscribe((res) => {
       const allData = this.commonReactions()?.dataAsDataProperty;
       if (allData && res) {
@@ -470,7 +471,7 @@ export class ReactionsPageComponent
             commonAnalye['inputAnalyte'].value === res?.id ||
             commonAnalye['rxnPartnerCommonName'].value === res?.id,
         );
-        this.forceDirectedGraphService.analyteData.set({
+        this.forceDirectedGraphService.inputData.set({
           data: filteredData,
           fields: this.dataColumns,
         });
@@ -482,6 +483,7 @@ export class ReactionsPageComponent
     formData: { [key: string]: unknown },
     origin: string,
   ): void {
+    this.visualizationsMap();
     this.activeTab.set(origin);
     if (formData['analytes']) {
       this.inputList = this._parseInput(
@@ -600,13 +602,12 @@ export class ReactionsPageComponent
   }
 
   private _mapToGraph(data: CommonAnalyte[]) {
-    const sourceNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
-    const targetNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
+    const nodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
     let nodes: GraphNode[] = [];
     const links: GraphLink[] = [];
     data.forEach((analyte) => {
-      let sourceNode = sourceNodeMap.get(analyte.inputAnalyte);
-      let targetNode = targetNodeMap.get(analyte.rxnPartnerCommonName);
+      let sourceNode = nodeMap.get(analyte.inputCommonName);
+      let targetNode = nodeMap.get(analyte.rxnPartnerCommonName);
       const types = analyte.queryRelation.split(`2`);
       if (!sourceNode) {
         sourceNode = new GraphNode({
@@ -616,8 +617,13 @@ export class ReactionsPageComponent
           extraClass: 'inputNode',
           shape: this.nodeShapes[types[0] as keyof typeof this.nodeShapes],
         });
-        sourceNodeMap.set(analyte.inputAnalyte, sourceNode);
+      } else {
+        sourceNode.color = '#000000';
+        sourceNode.extraClass = 'inputNode';
+        sourceNode.shape =
+          this.nodeShapes[types[0] as keyof typeof this.nodeShapes];
       }
+      nodeMap.set(analyte.inputCommonName, sourceNode);
       if (!targetNode) {
         targetNode = new GraphNode({
           id: analyte.rxnPartnerCommonName,
@@ -625,7 +631,8 @@ export class ReactionsPageComponent
           color: '#e6f1f9',
           shape: this.nodeShapes[types[1] as keyof typeof this.nodeShapes],
         });
-        targetNodeMap.set(analyte.rxnPartnerCommonName, targetNode);
+
+        nodeMap.set(analyte.rxnPartnerCommonName, targetNode);
       }
       links.push(
         new GraphLink({
@@ -643,7 +650,7 @@ export class ReactionsPageComponent
         }),
       );
     });
-    nodes = [...sourceNodeMap.values(), ...targetNodeMap.values()];
+    nodes = [...nodeMap.values()];
     return { nodes: nodes, links: links };
   }
 

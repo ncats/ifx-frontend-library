@@ -16,7 +16,7 @@ describe('SocialSignOnButtonComponent', () => {
       declarations: [],
       imports: [
         SocialSignOnButtonComponent,
-        
+
         MatDialogModule,
         MatMenuModule,
         StoreModule.forRoot({}),

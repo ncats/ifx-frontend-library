@@ -1,6 +1,7 @@
+/*
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { ApolloQueryResult } from '@apollo/client';
+import { ObservableQuery } from '@apollo/client';
 import {
   ALLARTICLES,
   Article,
@@ -34,7 +35,7 @@ export const loadArticle$ = createEffect(
         return articleService
           .fetchArticles(FETCHARTICLEDETAILS, ARTICLEDETAILSVARIABLES)
           .pipe(
-            map((articleData: ApolloQueryResult<unknown>) => {
+            map((articleData: ObservableQuery.Result<unknown>) => {
               const data: { articles: Article[] } = articleData.data as {
                 articles: Article[];
               };
@@ -74,7 +75,7 @@ export const loadArticlesList$ = createEffect(
         return articleService
           .fetchArticles(FETCHARTICLESQUERY, ALLARTICLES)
           .pipe(
-            map((articlesData: ApolloQueryResult<unknown>) => {
+            map((articlesData: ObservableQuery.Result<unknown>) => {
               const articlesDataArray = articlesData.data as {
                 articlesData: {
                   articlesList: Article[];
@@ -145,3 +146,4 @@ function _setArticlesOptions(options: {
     ALLARTICLES.articleFilter.publicationYear_IN = options['year'];
   }
 }
+ */

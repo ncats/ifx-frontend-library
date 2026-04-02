@@ -1,3 +1,4 @@
+/*
 import {
   trigger,
   state,
@@ -25,3 +26,4 @@ export const shrinkOnScroll = [
     transition('out => in', [group([animate('300ms ease-in')])]),
   ]),
 ];
+ */

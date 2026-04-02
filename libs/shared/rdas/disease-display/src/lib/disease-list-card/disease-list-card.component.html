@@ -9,18 +9,20 @@
         class="width-75 clickable-area"
       >
         <h3 class="disease-name">
-          {{ disease()?.name }}: {{ disease()?.gardId }}
+          {{ disease()?.gardName }}: {{ disease()?.gardId }}
         </h3>
       </div>
       <div>
         <lib-subscribe-button
-          [subscriptionName]="disease()?.name"
+          [subscriptionName]="disease()?.gardName"
           [subscriptionId]="disease()?.gardId"
         ></lib-subscribe-button>
       </div>
     </div>
     <div class="width-75">
-      @if (disease()?.classificationLevel) {
+      @if (
+        disease()?.classificationLevel && disease()?.classificationLevel?.length
+      ) {
         <div class="primary-chip-outlined">
           {{ disease()?.classificationLevel }}
         </div>
@@ -41,31 +43,31 @@
       <div class="count-card">
         <div class="bottom-border-primary count-title">Published Articles</div>
         <span class="card-count">
-          {{ disease()?.articleCount }}
+          {{ disease()?.countArticles }}
         </span>
       </div>
       <div class="count-card">
         <div class="bottom-border-primary">Funded Projects</div>
         <span class="card-count">
-          {{ disease()?.projectCount }}
+          {{ disease()?.countProjects }}
         </span>
       </div>
       <div class="count-card">
         <div class="bottom-border-primary">Clinical Trials</div>
         <span class="card-count">
-          {{ disease()?.clinicalTrialCount }}
+          {{ disease()?.countTrials }}
         </span>
       </div>
       <div class="count-card">
         <div class="bottom-border-primary">Associated Genes</div>
         <span class="card-count">
-          {{ disease()?.geneCount }}
+          {{ disease()?.countGenes }}
         </span>
       </div>
       <div class="count-card last">
         <div class="bottom-border-primary">Phenotypes</div>
         <span class="card-count">
-          {{ disease()?.phenotypeCount }}
+          {{ disease()?.countPhenotypes }}
         </span>
       </div>
     </div>

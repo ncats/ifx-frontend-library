@@ -3,7 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ViewEncapsulation, OnInit,
+  ViewEncapsulation,
+  OnInit,
 } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
@@ -37,7 +38,10 @@ import {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BiochemicalPathwaysPageComponent extends RampCorePageComponent implements OnInit {
+export class BiochemicalPathwaysPageComponent
+  extends RampCorePageComponent
+  implements OnInit
+{
   analyteColumns: DataProperty[] = [
     new DataProperty({
       label: 'Pathway Name',

@@ -62,7 +62,9 @@ export class RampMainComponent {
     if (pathsValue) {
       const separatedPaths = this._separateInputTabs(pathsValue);
       separatedPaths.forEach((inputTab, formKey) => {
-        const filteredInputTab = inputTab.filter((tab) => tab.filter);
+        const filteredInputTab = inputTab.filter((tab) => {
+          return tab.filter;
+        });
         filteredInputTab.forEach((parsedPath) => {
           const mappedSubform = this._pathToQuestionObject(parsedPath);
           if (filterMap.has(formKey)) {

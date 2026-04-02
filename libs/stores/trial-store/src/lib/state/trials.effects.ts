@@ -1,6 +1,7 @@
+/*
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { ApolloQueryResult } from '@apollo/client';
+import { ObservableQuery } from '@apollo/client';
 import {
   ClinicalTrial,
   FETCHTRIALDETAILS,
@@ -13,7 +14,9 @@ import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { filter, map, mergeMap } from 'rxjs';
 import { TrialService } from '../trial.service';
 import { FetchTrialActions, FetchTrialsListActions } from './trials.actions';
+*/
 
+/*
 export const fetchTrial$ = createEffect(
   (actions$ = inject(Actions), trialService = inject(TrialService)) => {
     return actions$.pipe(
@@ -32,7 +35,7 @@ export const fetchTrial$ = createEffect(
         return trialService
           .fetchTrials(FETCHTRIALDETAILS, TRIALDETAILSVARIABLES)
           .pipe(
-            map((trialData: ApolloQueryResult<unknown>) => {
+            map((trialData: ObservableQuery.Result<unknown>) => {
               const data: { clinicalTrials: ClinicalTrial[] } =
                 trialData.data as { clinicalTrials: ClinicalTrial[] };
               if (data) {
@@ -71,7 +74,7 @@ export const fetchTrialList$ = createEffect(
         return trialService
           .fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES)
           .pipe(
-            map((trialsData: ApolloQueryResult<unknown>) => {
+            map((trialsData: ObservableQuery.Result<unknown>) => {
               const trialsObj = trialsData.data as {
                 trialsData: [
                   {
@@ -143,3 +146,4 @@ function _setTrialsOptions(options: {
     FETCHTRIALSVARIABLES.ctfilters.Phase_IN = undefined;
   }
 }
+ */

@@ -1,0 +1,36 @@
+scalar JSON
+extend schema @mutation(operations: [])
+
+type Agent @node {
+  _idx_key: String
+  contactEmail: String
+  orc_id: String
+  lastName: String
+  fullName: String
+  firstName: String
+  pi_id: String
+  hasAffiliation: [Organization!]!
+    @relationship(type: "has_organization", direction: OUT)
+}
+
+type Organization @node {
+  _idx_key: String
+  name: String
+  hasLocation: [Location!]! @relationship(type: "has_location", direction: OUT)
+}
+
+type Location @node {
+  zip: String
+  country: String
+  facility: String
+  city: String
+  _idx_key: String
+  address: String
+  state: String
+}
+
+type Query {
+  agents: [Agent]
+  locations: [Location]
+  organizations: [Organization]
+}
