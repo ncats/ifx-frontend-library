@@ -38,24 +38,31 @@ const driver = neo4j.driver(
   neo4j.auth.basic(process.env.MEMGRAPH_USERNAME, process.env.MEMGRAPH_KEY),
 );
 
-const assetPath = path.join(__dirname, 'assets', 'rdas-schema.graphql');
-fs.readFile(assetPath, 'utf8', async (err, data) => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-  const typeDefs = data;
-  const neoSchema: Neo4jGraphQL = new Neo4jGraphQL({
-    typeDefs,
-    driver,
-    debug: true,
-  });
+function startSchema(instance) {
+console.log(typeDefs)
+  const driver = neo4j.driver(
+    environment.MEMGRAPH_HOST + ':' + environment.MEMGRAPH_PORT,
+    neo4j.auth.basic(environment.MEMGRAPH_USERNAME, environment.MEMGRAPH_KEY),
+  );
 
-  try {
-    const apolloServer: ApolloServer = new ApolloServer({
-      schema: await neoSchema.getSchema(),
-      plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    });
+/*  fs.readFile(environment.MEMGRAPH_SCHEMA, 'utf8', async (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    const typeDefs = data;
+    console.log(typeDefs)
+    const neoSchema: Neo4jGraphQL = new Neo4jGraphQL({
+      typeDefs,
+      driver,
+      debug: true,
+    });*/
+//schema: await neoSchema.getSchema(),
+const neoSchema: Neo4jGraphQL = new Neo4jGraphQL({
+  typeDefs,
+  driver,
+  debug: true,
+});
 
     await apolloServer.start();
 
