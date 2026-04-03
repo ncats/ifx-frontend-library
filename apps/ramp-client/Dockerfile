@@ -15,7 +15,6 @@ RUN apk add --no-cache bash git openssh
 #RUN npm install --unsafe-perm=true
 #RUN npm config set unsafe-perm true
 RUN npm install -g nx
-RUN npm install
 RUN npm i
 RUN NODE_OPTIONS=--max_old_space_size=8192 nx run ramp-client:build:production --verbose
 
