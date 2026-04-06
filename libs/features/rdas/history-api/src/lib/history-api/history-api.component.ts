@@ -10,7 +10,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { SwaggerUIBundle } from 'swagger-ui-dist';
+import { SwaggerUI} from 'swagger-ui';
 
 @Component({
   selector: 'lib-history-api',
@@ -30,7 +30,7 @@ export class HistoryApiComponent {
   constructor() {
     afterNextRender(() => {
       if (this.isBrowser()) {
-        SwaggerUIBundle({
+        SwaggerUI({
           url: '/assets/history-api/nhs_swagger.json',
           domNode: this.el()?.nativeElement,
         });
