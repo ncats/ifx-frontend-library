@@ -1,14 +1,23 @@
 FROM rstudio/plumber:v1.0.0
 
-RUN apt-get update && apt-get install -y build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev default-libmysqlclient-dev net-tools libglpk-dev openjdk-11-jdk r-cran-rjava pandoc
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libcurl4-gnutls-dev \
+    libxml2-dev \
+    libssl-dev \
+    default-libmysqlclient-dev \
+    net-tools \
+    libglpk-dev \
+    openjdk-11-jdk \
+    r-cran-rjava \
+    pandoc \
+    libuv1-dev
 
 RUN R -e "install.packages(c('devtools', 'sqldf', 'config', 'R.cache', 'readr', 'svglite', 'rJava', 'pandoc'))"
 
 COPY plumber.R /usr/local/lib/R/site-library
 
 COPY runRamp.R /usr/local/lib/R/site-library
-
-#COPY db.R /usr/local/lib/R/site-library
 
 COPY install.R install.R
 
