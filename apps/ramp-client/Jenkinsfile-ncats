@@ -87,7 +87,7 @@ pipeline {
                             "BUILD_VERSION=" + (params.BUILD_VERSION ?: env.BUILD_VERSION),
                         ]) {
                             sh '''#!/bin/bash
-                            cp rampdb-client-environment-prod.ts apps/ramp-client/src/environments/environment.prod.ts
+                            cp rampdb-client-environment-prod.ts apps/ramp-client/src/environments/environment.ts
                             source prepare.sh
                             docker login https://registry.ncats.nih.gov:5000 -u "${DOCKERLOGIN}" -p "${DOCKERPASSWORD}"
                             docker build -f apps/ramp-client/Dockerfile --no-cache --build-arg BUILD_VERSION=${BUILD_VERSION} -t ${DOCKER_REPO_NAME} .
