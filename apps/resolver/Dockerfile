@@ -24,7 +24,8 @@ RUN NODE_OPTIONS=--max_old_space_size=8192 nx run resolver:build:production --ba
 FROM registry.ncats.nih.gov:5000/labshare/docker-base-web
 
 # Install NCATS required packages
-RUN apt-get update && apt-get install -y net-tools
+# Acquire::Check-Valid-Until=false works around expired InRelease files on the base image's apt mirrors
+RUN apt-get update -o Acquire::Check-Valid-Until=false && apt-get install -y net-tools
 
 COPY --from=build /var/www/app/dist/apps/resolver/browser /var/www/app
 

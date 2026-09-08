@@ -69,7 +69,7 @@ pipeline {
                             "BUILD_VERSION=" + (params.BUILD_VERSION ?: env.BUILD_VERSION)
                         ]) {
                             sh '''#!/bin/bash
-                            cp rampdb-client-environment-ci.ts apps/ramp-client/src/environments/environment.prod.ts
+                            cp rampdb-client-environment-ci.ts apps/ramp-client/src/environments/environment.ts
                             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 853771734544.dkr.ecr.us-east-1.amazonaws.com
                             sed -i -e "s/registry.ncats.nih.gov:5000/853771734544.dkr.ecr.us-east-1.amazonaws.com/" apps/ramp-client/Dockerfile
                             docker build -f apps/ramp-client/Dockerfile --no-cache --build-arg BUILD_VERSION=${BUILD_VERSION} -t ${DOCKER_REPO_NAME} .
