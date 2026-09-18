@@ -1,40 +1,33 @@
 import { Disease } from './disease';
+import { Agent, Organization } from './shared-models';
+import { ClinicalTrial } from './clinical-trial';
+import { Article } from './article';
 
 export class CoreProject {
-  core_project_num!: string;
-  rd_total_cost!: number | string;
-  fundedByAgents?: { name: string }[];
-  clinicalStudies?: ClinicalStudy[];
-  patents?: Patent[];
-  projects?: Project[];
-  projectCount?: number;
+  coreProjectNumber!: string;
+  totalCost!: number | string;
+  subProjects?: Project[];
+  subProjectsCount?: number;
+  _subProjectsCount?: { totalCount: number };
   title?: string;
-  _projectCount?: { low?: number; high?: number };
-  _rd_total_cost?: { low?: number; high?: number };
+  organizations?: Organization[];
+  patents?: Patent[];
+  clinicalTrials?: ClinicalTrial[];
+  diseasesStudied?: Disease[];
+  publications?: Article[];
 
   constructor(obj: Partial<CoreProject> = {}) {
     Object.assign(this, obj);
 
-    if (obj.clinicalStudies) {
-      this.clinicalStudies = obj.clinicalStudies.map(
-        (data) => new ClinicalStudy(data),
+    if (obj.subProjects) {
+      this.subProjects = obj.subProjects.map((data) => new Project(data));
+      this.title = this.subProjects[0].title;
+    }
+
+    if (obj.organizations) {
+      this.organizations = obj.organizations.map(
+        (data) => new Organization(data),
       );
-    }
-
-    if (obj?._rd_total_cost && obj._rd_total_cost.low) {
-      this.rd_total_cost = obj._rd_total_cost.low;
-    }
-
-    if (obj?._projectCount && obj._projectCount.low) {
-      this.projectCount = obj._projectCount.low;
-    }
-
-    if (obj.patents) {
-      this.patents = obj.patents.map((data) => new Patent(data));
-    }
-
-    if (obj.projects) {
-      this.projects = obj.projects.map((data) => new Project(data));
     }
   }
 }
@@ -49,24 +42,18 @@ export class Patent {
   }
 }
 
-export class Investigator {
-  org_name?: string;
-  org_state?: string;
-  pi_name?: string;
-
-  constructor(obj: Partial<Investigator> = {}) {
-    Object.assign(this, obj);
-  }
-}
-
 export class Annotation {
-  semantic_types_names?: string[];
-  umls_concept?: string;
+  semanticTypesNames?: string[];
+  semanticTypeNames?: string[];
+  semanticTypes?: string[];
+  umlsConcept?: string;
+  umlsCui?: string;
   constructor(obj: Partial<Annotation> = {}) {
     Object.assign(this, obj);
   }
 }
 
+/*
 export class ClinicalStudy {
   title?: string;
   status?: string;
@@ -76,19 +63,36 @@ export class ClinicalStudy {
     Object.assign(this, obj);
   }
 }
+*/
 
 export class Project {
   abstract?: string;
-  application_id?: string;
-  application_type?: string;
+  activity?: string;
+  applicationId?: string;
+  applicationType?: string;
+  cfdaCode?: string;
+  coreProjectNumber!: string;
+  dateCreatedRDAS?: string;
+  foaNumber?: string;
+  fullProjectNumber?: string;
+  fundingMechanism?: string;
+  fundingYear?: number;
   phr?: string;
-  funding_year?: string;
-  subproject_id?: string;
-  total_cost?: string;
+  serialNumber?: string;
+  studySection?: string;
+  studySectionName?: string;
+  supportYear?: string;
   terms?: string[];
+  _terms?: string;
   title?: string;
+  totalCost?: string;
+
+  // fundedByAgents?: { name: string }[];
+  // clinicalStudies?: ClinicalStudy[];
+  // patents?: Patent[];
   annotations?: Annotation[];
-  principalInvestigators?: Investigator[];
+  principalInvestigators?: Agent[];
+  contacts?: Agent[];
   researchedDiseases?: Disease[];
 
   constructor(obj: Partial<Project> = {}) {
@@ -98,10 +102,33 @@ export class Project {
       this.annotations = obj.annotations.map((data) => new Annotation(data));
     }
 
+    if (obj.researchedDiseases) {
+      this.researchedDiseases = obj.researchedDiseases.map(
+        (data) => new Disease(data),
+      );
+    }
+
+    if (obj._terms) {
+      this.terms = obj._terms.split(';');
+    }
+    /*    if (obj.clinicalStudies) {
+      this.clinicalStudies = obj.clinicalStudies.map(
+        (data) => new ClinicalStudy(data),
+      );
+    }
+
+    if (obj.patents) {
+      this.patents = obj.patents.map((data) => new Patent(data));
+    }*/
+
     if (obj.principalInvestigators) {
       this.principalInvestigators = obj.principalInvestigators.map(
-        (data) => new Investigator(data),
+        (data) => new Agent(data),
       );
+    }
+
+    if (obj.contacts) {
+      this.contacts = obj.contacts.map((data) => new Agent(data));
     }
 
     if (obj.researchedDiseases) {

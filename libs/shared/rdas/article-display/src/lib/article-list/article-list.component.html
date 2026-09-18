@@ -1,8 +1,8 @@
-@for (article of articles(); track article.pubmed_id) {
+@for (article of articles(); track article.pubmedId) {
   <div class="row centered-row">
     <lib-article-list-card
       [article]="article"
-      (click)="navigate(article.pubmed_id)"
+      (click)="navigate(article.pubmedId)"
       class="clickable-area"
     ></lib-article-list-card>
   </div>

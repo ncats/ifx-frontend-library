@@ -1,29 +1,7 @@
 import { gql } from 'apollo-angular';
-import { DIRECTION, RdasQueryFactory, RdasQueryParams } from './rdas-utils';
 import { TypedDocumentNode } from '@apollo/client';
 import { Params } from '@angular/router';
-
-export class GeneWhereParams extends RdasQueryParams {
-  allGenesWhere:
-    | {
-        NOT: {
-          geneSymbol: {
-            in: string[];
-          };
-        };
-      }
-    | undefined;
-  filteredGenesWhere?: {
-    geneSymbol: {
-      in: string[];
-    };
-  };
-  searchedGenesWhere?: {
-    geneSymbol: {
-      contains: string | null;
-    };
-  };
-}
+import { GeneSort, GeneWhere, SortDirection } from './generated-types';
 
 export const GENEFILTERSQUERY = gql`
   query GeneFilters(
@@ -31,10 +9,8 @@ export const GENEFILTERSQUERY = gql`
     $limit: Int
     $sort: [GeneSort!]
     $allGenesWhere: GeneWhere
-    $filteredGenesWhere: GeneWhere
-    $searchedGenesWhere: GeneWhere
   ) {
-    allFilters: genes(
+    filters: genes(
       where: $allGenesWhere
       sort: $sort
       limit: $limit
@@ -43,50 +19,17 @@ export const GENEFILTERSQUERY = gql`
       term: geneSymbol
       count: countDiseases
     }
-    selectedFilters: genes(
-      sort: $sort
-      where: $filteredGenesWhere
-      limit: $limit
-      offset: $offset
-    ) {
-      term: geneSymbol
-      count: countDiseases
-    }
-    searchFilters: genes(
-      sort: $sort
-      limit: $limit
-      where: $searchedGenesWhere
-      offset: $offset
-    ) {
-      term: geneSymbol
-      count: countDiseases
-    }
   }
 `;
 
-export class GeneQueryFactory implements RdasQueryFactory {
+export class GeneQueryFactory {
   query!: TypedDocumentNode<unknown, unknown>;
-  params: GeneWhereParams = {
-    limit: 200,
-    offset: 0,
-    sort: [{ countDiseases: DIRECTION.DESC }],
-    allGenesWhere: {
-      NOT: {
-        geneSymbol: {
-          in: [],
-        },
-      },
-    },
-    filteredGenesWhere: {
-      geneSymbol: {
-        in: [],
-      },
-    },
-    searchedGenesWhere: {
-      geneSymbol: {
-        contains: null,
-      },
-    },
+  params!: {
+    limit?: number;
+    offset?: number;
+    sort?: GeneSort[];
+    allGenesWhere?: GeneWhere;
+    searchedGenesWhere?: GeneWhere;
   };
 
   getQuery(params: Params) {
@@ -100,31 +43,34 @@ export class GeneQueryFactory implements RdasQueryFactory {
   }
 
   _buildParams(params: Params) {
-    console.log(params);
-    if (Object.keys(params).length > 0) {
-      if (params['genes']) {
-        const terms: string[] = params['genes'].split('&');
-        this.params.offset = params['skip'];
-        this.params.allGenesWhere = { NOT: { geneSymbol: { in: terms } } };
-        this.params.filteredGenesWhere = { geneSymbol: { in: terms } };
-        this.params.searchedGenesWhere = { geneSymbol: { contains: null } };
+    this.params = {
+      limit: 50,
+      sort: [{ countDiseases: 'DESC' as SortDirection }],
+    };
+    Object.entries(params).forEach((key) => {
+      switch (key[0]) {
+        case 'skip': {
+          this.params.offset = key[1];
+          break;
+        }
+        case 'limit': {
+          this.params.limit = key[1];
+          break;
+        }
+        case 'term': {
+          const term = key[1];
+          if (!this.params.allGenesWhere) {
+            this.params.allGenesWhere = {};
+          }
+          if (!this.params.allGenesWhere.AND) {
+            this.params.allGenesWhere.AND = [];
+          }
+          this.params.allGenesWhere.AND.push({
+            geneSymbol: { contains: term.toUpperCase() },
+          });
+          break;
+        }
       }
-
-      if (params['skip']) {
-        console.log(params['skip']);
-        this.params.offset = params['skip'];
-        console.log(this.params);
-      }
-      if (params['limit']) {
-        this.params.limit = params['limit'];
-      }
-      if (params['term']) {
-        const term = <string>params['term'];
-        this.params.searchedGenesWhere = {
-          geneSymbol: { contains: term.toUpperCase() },
-        };
-      }
-    }
-    console.log(this.params);
+    });
   }
 }

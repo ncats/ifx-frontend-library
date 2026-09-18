@@ -2,10 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Inject,
+  DOCUMENT,
   input,
 } from '@angular/core';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Filter, FilterCategory } from 'utils-models';

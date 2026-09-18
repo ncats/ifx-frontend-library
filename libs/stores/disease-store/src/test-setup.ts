@@ -75,7 +75,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -100,7 +100,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -125,7 +125,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -150,7 +150,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -175,7 +175,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -270,7 +270,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -295,7 +295,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -320,7 +320,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -345,7 +345,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -370,7 +370,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -402,74 +402,74 @@ export const DISEASELISTMOCK = {
 export const SUBSCRIPTIONLISTMOCK = {
   subscriptions: [
     {
-      gardID: 'GARD:0002491',
+      gardId: 'GARD:0002491',
       alerts: ['articles', 'grants', 'trials'],
       diseaseName: 'Glioblastoma',
     },
     {
       alerts: ['articles', 'grants', 'trials'],
-      gardID: 'GARD:0020774',
+      gardId: 'GARD:0020774',
       diseaseName: '16p13.11 microdeletion syndrome',
     },
     {
-      gardID: 'GARD:0022513',
+      gardId: 'GARD:0022513',
       diseaseName: 'Rare developmental defect during embryogenesis',
       alerts: ['articles', 'grants', 'trials'],
     },
     {
-      gardID: 'GARD:0010525',
+      gardId: 'GARD:0010525',
       diseaseName: '15q11.2 microdeletion syndrome',
       alerts: ['articles', 'grants', 'trials'],
     },
     {
-      gardID: 'GARD:0017423',
+      gardId: 'GARD:0017423',
       diseaseName: '15q overgrowth syndrome',
       alerts: ['articles', 'grants', 'trials'],
     },
     {
-      gardID: 'GARD:0005679',
+      gardId: 'GARD:0005679',
       alerts: ['articles', 'grants', 'trials'],
       diseaseName: '49, XXXXY syndrome',
     },
     {
       diseaseName: 'Precocious puberty',
       alerts: ['articles', 'grants', 'trials'],
-      gardID: 'GARD:0007446',
+      gardId: 'GARD:0007446',
     },
     {
-      gardID: 'GARD:0005659',
+      gardId: 'GARD:0005659',
       diseaseName: '17-beta hydroxysteroid dehydrogenase 3 deficiency',
       alerts: ['articles', 'grants', 'trials'],
     },
     {
-      gardID: 'GARD:0001469',
+      gardId: 'GARD:0001469',
       diseaseName: '17-alpha-hydroxylase deficiency',
       alerts: ['articles', 'grants', 'trials'],
     },
     {
       alerts: ['articles', 'trials', 'grants'],
       diseaseName: '48,XXYY syndrome',
-      gardID: 'GARD:0005677',
+      gardId: 'GARD:0005677',
     },
     {
-      gardID: 'GARD:0011985',
+      gardId: 'GARD:0011985',
       alerts: ['trials', 'grants', 'articles'],
       diseaseName: '48,XYYY',
     },
     {
       diseaseName: '14q24.1q24.3 microdeletion syndrome',
       alerts: ['articles', 'grants', 'trials'],
-      gardID: 'GARD:0021706',
+      gardId: 'GARD:0021706',
     },
     {
-      gardID: 'GARD:0010935',
+      gardId: 'GARD:0010935',
       alerts: ['trials'],
       diseaseName: '16q24.3 microdeletion syndrome',
     },
     {
       diseaseName: '14q32 duplication syndrome',
       alerts: ['trials'],
-      gardID: 'GARD:0017890',
+      gardId: 'GARD:0017890',
     },
   ],
 };

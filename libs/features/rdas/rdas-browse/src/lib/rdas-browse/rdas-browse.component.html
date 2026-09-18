@@ -6,7 +6,7 @@
     [opened]="!mobileQuery.matches"
     [mode]="'side'"
   >
-    <div class="row right-justified-row">
+    <!--<div class="row right-justified-row">
       <button
         mat-icon-button
         class="close-button"
@@ -15,18 +15,22 @@
       >
         <mat-icon>close</mat-icon>
       </button>
-    </div>
+    </div>-->
     <mat-tab-group>
       <mat-tab label="Filters">
-        @for (filter of filters(); track filter.label) {
-          <lib-shared-utils-filter-panel
-            [filter]="filter"
-            [showSearch]="true"
-            (filterSelectionChange)="filterSelectionChange($event)"
-            (filterChange)="filterChange($event)"
-          ></lib-shared-utils-filter-panel>
-          <br />
-        }
+        <lib-shared-utils-filter-panel
+          [filter]="filters().get('genes')"
+          [showSearch]="true"
+          (filterSelectionChange)="filterSelectionChange($event)"
+          (filterChange)="filterChange($event)"
+        ></lib-shared-utils-filter-panel>
+        <br />
+        <lib-shared-utils-filter-panel
+          [filter]="filters().get('phenotypes')"
+          [showSearch]="true"
+          (filterSelectionChange)="filterSelectionChange($event)"
+          (filterChange)="filterChange($event)"
+        ></lib-shared-utils-filter-panel>
       </mat-tab>
       <!-- <mat-tab label="Hierarchy">
         <ng-template matTabContent>
@@ -58,7 +62,7 @@
         </button>
       </div>
     }-->
-    <!--    <div class="row space-around-row top-align">
+    <div class="row space-around-row top-align">
       @if (!mobileQuery.matches) {
         @if (filterMap() && filterMap().has('articles')) {
           <div class="width-30">
@@ -88,12 +92,12 @@
           </div>
         }
       }
-    </div>-->
+    </div>
     <br />
-    <lib-shared-utils-selected-filter-list
-      [filters]="selectedValues"
+    <!--   <lib-shared-utils-selected-filter-list
+      [filters]="selectedValues()"
       (filterChange)="filterSelectionChange($event)"
-    ></lib-shared-utils-selected-filter-list>
+    ></lib-shared-utils-selected-filter-list>-->
     <div class="row space-between-row">
       <div>
         <mat-form-field

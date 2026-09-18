@@ -108,7 +108,7 @@ export class IfxDatatableComponent implements OnInit {
   data = input<{ [key: string]: DataProperty }[]>();
   fieldsConfig = input<DataProperty[]>();
   displayColumns = computed(() => {
-    let ret: string[] = [];
+    let ret: string[];
     if (this.selectableRows()) {
       ret = ['select'].concat(
         this.displayFields()?.map((field) => field.field) as string[],
@@ -120,8 +120,7 @@ export class IfxDatatableComponent implements OnInit {
   });
 
   displayFields = computed(() => {
-    let ret: DataProperty[] = [];
-    ret = this.fieldsConfig()?.filter(
+    let ret: DataProperty[] = this.fieldsConfig()?.filter(
       (field) => !!field.visible,
     ) as DataProperty[];
     if (!ret || !ret.length) {

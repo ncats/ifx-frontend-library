@@ -7,7 +7,6 @@ import {
   Component,
   DestroyRef,
   inject,
-  OnDestroy,
   OnInit,
   signal,
   Signal,
@@ -34,29 +33,15 @@ import {
   DiseaseHeaderComponent,
 } from 'disease-display';
 import { ScrollToTopComponent } from 'scroll-to-top';
-import { DiseaseSelectors, FetchDiseaseActions } from 'disease-store';
-import { ArticleSelectors } from 'article-store';
-import { ProjectSelectors } from 'grant-store';
-import { TrialSelectors } from 'trial-store';
-import { Store } from '@ngrx/store';
+import { DiseaseSelectors, DiseaseStore } from 'disease-store';
+import { ArticleStore } from 'article-store';
+import { ProjectStore } from 'project-store';
+import { ClinicalTrialStore } from 'trial-store';
 
 @Component({
   selector: 'lib-rdas-disease-page',
   templateUrl: './rdas-disease-page.component.html',
   styleUrls: ['./rdas-disease-page.component.scss'],
-  /*   animations: [
-    trigger('followOnScroll', [
-      state('in', style({ top: '30vh' })),
-      state(
-        'out',
-        style({
-          top: '15vh',
-        }),
-      ),
-      transition('in => out', [group([animate('200ms ease-out')])]),
-      transition('out => in', [group([animate('200ms ease-in')])]),
-    ]),
-  ], */
   encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule,
@@ -78,8 +63,11 @@ import { Store } from '@ngrx/store';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RdasDiseasePageComponent implements OnInit, OnDestroy {
-  private readonly store = inject(Store);
+export class RdasDiseasePageComponent implements OnInit {
+  private readonly articleStore = inject(ArticleStore);
+  private readonly diseaseStore = inject(DiseaseStore);
+  private readonly projectStore = inject(ProjectStore);
+  private readonly clinicalTrialStore = inject(ClinicalTrialStore);
   private readonly route = inject(ActivatedRoute);
   scroller = inject(ViewportScroller);
   scrollDispatcher = inject(ScrollDispatcher);
@@ -88,21 +76,17 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   destroyRef = inject(DestroyRef);
 
-  disease: Signal<Disease | undefined> = this.store.selectSignal(
-    DiseaseSelectors.getSelected,
-  );
-  loaded: Signal<boolean | undefined> = this.store.selectSignal(
-    DiseaseSelectors.getDiseasesLoaded,
-  );
+  loaded = this.diseaseStore.isLoading;
+
   diseaseFilters: Signal<FilterCategory[] | undefined> =
-    this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
-  staticDiseaseFilters: Signal<FilterCategory[] | undefined> =
-    this.store.selectSignal(DiseaseSelectors.getStaticDiseaseFilters);
-  articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
-  projectsCount = this.store.selectSignal(
-    ProjectSelectors.selectAllProjectsCount,
-  );
-  trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
+    this.diseaseStore.dynamicDiseaseFilters;
+
+  disease = this.diseaseStore.disease;
+  staticDiseaseFilters = this.diseaseStore.staticDiseaseFilters;
+  articlesCount = this.articleStore.articleCounts;
+  projectsCount = this.projectStore.projectCounts;
+  clinicalTrialsCount = this.clinicalTrialStore.clinicalTrialCounts;
+
   animationState = signal('in');
 
   activeElement = 'overview';
@@ -149,7 +133,7 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
       //scroll to section
       this.router.navigate(['disease'], {
         fragment: event.fragment,
-        queryParams: { id: this.disease()?.gardId, ...event.params },
+        queryParams: { gardId: this.disease()?.gardId, ...event.params },
       });
     }
   }
@@ -164,10 +148,5 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
 
   isActive(check: string): boolean {
     return this.activeElement === check;
-  }
-
-  ngOnDestroy() {
-    this.store.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
-    // this.store.dispatch(FetchDiseaseActions.clearDisease());
   }
 }

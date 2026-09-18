@@ -1,5 +1,20 @@
-.modal-button {
+.register-background {
+  width: 25%;
+  background-color: #ffffff;
+  justify-self: center;
+  align-self: center;
+}
+
+.buttons-list > mat-list-item {
+  margin-top: 1vh;
+}
+
+.sign-in-form {
   min-width: 20vw;
+}
+
+.modal-button {
+  min-width: 25vw;
 }
 
 .disclaimer {

@@ -14,8 +14,7 @@
       </div>
       <div>
         <lib-subscribe-button
-          [subscriptionName]="disease()?.gardName"
-          [subscriptionId]="disease()?.gardId"
+          [subscriptionObject]="diseaseSubscription()"
         ></lib-subscribe-button>
       </div>
     </div>
@@ -36,7 +35,7 @@
     </div>
     @if (disease()?.synonyms && disease()?.synonyms?.length) {
       <div class="width-75">
-        <i>{{ disease()?.synonyms?.join(', ') }}</i>
+        <i>{{ disease()?.synonyms?.join(' | ') }}</i>
       </div>
     }
     <div class="count-grid">

@@ -4,6 +4,7 @@ import {
   Component,
   input,
   output,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,7 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUtilsSelectedFilterListComponent {
-  filters = input<Map<string, string[]>>();
+  filters = input<Map<string, string[]> | undefined>(undefined);
   filterChange = output<{ label: string; values: string[] }[]>();
 
   removeFilterFamily(family: string): void {

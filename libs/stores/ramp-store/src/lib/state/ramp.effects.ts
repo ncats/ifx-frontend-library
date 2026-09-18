@@ -43,9 +43,7 @@ import { exhaustMap, filter, mergeMap, of, tap } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   getChemicalEnrichment,
-  getClusterPlotUrl,
   getCombinedFishersDataframe,
-  // getEnrichedChemicalClass,
   getFilteredFishersDataframe,
   getOntologyEnrichment,
   getReactionClassEnrichment,

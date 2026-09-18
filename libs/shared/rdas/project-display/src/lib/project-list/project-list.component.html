@@ -1,8 +1,8 @@
-@for (grant of projects(); track grant.core_project_num) {
+@for (project of projects(); track project.coreProjectNumber) {
   <div class="row centered-row">
     <lib-project-list-card
-      [grant]="grant"
-      (click)="navigate(grant.core_project_num)"
+      [project]="project"
+      (click)="navigate(project.coreProjectNumber)"
       class="clickable-area"
     ></lib-project-list-card>
   </div>

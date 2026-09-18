@@ -3,7 +3,6 @@ import {
   Component,
   inject,
   OnInit,
-  ViewEncapsulation,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -14,14 +13,18 @@ import {
   ReactiveFormsModule,
   FormsModule,
 } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { RegisterEmailUserActions } from 'user-store';
+import {
+  MatDialog,
+  MatDialogContent,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { UserStore } from 'user-store';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Store } from '@ngrx/store';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 /**
  * Set the regular expression for a secure password
@@ -50,7 +53,7 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
   selector: 'lib-register-modal',
   templateUrl: './register-modal.component.html',
   styleUrls: ['./register-modal.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  //encapsulation: ViewEncapsulation.None,
   imports: [
     MatButtonModule,
     MatIconModule,
@@ -58,17 +61,20 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDialogContent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
 export class RegisterModalComponent implements OnInit {
-  store = inject(Store);
+  userStore = inject(UserStore);
   dialog = inject(MatDialog);
   public dialogRef = inject(MatDialogRef<RegisterModalComponent>);
 
   showPassword = false;
   inputType = 'password';
+  registerError = this.userStore.error;
+  userSignal = toObservable(this.userStore.user);
 
   registerForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -77,6 +83,12 @@ export class RegisterModalComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.userSignal.subscribe((res) => {
+      if (res) {
+        this.closeModal();
+      }
+    });
+
     this.registerForm.controls['pwVerify'].addValidators(
       matchPassword(this.registerForm.controls['pw']),
     );
@@ -117,9 +129,7 @@ export class RegisterModalComponent implements OnInit {
 
   register() {
     if (this.registerForm.status === 'VALID') {
-      this.store.dispatch(
-        RegisterEmailUserActions.registerEmailUser(this.registerForm.value),
-      );
+      this.userStore.registerUser(this.registerForm.value);
     }
   }
 
@@ -130,5 +140,6 @@ export class RegisterModalComponent implements OnInit {
 
   closeModal(): void {
     this.dialogRef.close();
+    this.userStore.clearError();
   }
 }

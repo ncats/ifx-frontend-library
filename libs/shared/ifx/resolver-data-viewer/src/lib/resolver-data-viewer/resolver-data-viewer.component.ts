@@ -102,7 +102,6 @@ export class ResolverDataViewerComponent {
   }
 
   _toCSV(data: { [key: string]: string }[]): string {
-    let ret = '';
     const lines: string[] = [];
     data.forEach((input) => {
       const inputLine: string[] = [];
@@ -113,8 +112,7 @@ export class ResolverDataViewerComponent {
       });
       lines.push(inputLine.join(','));
     });
-    ret = this.headers().join(',') + ' \n ' + lines.join('\n');
-    return ret;
+    return this.headers().join(',') + ' \n ' + lines.join('\n');
   }
 
   _toJSON(data: string): { [key: string]: string } {

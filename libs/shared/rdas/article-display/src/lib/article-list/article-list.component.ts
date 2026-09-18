@@ -26,7 +26,7 @@ export class ArticleListComponent {
     if (id) {
       const navigationExtras: NavigationExtras = {
         queryParams: {
-          pmid: id,
+          pubmedId: id,
         },
       };
       this.router.navigate(['/article'], navigationExtras);

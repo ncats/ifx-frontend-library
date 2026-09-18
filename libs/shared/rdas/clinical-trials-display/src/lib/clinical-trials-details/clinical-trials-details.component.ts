@@ -55,6 +55,8 @@ export class ClinicalTrialsDetailsComponent {
     let ret: string = objType;
     const t = this.trial();
     if (t) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       const arr = t[objType] as Array<unknown>;
       if (arr) {
         if (arr && arr.length > 1) {

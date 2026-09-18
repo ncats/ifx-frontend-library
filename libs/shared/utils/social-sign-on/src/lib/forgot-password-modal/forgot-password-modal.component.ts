@@ -3,26 +3,26 @@ import {
   Component,
   DestroyRef,
   inject,
-  OnDestroy,
-  OnInit,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   FormGroup,
-  Validators,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogContent,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
-
+import { MatRippleModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
-import { ResetPasswordEmailActions, UserSelectors } from 'user-store';
-import { select, Store } from '@ngrx/store';
-import { map } from 'rxjs';
+import { UserStore } from 'user-store';
 
 @Component({
   selector: 'lib-forgot-password-modal',
@@ -31,16 +31,19 @@ import { map } from 'rxjs';
   imports: [
     MatButtonModule,
     MatIconModule,
+    MatListModule,
+    MatRippleModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
+    MatDialogContent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
-export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
-  private readonly store = inject(Store);
+export class ForgotPasswordModalComponent {
+  private readonly userStore = inject(UserStore);
   destroyRef = inject(DestroyRef);
   dialog = inject(MatDialog);
   public dialogRef = inject(MatDialogRef<ForgotPasswordModalComponent>);
@@ -51,33 +54,6 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
   signOnForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
   });
-
-  ngOnInit() {
-    this.store
-      .pipe(
-        select(UserSelectors.getUsersError),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: string | null | undefined) => {
-          if (res) {
-            this.loginError = res;
-          }
-        }),
-      )
-      .subscribe();
-
-    this.store
-      .pipe(
-        select(UserSelectors.getEmail),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: string | null | undefined) => {
-          if (res === 'reset') {
-            this.emailSent = true;
-            this.signOnForm.reset();
-          }
-        }),
-      )
-      .subscribe();
-  }
 
   getEmailErrorMessage() {
     if (this.signOnForm.controls['email'].hasError('required')) {
@@ -90,17 +66,14 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
 
   send() {
     if (this.signOnForm.valid) {
-      this.store.dispatch(
-        ResetPasswordEmailActions.resetPasswordEmail(this.signOnForm.value),
-      );
+      this.userStore.sendResetEmail(this.signOnForm.value);
+      this.signOnForm.reset();
+      this.emailSent = true;
     }
   }
 
   closeModal(): void {
     this.dialogRef.close();
-  }
-
-  ngOnDestroy() {
-    this.loginError = '';
+    this.userStore.clearError();
   }
 }

@@ -137,7 +137,6 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
   });
 
   sortedSelection = computed(() => {
-    //  return this.subscriptionSelectionSignal()
     return this.subscriptionSelectionSignal()
       .selected // .map((filter) => filter.value)
       .sort((a, b) => a.localeCompare(b));
@@ -290,7 +289,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
           if (tempObj[field] && tempObj[field].length) {
             tempObj[field].push(filter);
             tempObj[field] = tempObj[field].sort((a, b) =>
-              a.term.localeCompare(b.term),
+              a.term.toString().localeCompare(b.term.toString()),
             );
           } else {
             tempObj[field] = [filter];

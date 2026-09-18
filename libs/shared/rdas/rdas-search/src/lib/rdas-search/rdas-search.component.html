@@ -30,7 +30,7 @@
             <span
               class="sub-value"
               [innerHTML]="
-                option.synonyms.join(', ') | highlight: searchFormCtl.value
+                option.synonyms.join(' | ') | highlight: searchFormCtl.value
               "
             ></span>
           }

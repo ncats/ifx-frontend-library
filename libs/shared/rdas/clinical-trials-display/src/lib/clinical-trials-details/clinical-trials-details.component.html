@@ -12,14 +12,14 @@
               }}
             </h2>
           </div>
-          @if (trial()!.NCTId) {
+          @if (trial()!.nctId) {
             <div class="mat-h3">
               <a
-                href="https://clinicaltrials.gov/ct2/show/{{ trial()!.NCTId }}"
+                href="https://clinicaltrials.gov/ct2/show/{{ trial()!.nctId }}"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Link to clinical trial in at Clinicaltrials.gov"
-                >{{ trial()!.NCTId }}</a
+                >{{ trial()!.nctId }}</a
               >
             </div>
           }
@@ -52,7 +52,7 @@
               </div>
               <div class="primary-chip-outlined">Last Update</div>
               <div class="list-item-content">
-                {{ trial()?.lastUpdatePostDate }}
+                {{ trial()?.lastUpdatePostDate | date }}
               </div>
             </div>
           </div>
@@ -253,10 +253,13 @@
             <mat-tab
               [label]="getLabel('studyDiseases')"
               [disabled]="
-                !trial()?.studyDiseases || trial()!.studyDiseases!.length <= 1
+                !trial()?.studyDiseases && trial()!.conditions
               "
             >
               <mat-list>
+                <div class="accent-chip-outlined">
+                  Study Disease
+                </div>
                 @for (disease of trial()!.studyDiseases; track disease.gardId) {
                   <mat-list-item>
                     @if (disease.gardId) {
@@ -277,23 +280,44 @@
                   </mat-list-item>
                 }
               </mat-list>
-            </mat-tab>
-            <mat-tab
-              [label]="getLabel('conditions')"
-              [disabled]="
-                !trial()?.conditions || trial()?.conditions?.length === 0
-              "
-            >
-              <mat-list>
+                @if(trial()!.conditions){
+                  <mat-list>
+                  <div class="accent-chip-outlined">
+                    Conditions
+                  </div>
                 @for (
                   condition of trial()!.conditions;
                   track condition.condition
-                ) {
+                  ) {
                   <mat-list-item>
                     {{ condition.condition }}
+                    @if(condition.mappedDiseases && condition.mappedDiseases.length){
+                      mapped to:
+                      @for (
+                        disease of condition.mappedDiseases;
+                        track disease.gardId
+                        ) {
+                        @if (disease.gardId) {
+                          <div #link>
+                            <a
+                              href="/disease?id={{ disease.gardId }}"
+                              target="_blank"
+                              rel="noreferrer"
+                              aria-label="Link to disease details page"
+                            >{{ disease.gardName }}</a
+                            >
+                          </div>
+                        } @else {
+                          <div #nolink>
+                            {{ disease.gardName }}
+                          </div>
+                        }
+                      }
+                    }
                   </mat-list-item>
                 }
               </mat-list>
+                }
             </mat-tab>
             <mat-tab
               [label]="getLabel('locations')"
@@ -304,28 +328,23 @@
               @for (location of trial()!.locations; track location) {
                 <mat-list>
                   <mat-list-item>
-                    <div>{{ location.locationFacility }}</div>
+                    <div>{{ location.facility }}</div>
                   </mat-list-item>
                   <mat-list-item>
-                    @if (location.locationCity) {
-                      {{ location.locationCity }}
-                      @if (location.locationState || location.locationCountry) {
+                    @if (location.city) {
+                      {{ location.city }}
+                      @if (location.state || location.state) {
                         <span>,&nbsp;</span>
                       }
                     }
-                    @if (location.locationState) {
-                      <span>{{ location.locationState }}&nbsp;</span>
+                    @if (location.state) {
+                      <span>{{ location.state }}&nbsp;</span>
                     }
-                    @if (location.locationCountry) {
-                      <span>{{ location.locationCountry }}&nbsp;</span>
+                    @if (location.country) {
+                      <span>{{ location.country }}&nbsp;</span>
                     }
-                    @if (location.locationZip) {
-                      <span>{{ location.locationZip }}&nbsp;</span>
-                    }
-                  </mat-list-item>
-                  <mat-list-item>
-                    @if (location.locationStatus) {
-                      <span>Status: {{ location.locationStatus }}</span>
+                    @if (location) {
+                      <span>{{ location.zip }}&nbsp;</span>
                     }
                   </mat-list-item>
                 </mat-list>
@@ -371,10 +390,15 @@
                       {{ intervention.interventionName }}
                     </div>
                   }
+                  @if (intervention.interventionDescription) {
+                    <p>
+                      {{ intervention.interventionDescription }}
+                    </p>
+                  }
                 </div>
               }
             </mat-tab>
-            <mat-tab
+            <!-- <mat-tab
               [label]="getLabel('references')"
               [disabled]="
                 !trial()?.references || trial()?.references?.length === 0
@@ -416,7 +440,7 @@
                   <br />
                 </div>
               }
-            </mat-tab>
+            </mat-tab>-->
           </mat-tab-group>
         </mat-card-content>
       </mat-card>

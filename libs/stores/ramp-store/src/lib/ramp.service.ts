@@ -160,9 +160,10 @@ export class RampService {
       analytes: analytes,
     };
     return this.http
-      .post<
-        RampAPIResponse<Pathway>
-      >(`${this.url}pathways-from-analytes`, options)
+      .post<RampAPIResponse<Pathway>>(
+        `${this.url}pathways-from-analytes`,
+        options,
+      )
       .pipe(
         map((response: RampAPIResponse<Pathway>) => {
           const pathwayList: Pathway[] = response.data.map(
@@ -182,9 +183,10 @@ export class RampService {
       analyteType: action.analyteType,
     };
     return this.http
-      .post<
-        RampAPIResponse<Analyte>
-      >(`${this.url}analytes-from-pathways`, options)
+      .post<RampAPIResponse<Analyte>>(
+        `${this.url}analytes-from-pathways`,
+        options,
+      )
       .pipe(
         map((response: RampAPIResponse<Analyte>) => {
           const analyteList = response.data.map(
@@ -202,9 +204,10 @@ export class RampService {
       metabolites: analytes,
     };
     return this.http
-      .post<
-        RampAPIResponse<Ontology>
-      >(`${this.url}ontologies-from-metabolites`, options)
+      .post<RampAPIResponse<Ontology>>(
+        `${this.url}ontologies-from-metabolites`,
+        options,
+      )
       .pipe(
         map((response: RampAPIResponse<Ontology>) => {
           const ontologyList = response.data.map(
@@ -222,9 +225,10 @@ export class RampService {
       ontology: ontologies,
     };
     return this.http
-      .post<
-        RampAPIResponse<Metabolite>
-      >(`${this.url}metabolites-from-ontologies`, options)
+      .post<RampAPIResponse<Metabolite>>(
+        `${this.url}metabolites-from-ontologies`,
+        options,
+      )
       .pipe(
         map((response: RampAPIResponse<Metabolite>) => {
           const metaboliteList = response.data.map(
@@ -332,9 +336,11 @@ export class RampService {
       format: format,
     };
     this.http
-      .post<
-        string[]
-      >(`${this.url}metabolites-from-ontologies`, params, HTTP_OPTIONS)
+      .post<string[]>(
+        `${this.url}metabolites-from-ontologies`,
+        params,
+        HTTP_OPTIONS,
+      )
       .subscribe((response: unknown) => {
         this._downloadFile(
           response as Blob,
@@ -398,9 +404,10 @@ export class RampService {
       metabolites: metabolites,
     };
     return this.http
-      .post<
-        RampAPIResponse<Properties>
-      >(`${this.url}chemical-properties`, options)
+      .post<RampAPIResponse<Properties>>(
+        `${this.url}chemical-properties`,
+        options,
+      )
       .pipe(
         map((response: RampAPIResponse<Properties>) => {
           const propertyList = response.data.map(
@@ -430,9 +437,10 @@ export class RampService {
       analytes: analytes,
     };
     return this.http
-      .post<
-        RampAPIResponse<CommonAnalyte>
-      >(`${this.url}common-reaction-analytes`, options)
+      .post<RampAPIResponse<CommonAnalyte>>(
+        `${this.url}common-reaction-analytes`,
+        options,
+      )
       .pipe(
         map((response: RampAPIResponse<CommonAnalyte>) => {
           const commonAnalyteList = response.data.map(
@@ -477,7 +485,7 @@ export class RampService {
           );
           const plot = Object.keys(response.plot).map((level: string) => {
             const t = response.plot[level as keyof typeof response.plot];
-            let r = [];
+            let r;
             if (Object.is(t, {})) {
               r = Array.from([]);
             } else {

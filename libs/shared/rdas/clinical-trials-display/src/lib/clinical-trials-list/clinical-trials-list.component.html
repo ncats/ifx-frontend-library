@@ -1,8 +1,8 @@
-@for (trial of trials(); track trial.NCTId) {
+@for (trial of trials(); track trial.nctId) {
   <div class="row centered-row">
     <lib-clinical-trials-list-card
       [trial]="trial"
-      (click)="navigate(trial.NCTId)"
+      (click)="navigate(trial.nctId)"
       class="clickable-area"
     ></lib-clinical-trials-list-card>
   </div>

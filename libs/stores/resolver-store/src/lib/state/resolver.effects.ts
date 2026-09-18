@@ -46,7 +46,7 @@ export const init$ = createEffect(
                     term: <string>opt['title'],
                   });
                 })
-                .sort((a, b) => a.term.localeCompare(b.term));
+             //   .sort((a, b) => a.term.toString().localeCompare(b.term.toString()));
               if (opts && opts.length) {
                 retArr.forEach((opt: Filter) => {
                   if (opts.includes(<string>opt.value)) {

@@ -3,6 +3,11 @@
     <div class="filter-grid">
       @for (filter of filters(); track filter.field) {
         @if (filter.values && filter.field) {
+          @switch (filter.formType){
+            @case ('boolean'){
+              <mat-slide-toggle [formControlName]="filter.field" >{{filter.values[0].label}} only</mat-slide-toggle>
+            }
+            @default {
           <div>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ filter?.label }}</mat-label>
@@ -55,6 +60,8 @@
               }
             }
           </div>
+            }
+          }
         }
       }
     </div>

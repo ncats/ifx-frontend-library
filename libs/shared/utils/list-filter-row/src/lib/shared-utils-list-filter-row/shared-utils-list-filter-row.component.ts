@@ -2,9 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  EventEmitter,
   input,
-  Output,
+  output,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -13,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Filter, FilterCategory } from 'utils-models';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'lib-shared-utils-list-filter-row',
@@ -22,6 +22,7 @@ import { Filter, FilterCategory } from 'utils-models';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatSlideToggle,
   ],
   templateUrl: './shared-utils-list-filter-row.component.html',
   styleUrl: './shared-utils-list-filter-row.component.scss',
@@ -50,6 +51,5 @@ export class SharedUtilsListFilterRowComponent {
   showCount = input<boolean>(true);
   showSelected = input<boolean>(true);
 
-  @Output() filterChange: EventEmitter<{ [key: string]: Filter[] }> =
-    new EventEmitter<{ [key: string]: Filter[] }>();
+  filterChange = output<{ [key: string]: Filter[] }>();
 }

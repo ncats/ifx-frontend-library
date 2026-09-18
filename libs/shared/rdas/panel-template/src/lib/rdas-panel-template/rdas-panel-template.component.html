@@ -1,25 +1,106 @@
-@if (filters() && filters()?.length) {
+<!--@if (filters() && filters()?.length) {
   <lib-shared-utils-list-filter-row
     [filters]="filters()"
     (filterChange)="fetchList($event)"
   ></lib-shared-utils-list-filter-row>
-}
-@if (showPagination()) {
-  <div class="row right-justified-row">
-    <mat-paginator
-      #paginator
-      [length]="count()"
-      [pageIndex]="0"
-      [pageSize]="10"
-      [hidePageSize]="true"
-      (page)="pageList($event)"
-    ></mat-paginator>
-  </div>
-}
+}-->
 @if (count() > 0) {
-  <ng-content select=".data-list"></ng-content>
+  <div class="row space-between-row">
+    @if (filters() && filters()?.length) {
+    <div>
+      <button matButton (click)="filterDrawer.toggle()"><mat-icon>filter_alt</mat-icon>Filters</button>
+    </div>
+    } @else {
+      <div></div>
+    }
+    @if (showPagination()) {
+      <div>
+        <mat-paginator
+          #paginator
+          [length]="count()"
+          [pageIndex]="0"
+          [pageSize]="10"
+          [hidePageSize]="true"
+          (page)="pageList($event)"
+        ></mat-paginator>
+      </div>
+    }
+  </div>
+  <mat-drawer-container class="example-container">
+    <mat-drawer mode="over" #filterDrawer>
+      <button mat-icon-button (click)="filterDrawer.toggle()"><mat-icon>close</mat-icon></button>
+
+      @for(filter of filters(); track filter.label){
+
+        <lib-shared-utils-filter-panel
+          [filter]="filter"
+          [showSearch]="false"
+          [fullList] = true
+          (filterSelectionChange)="filterChange($event)"
+        ></lib-shared-utils-filter-panel>
+          @if(filter.values.length === 2){
+          <mat-slide-toggle (change)="toggleField(filter.field, $event.checked)">{{filter.values[0].label}} only</mat-slide-toggle>
+          } @else {
+ <!--           <div>
+              &lt;!&ndash;    <lib-loading-spinner
+              [isLoaded]="!loading"
+            ></lib-loading-spinner>&ndash;&gt;
+              <cdk-virtual-scroll-viewport
+                appendOnly
+                itemSize="5"
+                class="filter-viewport"
+              >
+                <div
+                  *cdkVirtualFor="
+            let field of filter.values;
+            let last = last;
+            trackBy: _filterField
+          "
+                  class="filter-grid"
+                >
+                  <div class="filter-cell checkbox">
+                    <mat-checkbox
+                      [id]="field.term.toString()"
+                      (click)="$event.stopPropagation()"
+                      [aria-label]="field.term.toString()"
+                      (change)="$event ? filterSelection.toggle(field['term']) : null"
+                      [checked]="filterSelection.isSelected(field['term'])"
+                    >
+                    </mat-checkbox>
+                  </div>
+                  <div class="filter-cell name">
+            <span class="field-text">
+                  {{field.term}}
+                          </span>
+                  </div>
+                  <div class="filter-cell count">
+            <span class="field-text">
+              {{
+                field['filteredCount']
+                  ? field['filteredCount'] + '/' + field['count']
+                  : field['count']
+              }}
+            </span>
+                  </div>
+                </div>
+              </cdk-virtual-scroll-viewport>
+            </div>-->
+          }
+        }
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <button matButton="filled" (click)="filterDrawer.toggle()">Apply Filters</button>
+    </mat-drawer>
+    <mat-drawer-content>
+      <ng-content select=".data-list"></ng-content>
+
+    </mat-drawer-content>
+  </mat-drawer-container>
 } @else {
   <lib-shared-utils-data-not-found
+    [subscription]="diseaseSubscription()"
     [message]="message()"
   ></lib-shared-utils-data-not-found>
 }

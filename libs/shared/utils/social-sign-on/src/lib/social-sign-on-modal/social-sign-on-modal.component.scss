@@ -1,11 +1,16 @@
-.buttons-list {
-  list-style: none;
-  padding-left: 0;
-  padding-top: 2vh;
+.sign-in-background {
+  width: 25%;
+  background-color: #ffffff;
+  justify-self: center;
+  align-self: center;
 }
 
 .buttons-list > mat-list-item {
   margin-top: 1vh;
+}
+
+.sign-in-form {
+  min-width: 20vw;
 }
 
 .login-button {
@@ -16,11 +21,13 @@
   font-size: 1rem;
   color: #ffffff;
   border-radius: 4px;
+  height: 32px;
+  padding: 6px;
 }
 
 .login-icon {
   height: 32px;
-  width: 32px;
+  // width: 32px;
   padding: 6px;
 }
 
@@ -30,16 +37,15 @@
   border: rgba(158, 158, 158, 0.2) 1px solid;
 }
 
+.email {
+  background-color: #000000;
+  color: #ffffff;
+}
+
 .facebook {
-  background-color: #3b5998;
-}
-
-.github {
-  background-color: #333333;
-}
-
-.twitter {
-  background-color: #1da1f2;
+  background-color: #ffffff;
+  color: #757575;
+  border: rgba(158, 158, 158, 0.2) 1px solid;
 }
 
 .disclaimer {

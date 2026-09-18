@@ -63,11 +63,6 @@
   overflow: visible;
 }
 
-.mat-row {
-  //min-height: 32px;
-  // border: none;
-}
-
 .mat-column-label {
   min-width: 60%;
   text-align: start;
@@ -102,16 +97,3 @@
   display: none;
 }
 
-mat-card {
-  padding: 2vh 2vw;
-}
-
-.example-viewport {
-  height: 200px;
-  width: 200px;
-  border: 1px solid black;
-}
-
-.example-item {
-  height: 50px;
-}

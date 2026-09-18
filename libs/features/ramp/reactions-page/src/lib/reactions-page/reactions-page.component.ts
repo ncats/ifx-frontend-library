@@ -603,7 +603,6 @@ export class ReactionsPageComponent
 
   private _mapToGraph(data: CommonAnalyte[]) {
     const nodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
-    let nodes: GraphNode[] = [];
     const links: GraphLink[] = [];
     data.forEach((analyte) => {
       let sourceNode = nodeMap.get(analyte.inputCommonName);
@@ -650,8 +649,7 @@ export class ReactionsPageComponent
         }),
       );
     });
-    nodes = [...nodeMap.values()];
-    return { nodes: nodes, links: links };
+    return { nodes: [...nodeMap.values()], links: links };
   }
 
   private _mapToUpset(

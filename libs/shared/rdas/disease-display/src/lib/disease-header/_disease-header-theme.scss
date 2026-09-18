@@ -49,3 +49,32 @@
     color: mat.get-theme-color($theme, primary, 100);
   }
 }
+
+
+.shrink-height-animate {
+  height: 8vh;
+  animation: shrink 300ms;
+}
+
+@keyframes shrink {
+  from {
+    height: 22vh;
+  }
+  to {
+    height: 8vh;
+  }
+}
+
+.full-height-animate {
+  height: 22vh;
+  animation: grow 300ms;
+}
+
+@keyframes grow {
+  from {
+    height: 8vh;
+  }
+  to {
+    height: 22vh;
+  }
+}

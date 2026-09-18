@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationExtras, Router } from '@angular/router';
 import { Disease } from 'rdas-models';
 import { SubscribeButtonComponent } from 'subscribe-button';
-import { BrowseDiseaseListActions } from 'disease-store';
-import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'lib-disease-list-card',
@@ -21,20 +19,20 @@ import { Store } from '@ngrx/store';
   ],
 })
 export class DiseaseListCardComponent {
-  private readonly store = inject(Store);
   router = inject(Router);
   disease = input<Disease>();
+  diseaseSubscription = computed(() => {
+    return {
+      gardName: this.disease()?.gardName,
+      gardId: this.disease()?.gardId,
+    };
+  });
 
-  navigate(id: string | undefined): void {
-    if (id) {
-      this.store.dispatch(
-        BrowseDiseaseListActions.setDisease({
-          disease: this.disease() as Disease,
-        }),
-      );
+  navigate(gardId: string | undefined): void {
+    if (gardId) {
       const navigationExtras: NavigationExtras = {
         queryParams: {
-          id: id,
+          gardId: gardId,
         },
       };
       this.router.navigate(['/disease'], navigationExtras);

@@ -9,6 +9,7 @@
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/ramp-client",
         "browser": "apps/ramp-client/src/main.ts",
@@ -71,12 +72,12 @@
           "extractLicenses": false,
           "sourceMap": true
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "defaultConfiguration": "development",
       "configurations": {
         "production": {
           "buildTarget": "ramp-client:build:production"
@@ -84,8 +85,7 @@
         "development": {
           "buildTarget": "ramp-client:build:development"
         }
-      },
-      "defaultConfiguration": "development"
+      }
     },
     "extract-i18n": {
       "executor": "@angular/build:extract-i18n",
@@ -94,7 +94,6 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
       "inputs": [
         "default",
         "{workspaceRoot}/.eslintignore",

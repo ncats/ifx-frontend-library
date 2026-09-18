@@ -1,102 +1,28 @@
 @if (subscribed()) {
   <button
-    mat-flat-button
-    [matMenuTriggerFor]="menu"
+    matButton="outlined"
+    (click)="unSubscribe()"
     class="subscription-button"
   >
-    Subscribed
-    <mat-icon aria-label="Alert options menu">expand_more</mat-icon>
-    @if (subscriptionSelection().selected.length === 3) {
-      <mat-icon>notifications_active</mat-icon>
-    }
-    @if (
-      subscriptionSelection().selected.length === 1 ||
-      subscriptionSelection().selected.length === 2
-    ) {
-      <mat-icon class="material-symbols-outlined">notifications</mat-icon>
-    }
-    @if (subscriptionSelection().selected.length === 0) {
-      <mat-icon>notifications_off</mat-icon>
-    }
+    Unsubscribe
+    <mat-icon>notifications_off</mat-icon>
   </button>
-  <mat-menu #menu="matMenu">
-    <div mat-menu-item>
-      <mat-checkbox
-        (click)="$event.stopPropagation()"
-        aria-label="Select filter option"
-        (change)="$event ? toggleAll() : null"
-        [indeterminate]="
-          subscriptionSelection().selected.length > 0 &&
-          subscriptionSelection().selected.length < 3
-        "
-        [checked]="subscriptionSelection().selected.length === 3"
-      >
-        <mat-icon class="outlined-icon">notifications_outline</mat-icon>
-        All Alerts
-      </mat-checkbox>
-    </div>
-    <ul class="subscribe-menu">
-      <li>
-        <button mat-menu-item class="subscribe-button">
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            aria-label="Select filter option"
-            (change)="
-              $event ? subscriptionSelection().toggle('articles') : null
-            "
-            [checked]="subscriptionSelection().isSelected('articles')"
-          >
-            <mat-icon class="material-symbols-outlined">article</mat-icon>
-            <span>Article alerts</span>
-          </mat-checkbox>
-        </button>
-      </li>
-      <li>
-        <button mat-menu-item>
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            aria-label="Select filter option"
-            (change)="$event ? subscriptionSelection().toggle('grants') : null"
-            [checked]="subscriptionSelection().isSelected('grants')"
-          >
-            <mat-icon>biotech</mat-icon>
-            <span>Grant alerts</span>
-          </mat-checkbox>
-        </button>
-      </li>
-      <li>
-        <button mat-menu-item>
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            aria-label="Select filter option"
-            (change)="$event ? subscriptionSelection().toggle('trials') : null"
-            [checked]="subscriptionSelection().isSelected('trials')"
-          >
-            <mat-icon>safety_divider</mat-icon>
-            <span>Clinical trial alerts</span>
-          </mat-checkbox>
-        </button>
-      </li>
-    </ul>
-    <button mat-menu-item (click)="unSubscribe()">
-      <mat-icon>unsubscribe</mat-icon>
-      <span>Unsubscribe</span>
-    </button>
-  </mat-menu>
 } @else {
   <button
     mat-flat-button
     (click)="subscribe()"
     class="subscribe-button"
-    [disabled]="!user()"
+    [disabled]="!subscriptions()"
   >
+    <mat-icon>notifications_active</mat-icon>
     Subscribe
   </button>
 }
 <button
-  mat-icon-button
+  matIconButton
   class="about-subscribe-button"
-  (click)="aboutSubscribe()"
+  matTooltip="Register for emailed alerts when data about this rare disease changes."
+  aria-label="Button that displays a tooltip when focused or hovered over"
 >
   <mat-icon>question_mark</mat-icon>
 </button>

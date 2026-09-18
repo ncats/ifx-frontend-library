@@ -1,6 +1,6 @@
 import { ScrollDispatcher } from '@angular/cdk/overlay';
 import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -11,6 +11,7 @@ import {
   inject,
   InjectionToken,
   input,
+  DOCUMENT,
   PLATFORM_ID,
   ViewEncapsulation,
 } from '@angular/core';
@@ -43,7 +44,7 @@ export class ScrollToTopComponent implements AfterViewInit {
   private changeRef = inject(ChangeDetectorRef);
   private router = inject(Router);
   private scrollDispatcher = inject(ScrollDispatcher);
-  protected document = inject(DOCUMENT);
+  private document = inject(DOCUMENT);
 
   navIsFixed!: boolean;
 

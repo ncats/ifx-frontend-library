@@ -24,38 +24,21 @@ import {
   provideClientHydration,
   withEventReplay,
 } from '@angular/platform-browser';
-import { provideState, provideStore, Store } from '@ngrx/store';
-import {
-  RdasUsersInitActions,
-  USERS_FEATURE_KEY,
-  UserEffects,
-  usersReducer,
-} from 'user-store';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getAuth, provideAuth } from '@angular/fire/auth';
+import { UserStore } from 'user-store';
+import { initializeApp } from 'firebase/app';
 import { environment } from '../environments/environment';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getStorage, provideStorage } from '@angular/fire/storage';
-import { provideRouterStore } from '@ngrx/router-store';
+import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { provideEffects } from '@ngrx/effects';
 import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client';
-import {
-  DISEASES_FEATURE_KEY,
-  diseasesReducer,
-  DiseaseEffects,
-} from 'disease-store';
-import {
-  FILTERS_FEATURE_KEY,
-  filtersReducer,
-  FilterEffects,
-} from 'filter-store';
+import { provideStore } from '@ngrx/store';
 
-export function rdasInit(store = inject(Store)) {
+export function rdasInit(userStore = inject(UserStore)) {
+  const app = initializeApp(environment.firebase);
+  userStore.setUrl(environment.baseUrl);
   return () => {
-    store.dispatch(RdasUsersInitActions.init());
+    userStore.fetchUserFromLocalStorage();
   };
 }
 export const appConfig: ApplicationConfig = {
@@ -70,8 +53,8 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       appRoutes,
-      withViewTransitions(),
       withComponentInputBinding(),
+      withViewTransitions(),
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
@@ -79,36 +62,18 @@ export const appConfig: ApplicationConfig = {
       withPreloading(PreloadAllModules),
     ),
     provideZonelessChangeDetection(),
-    provideStore({
-      users: usersReducer,
-      diseases: diseasesReducer,
-      filters: filtersReducer,
-    }),
-    provideState(USERS_FEATURE_KEY, usersReducer),
-    provideState(DISEASES_FEATURE_KEY, diseasesReducer),
-    provideState(FILTERS_FEATURE_KEY, filtersReducer),
-    provideEffects([
-      UserEffects,
-      DiseaseEffects,
-      FilterEffects,
-      //    ArticleEffects,
-      //
-      /*
-      TrialEffects,
-      ProjectEffects, */
-    ]),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage()),
-    provideRouterStore(),
     provideStoreDevtools(),
+    provideStore({
+      router: routerReducer,
+    }),
+    provideRouterStore(),
     provideApollo(() => {
       const httpLink = inject(HttpLink);
       return {
+        ssrMode: true,
         cache: new InMemoryCache(),
         link: httpLink.create({
-          uri: environment.baseUrl,
+          uri: environment.baseUrl + '/api/diseases',
         }),
       };
     }),

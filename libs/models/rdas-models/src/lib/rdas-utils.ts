@@ -1,4 +1,3 @@
-//todo see if i can keep using router params obj
 import { TypedDocumentNode } from '@apollo/client';
 import { Params } from '@angular/router';
 

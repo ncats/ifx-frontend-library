@@ -7,6 +7,7 @@
 dist.zip
 *.bk
 #environments
+apps/rdas-frontend/src/environments/
 apps/rdas-express/.env*
 apps/ramp-client/src/environments/*.ts
 apps/ramp-client/src/environments/environment.prod.ts

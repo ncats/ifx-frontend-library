@@ -1,4 +1,4 @@
-import { HierarchyNode } from 'utils-models';
+import { Filter, HierarchyNode } from 'utils-models';
 import { Article } from './article';
 import { ClinicalTrial } from './clinical-trial';
 import { Gene, GeneAssociation } from './gene';
@@ -30,33 +30,25 @@ export class Disease {
   nhsArticles?: Article[];
   countArticles = 0;
   countTrials = 0;
+  countCoreProjects = 0;
   countProjects = 0;
   countGenes = 0;
   countPhenotypes = 0;
-  allEpiCount = 0; //todo need 2 counts to preserve counts in sidebar for filtering
-  epiCount = 0;
-  allArticleCount = 0;
-  // articleCount = 0;
-  allNhsCount = 0;
-  nhsCount = 0;
+  filterCounts?: { [key: string]: Filter[] };
   projects?: CoreProject[];
-  //projectCount = 0;
-  allProjectCount = 0;
   clinicalTrials?: ClinicalTrial[];
-  // allClinicalTrialCount = 0;
-  // clinicalTrialCount = 0;
   geneAssociations?: GeneAssociation[];
-  _geneAssociations?: { edges?: Partial<GeneAssociation>[] };
+  _geneAssociations?: {
+    edges: { gene: Partial<Gene>; properties: Partial<GeneAssociation> }[];
+  };
   phenotypeAssociations?: PhenotypeAssociation[];
-  _phenotypeAssociations?: { edges?: Partial<PhenotypeAssociation>[] };
-  // geneCount: number | undefined = 0;
-  // phenotypeCount = 0;
+  _phenotypeAssociations?: {
+    edges: {
+      phenotype: Partial<Phenotype>;
+      properties: Partial<PhenotypeAssociation>;
+    }[];
+  };
   parentId?: string;
-  // _genesCount?: { count?: number; low: 0 };
-  //  _phenotypesCount?: { count: number; low: 0 };
-  _epiCount?: { count: number };
-  // _allArticleCount?: { count: number };
-  _nhsCount?: { count: number };
   _childrenCount?: { count?: number; low: 0 };
 
   constructor(obj: Partial<Disease>) {
@@ -77,34 +69,23 @@ export class Disease {
         (article: Partial<Article> = {}) => new Article(article),
       );
     }
-    if (obj._epiCount) {
-      this.epiCount = obj._epiCount.count;
-      delete this._epiCount;
-    }
-
     if (obj.nhsArticles) {
       this.nhsArticles = obj.nhsArticles.map(
         (article: Partial<Article> = {}) => new Article(article),
       );
     }
 
-    if (obj._nhsCount) {
-      this.nhsCount = obj._nhsCount.count;
-      delete this._nhsCount;
-    }
-
     if (obj._geneAssociations && obj._geneAssociations.edges) {
-      this.geneAssociations = obj._geneAssociations.edges
-        .map(
-          (data: unknown) =>
-            new GeneAssociation(
-              data as {
-                gene: Partial<Gene>;
-                properties: Partial<GeneAssociation>;
-              },
-            ),
-        )
-        .sort((a, b) => b.associationType.localeCompare(a.associationType));
+      this.geneAssociations = obj._geneAssociations.edges.map(
+        (data: unknown) =>
+          new GeneAssociation(
+            data as {
+              gene: Partial<Gene>;
+              properties: Partial<GeneAssociation>;
+            },
+          ),
+      );
+      //   .sort((a, b) => b.associationType.localeCompare(a.associationType));
       delete this._geneAssociations;
     }
 
@@ -120,19 +101,8 @@ export class Disease {
             ),
         )
         .sort((a, b) => b.frequencyRank - a.frequencyRank);
-
       delete this._phenotypeAssociations;
     }
-
-    /*if (obj._genesCount && obj._genesCount.count) {
-      this.geneCount = obj._genesCount.count;
-      delete this._genesCount;
-    }
-
-    if (obj._phenotypesCount && obj._phenotypesCount.count) {
-      this.phenotypeCount = obj._phenotypesCount.count;
-      delete this._phenotypesCount;
-    }*/
 
     if (obj.synonyms) {
       this.synonyms = [...new Set(obj.synonyms)];
@@ -172,4 +142,15 @@ export class DiseaseNode implements HierarchyNode {
   }
 
   term: string;
+}
+
+export class Subscription {
+  diseaseName!: string;
+  gardId = '';
+  disease?: Disease;
+  alerts?: string[];
+
+  constructor(obj: Partial<Subscription>) {
+    Object.assign(this, obj);
+  }
 }

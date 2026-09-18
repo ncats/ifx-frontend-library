@@ -1,5 +1,5 @@
-<div class="disease-header-section" [@shrinkOnScroll]="animationState()">
-  <div class="header-background">
+<div class="disease-header-section">
+  <div class="header-background" [ngClass]="animationState()">
     <img
       ngSrc="/assets/disease-display/graph-background-crop.webp"
       alt="disease header image"
@@ -8,12 +8,12 @@
     />
   </div>
   <div class="disease-header">
-    <div class="row space-around-row link-row">
-      <div class="width-sm-95 width-75">
+    <div class="row link-row">
+      <div class="width-sm-95 width-85">
         <a
           class="mat-h1 disease-link"
           href="https://rarediseases.info.nih.gov/diseases/{{ parsedId() }}/{{
-            this.disease()?.gardName | lowercase
+            this.disease()!.gardName | lowercase
           }}"
           target="_blank"
           rel="noreferrer"
@@ -27,29 +27,33 @@
       <div class="width-sm-5 width-15">
         <lib-subscribe-button
           class="subscribed-button"
-          [subscriptionName]="disease()?.gardName"
-          [subscriptionId]="disease()?.gardId"
+          [subscriptionObject]="diseaseSubscription()"
         ></lib-subscribe-button>
       </div>
     </div>
-    @if (animationState() === 'in') {
-      <div class="width-75">
-        @if (disease()?.classificationLevel) {
-          <div class="primary-chip-outlined">
-            {{ disease()?.classificationLevel }}
-          </div>
-        }
-        &nbsp;&nbsp;&nbsp;
-        @if (disease()?.disorderType && disease()?.disorderType?.length) {
-          <div class="accent-chip-outlined">
-            {{ disease()?.disorderType?.join(', ') }}
-          </div>
-        }
+    @if (animationState() === 'full-height-animate') {
+      <div class="row">
+        <div class="width-75">
+          @if (
+            disease()?.classificationLevel &&
+            disease()?.classificationLevel?.length
+          ) {
+            <div class="primary-chip-outlined">
+              {{ disease()?.classificationLevel }}
+            </div>
+          }
+          &nbsp;&nbsp;&nbsp;
+          @if (disease()?.disorderType && disease()?.disorderType?.length) {
+            <div class="accent-chip-outlined">
+              {{ disease()?.disorderType?.join(', ') }}
+            </div>
+          }
+        </div>
       </div>
       <div class="row space-between-row">
         @if (disease()?.synonyms && disease()?.synonyms?.length) {
           <div class="width-75">
-            <span>{{ disease()?.synonyms?.join(', ') }}</span>
+            <span>{{ disease()?.synonyms?.join(' | ') }}</span>
           </div>
         }
       </div>

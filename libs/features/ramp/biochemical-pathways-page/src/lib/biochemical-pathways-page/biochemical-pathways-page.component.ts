@@ -327,8 +327,8 @@ export class BiochemicalPathwaysPageComponent
           });
         }
         const noEnrichedPathwaysModalRef:
-          | MatDialogRef<DialogModalComponent>
-          | undefined = this.noEnrichedPathwaysModal();
+          MatDialogRef<DialogModalComponent> | undefined =
+          this.noEnrichedPathwaysModal();
         break;
       }
     }

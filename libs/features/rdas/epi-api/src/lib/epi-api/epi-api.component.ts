@@ -11,7 +11,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { SwaggerUI } from 'swagger-ui';
+import SwaggerUI from 'swagger-ui';
 
 @Component({
   selector: 'lib-epi-api',

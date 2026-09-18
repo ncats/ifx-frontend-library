@@ -1,4 +1,4 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +6,7 @@ import {
   inject,
   input,
   viewChild,
+  DOCUMENT,
   ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +18,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { PhenotypeAssociation } from 'rdas-models';
 import { SharedUtilsDataNotFoundComponent } from 'data-not-found';
 import { ExternalLinkComponent } from 'external-link';
+import { RdasPanelTemplateComponent } from 'rdas-panel-template';
 
 @Component({
   selector: 'lib-phenotype-list',
@@ -30,6 +32,7 @@ import { ExternalLinkComponent } from 'external-link';
     SharedUtilsDataNotFoundComponent,
     ExternalLinkComponent,
     MatTooltip,
+    RdasPanelTemplateComponent,
   ],
   templateUrl: './phenotype-list.component.html',
   styleUrls: ['./phenotype-list.component.scss'],
@@ -73,8 +76,6 @@ export class PhenotypeListComponent {
             return compare(a.phenotype.hpoTerm, b.phenotype.hpoTerm, isAsc);
           case 'Frequency':
             return compare(a.frequencyRank, b.frequencyRank, isAsc);
-          case 'Validated':
-            return compare(+a.validationStatus, +b.validationStatus, isAsc);
           case 'Evidence':
             return compare(a.evidence.code, b.evidence.code, isAsc);
           default:
@@ -99,7 +100,6 @@ export class PhenotypeListComponent {
     const headings: string = [
       'term',
       'frequency',
-      'validationStatus',
       'evidence',
       'references',
     ].join('\t');

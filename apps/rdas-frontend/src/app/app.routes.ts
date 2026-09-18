@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import * as Resolvers from './app.resolvers';
 
 export const appRoutes: Route[] = [
   {
@@ -10,8 +11,24 @@ export const appRoutes: Route[] = [
     path: 'diseases',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      allStaticFilters: Resolvers.allStaticDiseaseFiltersResolver,
+      diseases: Resolvers.diseaseListResolver,
+    },
     loadComponent: () =>
       import('rdas-browse').then((m) => m.RdasBrowseComponent),
+  },
+  {
+    path: 'disease',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      staticFilters: Resolvers.staticDiseaseFiltersResolver,
+      dynamicFilters: Resolvers.dynamicDiseaseFiltersResolver,
+      disease: Resolvers.diseaseResolver,
+    },
+    loadComponent: () =>
+      import('rdas-disease-page').then((m) => m.RdasDiseasePageComponent),
   },
   {
     path: 'about',
@@ -38,8 +55,40 @@ export const appRoutes: Route[] = [
     path: 'subscriptions',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      diseases: Resolvers.diseaseSubscriptionResolver,
+    },
     loadComponent: () =>
       import('rdas-subscriptions').then((m) => m.RdasSubscriptionsComponent),
+  },
+  {
+    path: 'article',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      article: Resolvers.articleResolver,
+    },
+    loadComponent: () =>
+      import('article-page').then((m) => m.ArticlePageComponent),
+  },
+  {
+    path: 'project',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      project: Resolvers.projectResolver,
+    },
+    loadComponent: () =>
+      import('project-page').then((m) => m.ProjectPageComponent),
+  },
+  {
+    path: 'trial',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      clinicalTrial: Resolvers.clinicalTrialResolver,
+    },
+    loadComponent: () => import('trial-page').then((m) => m.TrialPageComponent),
   },
   {
     path: 'apis/diseases',
@@ -61,5 +110,12 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('history-api').then((m) => m.HistoryApiComponent),
   },
+  /*  {
+    path: 'apis/abstract-abstraction',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    loadComponent: () =>
+      import('abstract-extraction-api').then((m) => m.AbstractExtractionApi),
+  },*/
   { path: '**', redirectTo: '' },
 ];

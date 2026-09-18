@@ -1,78 +1,85 @@
-<mat-card class="filter-card" [appearance]="'outlined'">
-  <mat-card-title>{{ filter().label | titlecase }}</mat-card-title>
-  @if (showSearch()) {
-    <mat-form-field class="table-search">
-      <input
-        matInput
-        #searchInput
-        placeholder="Search {{ filter().label | titlecase }}"
-        [formControl]="searchCtl"
-        [value]="filter().query ? filter().query : null"
-      />
-      @if (searchCtl.value) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="close"
-          (click)="clearSearch()"
-        >
-          <mat-icon [color]="'primary'">backspace</mat-icon>
-        </button>
-      }
-    </mat-form-field>
-  }
-  <div>
-    <!--  <lib-loading-spinner
-      [isLoaded]="!loading"
-    ></lib-loading-spinner>-->
-    <cdk-virtual-scroll-viewport
-      appendOnly
-      itemSize="10"
-      class="filter-viewport"
-      (scrolledIndexChange)="scrollDetected()"
-    >
-      <div
-        *cdkVirtualFor="
-          let field of filter()!.values;
-          let last = last;
-          trackBy: _filterField
-        "
-        class="filter-grid"
-      >
-        <div class="filter-cell checkbox">
-          <mat-checkbox
-            [id]="field.term"
-            (click)="$event.stopPropagation()"
-            [aria-label]="field.term"
-            (change)="$event ? filterSelection.toggle(field['term']) : null"
-            [checked]="filterSelection.isSelected(field['term'])"
+@if (filter()) {
+  <mat-card class="filter-card" [appearance]="'outlined'">
+    <mat-card-header>
+    <mat-card-title>{{ filter()?.label | titlecase }}</mat-card-title>
+    </mat-card-header>
+    @if (showSearch()) {
+      <mat-form-field class="table-search">
+        <input
+          matInput
+          #searchInput
+          placeholder="Search {{ filter()?.label | titlecase }}"
+          [formControl]="searchCtl"
+          [value]="filter()?.query ? filter()?.query : null"
+        />
+        @if (searchCtl.value) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="close"
+            (click)="clearSearch()"
           >
-          </mat-checkbox>
-        </div>
-        <div class="filter-cell name">
-          <span class="field-text">
-            <span
-              [innerHTML]="
-                field['term']
-                  | highlight: (filter().query ? filter().query : '')
-              "
-            ></span>
-          </span>
-        </div>
-        <div class="filter-cell count">
-          <span class="field-text">
-            {{ field['count'] }}
-          </span>
-        </div>
-        @if (last) {
-          <br />
-        }
-        @if (!fullList() && last && filter().values.length >= 200) {
-          <button mat-stroked-button (click)="loadMore()" class="full-width">
-            see more
+            <mat-icon [color]="'primary'">backspace</mat-icon>
           </button>
         }
-      </div>
-    </cdk-virtual-scroll-viewport>
-  </div>
-</mat-card>
+      </mat-form-field>
+    }
+    <div>
+      <!--    <lib-loading-spinner
+      [isLoaded]="!loading"
+    ></lib-loading-spinner>-->
+      <cdk-virtual-scroll-viewport
+        appendOnly
+        itemSize="10"
+        class="filter-viewport"
+      >
+        <div
+          *cdkVirtualFor="
+            let field of filter()!.values;
+            let last = last;
+            trackBy: _filterField
+          "
+          class="filter-grid"
+        >
+          <div class="filter-cell checkbox">
+            <mat-checkbox
+              [id]="field.term.toString()"
+              (click)="$event.stopPropagation()"
+              [aria-label]="field.term.toString()"
+              (change)="$event ? filterSelection.toggle(field['term']) : null"
+              [checked]="filterSelection.isSelected(field['term'])"
+            >
+            </mat-checkbox>
+          </div>
+          <div class="filter-cell name">
+            <span class="field-text">
+              <span
+                [innerHTML]="
+                  field['term'].toString()
+                    | highlight: (filter()?.query ? filter()?.query : '')
+                "
+              ></span>
+            </span>
+          </div>
+          <div class="filter-cell count">
+            <span class="field-text">
+              {{
+                field['filteredCount']
+                  ? field['filteredCount'] + '/' + field['count']
+                  : field['count']
+              }}
+            </span>
+          </div>
+          @if (last) {
+            <br />
+          }
+          @if (!fullList() && last && filter()?.values!.length >= 50) {
+            <button mat-stroked-button (click)="loadMore()" class="full-width">
+              see more
+            </button>
+          }
+        </div>
+      </cdk-virtual-scroll-viewport>
+    </div>
+  </mat-card>
+}

@@ -20,6 +20,9 @@ export const BrowseDiseaseListActions = createActionGroup({
     fetchDiseaseTree: props<{ gardId: string }>(),
     fetchDiseaseTreeSuccess: props<{ diseases: DiseaseNode[] }>(),
     fetchDiseaseTreeFailure: props<{ error: string }>(),
+    fetchAllDiseaseFilters: emptyProps(),
+    fetchAllDiseaseFiltersSuccess: props<{ filters: FilterCategory[] }>(),
+    fetchAllDiseaseFiltersFailure: props<{ error: string }>(),
   },
 });
 
@@ -60,8 +63,5 @@ export const FetchDiseaseListActions = createActionGroup({
     fetchDiseaseList: props<{ gardIds: string[] }>(),
     fetchDiseaseListSuccess: props<{ diseases: Disease[] }>(),
     fetchDiseaseListFailure: props<{ error: string }>(),
-    fetchAllDiseaseFilters: emptyProps(),
-    fetchAllDiseaseFiltersSuccess: props<{ filters: FilterCategory[] }>(),
-    fetchAllDiseaseFiltersFailure: props<{ error: string }>(),
   },
 });

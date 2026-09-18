@@ -1,26 +1,35 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   DestroyRef,
   inject,
   OnInit,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatRippleModule } from '@angular/material/core';
 import {
   MatDialog,
-  MatDialogActions,
   MatDialogContent,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { UserLoginActions } from 'user-store';
-import { Store } from '@ngrx/store';
-import { EmailSignOnModalComponent } from '../email-sign-on-modal/email-sign-on-modal.component';
+import { UserStore } from 'user-store';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {
+  MatError,
+  MatFormField,
+  MatInput,
+  MatLabel,
+} from '@angular/material/input';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { RegisterModalComponent } from '../register-modal/register-modal.component';
+import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'lib-social-sign-on-modal',
@@ -31,45 +40,93 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatListModule,
     MatRippleModule,
-    MatDialogActions,
     MatDialogContent,
+    MatError,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    ReactiveFormsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SocialSignOnModalComponent implements OnInit {
   destroyRef = inject(DestroyRef);
-  store = inject(Store);
+  userStore = inject(UserStore);
   dialogRef = inject(MatDialogRef<SocialSignOnModalComponent>);
   public dialog = inject(MatDialog);
-  private breakpointObserver = inject(BreakpointObserver);
-  private changeRef = inject(ChangeDetectorRef);
 
-  mobile = false;
+  loginError = this.userStore.error;
+  formError = '';
+  user = this.userStore.user;
+  userSignal = toObservable(this.user);
 
+  signOnForm: FormGroup = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    pw: new FormControl('', [Validators.required]),
+  });
+
+  //
   ngOnInit() {
-    this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        this.mobile = result.matches;
-        this.changeRef.markForCheck();
-      });
+    this.userSignal.subscribe((res) => {
+      if (res && 'uid' in res) {
+        this.closeModal();
+      }
+    });
+
+    this.signOnForm.controls['pw'].valueChanges.subscribe(
+      () => (this.formError = ''),
+    );
   }
 
   login(provider: string): void {
-    this.store.dispatch(UserLoginActions.loginUser({ provider: provider }));
+    this.userStore.loginUser({ providerName: provider });
   }
   /**
    * use firebase's email login methods
    */
   loginEmail() {
+    this.userStore.loginEmailUser(this.signOnForm.value);
+  }
+
+  getEmailErrorMessage() {
+    if (this.signOnForm.controls['email'].hasError('required')) {
+      return 'Email address required';
+    }
+    return this.signOnForm.controls['email'].hasError('email')
+      ? 'Not a valid email'
+      : '';
+  }
+
+  getPasswordErrorMessage() {
+    if (this.signOnForm.controls['pw'].hasError('required')) {
+      return 'Password required';
+    }
+    return '';
+  }
+
+  register() {
     this.dialog
-      .open(EmailSignOnModalComponent, {
-        height: '55vh',
-        width: this.mobile ? '90vw' : '35vw',
+      .open(RegisterModalComponent, {
+        minHeight: '100vh',
+        maxHeight: '100vh',
+        minWidth: '100vw',
+        maxWidth: '100vw',
       })
       .afterClosed()
-      .subscribe(() => this.closeModal());
+      .subscribe(() => (this.formError = ''));
+  }
+
+  forgotPassword() {
+    this.formError = '';
+    this.dialog
+      .open(ForgotPasswordModalComponent, {
+        minHeight: '100vh',
+        maxHeight: '100vh',
+        minWidth: '100vw',
+        maxWidth: '100vw',
+      })
+      .afterClosed()
+      .subscribe(() => (this.formError = ''));
   }
 
   closeModal(): void {

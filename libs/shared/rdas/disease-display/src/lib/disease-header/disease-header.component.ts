@@ -1,6 +1,6 @@
 import { ScrollDispatcher } from '@angular/cdk/overlay';
 import {
-  LowerCasePipe,
+  LowerCasePipe, NgClass,
   NgOptimizedImage,
   ViewportScroller,
 } from '@angular/common';
@@ -17,21 +17,18 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { Disease } from 'rdas-models';
 import { SubscribeButtonComponent } from 'subscribe-button';
-/*
-import { shrinkOnScroll } from './disease-header-animation';
- */
 
 @Component({
   selector: 'lib-disease-header',
   templateUrl: './disease-header.component.html',
   styleUrls: ['./disease-header.component.scss'],
-  //animations: [shrinkOnScroll],
   encapsulation: ViewEncapsulation.None,
   imports: [
     MatIconModule,
     SubscribeButtonComponent,
     NgOptimizedImage,
     LowerCasePipe,
+    NgClass,
   ],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,9 +37,15 @@ export class DiseaseHeaderComponent implements OnInit {
   scroller = inject(ViewportScroller);
   scrollDispatcher = inject(ScrollDispatcher);
 
-  animationState = signal('in');
+  animationState = signal('full-height-animate');
 
   disease = input<Disease>();
+  diseaseSubscription = computed(() => {
+    return {
+      gardName: this.disease()?.gardName,
+      gardId: this.disease()?.gardId,
+    };
+  });
   parsedId = computed(() => {
     let ret = 0;
     const gardId: string | undefined = this.disease()?.gardId;
@@ -56,7 +59,9 @@ export class DiseaseHeaderComponent implements OnInit {
   ngOnInit() {
     this.scrollDispatcher.scrolled().subscribe(() => {
       this.animationState.set(
-        this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in',
+        this.scroller.getScrollPosition()[1] > 120
+          ? 'shrink-height-animate'
+          : 'full-height-animate',
       );
     });
   }

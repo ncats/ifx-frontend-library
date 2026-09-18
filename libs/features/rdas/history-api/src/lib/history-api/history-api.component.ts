@@ -1,5 +1,6 @@
 import {
   afterNextRender,
+  AfterViewInit,
   Component,
   computed,
   ElementRef,
@@ -10,7 +11,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { SwaggerUI} from 'swagger-ui';
+import SwaggerUI from 'swagger-ui';
 
 @Component({
   selector: 'lib-history-api',
@@ -20,21 +21,19 @@ import { SwaggerUI} from 'swagger-ui';
   standalone: true,
   encapsulation: ViewEncapsulation.None,
 })
-export class HistoryApiComponent {
+export class HistoryApiComponent implements AfterViewInit {
   el = viewChild<ElementRef>('documentation');
   platformId: InjectionToken<NonNullable<unknown>> = inject(
     PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
 
-  constructor() {
-    afterNextRender(() => {
-      if (this.isBrowser()) {
-        SwaggerUI({
-          url: '/assets/history-api/nhs_swagger.json',
-          domNode: this.el()?.nativeElement,
-        });
-      }
-    });
+  ngAfterViewInit() {
+    if (this.isBrowser()) {
+      SwaggerUI({
+        url: '/assets/history-api/nhs_swagger.json',
+        domNode: this.el()?.nativeElement,
+      });
+    }
   }
 }

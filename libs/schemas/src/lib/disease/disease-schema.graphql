@@ -11,7 +11,7 @@ type Disease @node {
   omim: String
   orphanet: String
   synonyms: [String!]
-  umls: String!
+  umls: String
   doid: [String!]
   ncit: [String!]
   sctid: [String!]

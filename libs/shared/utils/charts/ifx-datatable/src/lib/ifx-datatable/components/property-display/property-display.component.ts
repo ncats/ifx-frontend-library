@@ -20,11 +20,7 @@ export class PropertyDisplayComponent {
   showLabel = input<boolean>(true);
 
   @Input() displayType?:
-    | 'string'
-    | 'number'
-    | 'externalLink'
-    | 'internalLink'
-    | 'date';
+    'string' | 'number' | 'externalLink' | 'internalLink' | 'date';
 
   @Input() property!: DataProperty;
 

@@ -1,33 +1,46 @@
-import { Author } from './author';
 import { Disease } from './disease';
+import { Agent } from './shared-models';
 
 export class Article {
-  DateCreatedRDAS!: string;
   abstractText!: string;
-  affiliation!: string;
-  citedByCount!: number;
+  citationCount!: number;
+  dateCreatedRDAS!: string;
   doi!: string;
   firstPublicationDate!: string;
-  isEpi?: boolean;
+  hasPDF?: boolean;
+  inEPMC?: boolean;
+  inPMC?: boolean;
+  isEpidemiologicalStudy?: boolean;
+  isGeneReview?: boolean;
+  isNaturalHistoryStudy?: boolean;
+  isOpenAccess?: boolean;
+  issue?: number;
+  publicationYear?: number;
+  pubmedId!: string;
   pubType?: string[];
-  pubmed_id!: string;
   title!: string;
-  authorsWrote?: Author[];
-  diseases!: Disease[];
+  volume!: string;
+
   journals!: JournalVolume[];
+  diseases!: Disease[];
+  authors?: Agent[];
   keywords?: { keyword: string }[];
   meshTerms?: MeshTerm[];
   annotations?: PubtatorAnnotation[];
   epidemiologies?: Epidemiology[];
-  sources!: Source[];
-  // substances?: { name: string }[];
+  // sources!: Source[];
+  substances?: { name: string }[];
 
   constructor(obj: Partial<Article> = {}) {
     Object.assign(this, obj);
 
-    if (obj.authorsWrote) {
-      this.authorsWrote = obj.authorsWrote.map(
-        (author: Partial<Author> = {}) => new Author(author),
+    if (obj.pubType) {
+      this.pubType = JSON.parse((<unknown>obj.pubType) as string);
+    }
+
+    if (obj.authors) {
+      this.authors = obj.authors.map(
+        (author: Partial<Agent> = {}) => new Agent(author),
       );
     }
 
@@ -41,20 +54,15 @@ export class Article {
       this.meshTerms = obj.meshTerms
         .map((mesh: Partial<MeshTerm> = {}) => new MeshTerm(mesh))
         .sort((a: MeshTerm, b: MeshTerm) =>
-          a.descriptorName.localeCompare(b.descriptorName),
+          a.meshTerm.localeCompare(b.meshTerm),
         );
     }
 
     if (obj.annotations) {
-      this.annotations = obj.annotations
-        .filter(
-          (a: Partial<PubtatorAnnotation>) =>
-            !(a.infons_type === 'Species' || a.infons_type === 'Genus'),
-        )
-        .map(
-          (annotation: Partial<PubtatorAnnotation> = {}) =>
-            new PubtatorAnnotation(annotation),
-        );
+      this.annotations = obj.annotations.map(
+        (annotation: Partial<PubtatorAnnotation> = {}) =>
+          new PubtatorAnnotation(annotation),
+      );
     }
 
     if (obj.diseases) {
@@ -63,11 +71,11 @@ export class Article {
         .sort((a: Disease, b: Disease) => a.gardName.localeCompare(b.gardName));
     }
 
-    if (obj.sources) {
+    /*    if (obj.sources) {
       this.sources = obj.sources.map(
         (source: Partial<Source> = {}) => new Source(source),
       );
-    }
+    }*/
 
     if (obj.epidemiologies) {
       this.epidemiologies = obj.epidemiologies.map(
@@ -78,18 +86,18 @@ export class Article {
 }
 
 export class JournalVolume {
-  dateOfPublication!: string;
-  printPublicationDate!: string;
-  volume!: string;
-  _title!: { title: string }[];
+  // dateOfPublication!: string;
+  // printPublicationDate!: string;
+  ///  volume!: string;
+  // _title!: { title: string }[];
   title!: string;
 
   constructor(obj: Partial<JournalVolume>) {
     Object.assign(this, obj);
-
+    /*
     if (obj._title) {
       this.title = obj._title[0].title;
-    }
+    }*/
   }
 }
 
@@ -98,6 +106,7 @@ export class MeshTerm {
   majorTopic_YN?: string;
   abbreviation?: string;
   qualifierName?: string;
+  meshTerm!: string;
 
   _qualifier!: {
     abbreviation?: string;
@@ -117,14 +126,13 @@ export class MeshTerm {
 }
 
 export class PubtatorAnnotation {
-  infons_identifier!: string;
-  infons_type!: string;
-  type!: string;
-  text!: string[];
+  annotationIdentifier!: string;
+  annotationType!: string;
+  annotation!: string[];
 
   constructor(obj: Partial<PubtatorAnnotation>) {
     Object.assign(this, obj);
-    if (obj.text) {
+    /* if (obj.text) {
       if (!Array.isArray(obj.text)) {
         this.text = [obj.text];
       } else {
@@ -134,7 +142,7 @@ export class PubtatorAnnotation {
           this.text.push(...textArr);
         });
       }
-    }
+    }*/
   }
 }
 
@@ -151,10 +159,11 @@ export class Source {
 }
 
 export class Epidemiology {
-  epidemiology_rate?: string[];
-  epidemiology_type?: string[];
+  epidemiologyRate?: string[];
+  epidemiologyType?: string[];
   ethnicity?: string[];
-  location?: string[];
+  studyLocation?: string[];
+  studyDate?: string[];
   sex?: string[];
 
   constructor(obj: Partial<Epidemiology>) {

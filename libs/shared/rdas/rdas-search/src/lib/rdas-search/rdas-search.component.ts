@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   OnInit,
@@ -21,12 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Disease } from 'rdas-models';
 import { HighlightPipe } from 'highlight-pipe';
-import {
-  DiseaseSelectors,
-  FetchDiseaseActions,
-  SearchDiseasesActions,
-} from 'disease-store';
-import { Store } from '@ngrx/store';
+import { DiseaseStore } from 'disease-store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
@@ -47,12 +43,10 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RdasSearchComponent implements OnInit {
-  private readonly diseaseStore = inject(Store);
+  private readonly diseaseStore = inject(DiseaseStore);
   destroyRef = inject(DestroyRef);
   autocomplete = viewChild(MatAutocompleteTrigger);
-  options = this.diseaseStore.selectSignal(
-    DiseaseSelectors.searchDiseasesEntities,
-  );
+  options = this.diseaseStore.typeahead;
   searchFormCtl: FormControl = new FormControl();
 
   diseaseSelect = output<Disease>();
@@ -62,14 +56,12 @@ export class RdasSearchComponent implements OnInit {
     this.searchFormCtl.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        debounceTime(200),
+        debounceTime(100),
         distinctUntilChanged(),
       )
       .subscribe((term) => {
         if (term && term.length) {
-          this.diseaseStore.dispatch(
-            SearchDiseasesActions.searchDiseases({ term: term.trim() }),
-          );
+          this.diseaseStore.diseaseTypeaheadList({ term: term.trim() });
         }
       });
   }
@@ -77,16 +69,13 @@ export class RdasSearchComponent implements OnInit {
   selectDisease(event: MatAutocompleteSelectedEvent) {
     this.diseaseSelect.emit(event.option.value as Disease);
     this.searchFormCtl.reset();
-    this.diseaseStore.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
-    this.diseaseStore.dispatch(FetchDiseaseActions.clearDisease());
+    /*  this.diseaseStore.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
+    this.diseaseStore.dispatch(FetchDiseaseActions.clearDisease());*/
   }
 
   searchString() {
     this.autocomplete()?.closePanel();
-    const searchVal: string = this.searchFormCtl.value.name
-      ? this.searchFormCtl.value.name
-      : this.searchFormCtl.value;
-    this.diseaseSearch.emit(searchVal);
+    this.diseaseSearch.emit(this.searchFormCtl.value);
   }
 
   displayFn(option: { name: string; id: string }): string {

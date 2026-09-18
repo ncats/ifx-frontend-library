@@ -1,69 +1,94 @@
-<div class="row right-justified-row no-padding">
-  <button mat-icon-button (click)="closeModal()">
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
-<form (keydown.enter)="register()" [formGroup]="registerForm">
-  <div class="row centered-row">
-    <mat-form-field appearance="outline" class="modal-button">
-      <mat-label>Enter your email</mat-label>
-      <input
-        matInput
-        type="email"
-        [placeholder]="'Email Sign in'"
-        [formControlName]="'email'"
-      />
-      @if (registerForm.controls['email'].invalid) {
-        <mat-error>{{ getEmailErrorMessage() }}</mat-error>
-      }
-    </mat-form-field>
+<div class="row right-justified-row">
+  <div>
+    <button mat-icon-button (click)="closeModal()">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
-  <div class="row centered-row">
-    <mat-form-field appearance="outline" class="modal-button">
-      <input
-        matInput
-        type="password"
-        [placeholder]="'Password'"
-        [formControlName]="'pw'"
-      />
-      @if (registerForm.controls['pw'].invalid) {
-        <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
-      }
-    </mat-form-field>
-  </div>
-  <div class="row centered-row">
-    <mat-form-field appearance="outline" class="modal-button">
-      <input
-        matInput
-        type="password"
-        [placeholder]="'Verify Password'"
-        [formControlName]="'pwVerify'"
-      />
-      @if (registerForm.controls['pwVerify'].invalid) {
-        <mat-error>{{ getPasswordVerifyErrorMessage() }}</mat-error>
-      }
-    </mat-form-field>
-  </div>
-</form>
-<div class="row centered-row">
-  <button
-    mat-flat-button
-    (click)="register()"
-    class="modal-button"
-    [disabled]="registerForm.invalid"
-  >
-    Register
-  </button>
 </div>
 <div class="row centered-row">
-  <p class="disclaimer">
-    By continuing, you are indicating that you accept our
-    <a href="https://ncats.nih.gov/disclaimer" target="_blank" rel="noreferrer"
-      >Terms of Service</a
-    >
-    and
-    <a href="https://ncats.nih.gov/privacy" target="_blank" rel="noreferrer"
-      >Privacy Policy</a
-    >.
-  </p>
+  <h2>Registration</h2>
+</div>
+<div class="row centered-row">
+  <h3>Register for a new account</h3>
+</div>
+
+<div class="register-background">
+  <mat-dialog-content>
+    <form (keydown.enter)="register()" [formGroup]="registerForm">
+      <div class="row centered-row">
+        <mat-form-field appearance="outline" class="sign-in-form">
+          <mat-label>Enter your email</mat-label>
+          <input
+            matInput
+            type="email"
+            [placeholder]="'Email Sign in'"
+            [formControlName]="'email'"
+          />
+          @if (registerForm.controls['email'].invalid) {
+            <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="row centered-row">
+        <mat-form-field appearance="outline" class="sign-in-form">
+          <input
+            matInput
+            type="password"
+            [placeholder]="'Password'"
+            [formControlName]="'pw'"
+          />
+          @if (registerForm.controls['pw'].invalid) {
+            <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="row centered-row">
+        <mat-form-field appearance="outline" class="sign-in-form">
+          <input
+            matInput
+            type="password"
+            [placeholder]="'Verify Password'"
+            [formControlName]="'pwVerify'"
+          />
+          @if (registerForm.controls['pwVerify'].invalid) {
+            <mat-error>{{ getPasswordVerifyErrorMessage() }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </form>
+    <div class="row centered-row">
+      @if (registerError()) {
+        <mat-error>{{ registerError()! }}</mat-error>
+      }
+    </div>
+    <div class="row centered-row">
+      <button
+        mat-flat-button
+        (click)="register()"
+        class="sign-in-form"
+        [disabled]="registerForm.invalid"
+      >
+        Register
+      </button>
+    </div>
+    <div class="row centered-row">
+      <p class="disclaimer">
+        By continuing, you are indicating that you accept our
+        <a href="/privacy" target="_blank" rel="noreferrer">Terms of Service</a>
+        and
+        <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>.
+      </p>
+      <br />
+    </div>
+    <div class="row centered-row">
+      <a
+        role="button"
+        tabindex="0"
+        (click)="closeModal()"
+        (keydown.enter)="closeModal()"
+        class="return-button clickable-area"
+        >Return to login</a
+      >
+    </div>
+  </mat-dialog-content>
 </div>

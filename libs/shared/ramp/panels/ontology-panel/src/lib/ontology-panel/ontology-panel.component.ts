@@ -65,11 +65,12 @@ export class OntologyPanelComponent implements OnInit {
         map((term: string) => {
           const retOntologies: FilterCategory[] = [];
           this.ontologies()?.forEach((ontologyCategory) => {
-            const values = ontologyCategory.values.filter((ontology) =>
-              ontology.term
+            const values = ontologyCategory.values.filter((ontology) => {
+              const t = <string>ontology.term;
+              return t
                 .toLocaleLowerCase()
-                .includes(<string>term.toLocaleLowerCase()),
-            );
+                .includes(<string>term.toLocaleLowerCase());
+            });
             retOntologies.push(
               new FilterCategory({
                 ...ontologyCategory,
@@ -84,13 +85,19 @@ export class OntologyPanelComponent implements OnInit {
       .subscribe();
   }
 
-  setValues(values: { label: string; values: string[] }[]) {
+  setValues(
+    values: { label: string; values: (string | number | boolean)[] }[],
+  ) {
     values.forEach((onto) => {
-      this.ontologyMap.set(onto.label, onto.values);
+      this.ontologyMap.set(onto.label, <string[]>onto.values);
     });
   }
 
-  filterChange(search: { label: string; term?: string; page?: number }) {
+  filterChange(search: {
+    label: string;
+    term?: string | number | boolean;
+    page?: number;
+  }) {
     if (!search.term || search.term === '') {
       this.filteredOntologies.set(this.ontologies());
     } else {
@@ -98,11 +105,12 @@ export class OntologyPanelComponent implements OnInit {
       this.ontologies()?.forEach((onto) => {
         if (onto.label === search.label) {
           const term = search.term as string;
-          const values = onto.values.filter((val) =>
-            val.term
+          const values = onto.values.filter((val) => {
+            const t = <string>val.term;
+            return t
               .toLocaleLowerCase()
-              .includes(<string>term.toLocaleLowerCase()),
-          );
+              .includes(<string>term.toLocaleLowerCase());
+          });
           returnedOntologies.push(
             new FilterCategory({ ...onto, values: values, query: term }),
           );

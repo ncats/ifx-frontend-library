@@ -4,10 +4,10 @@
       <lib-article-list-card [article]="article()"></lib-article-list-card>
 
       <mat-card-content>
-        @if (article()?.authorsWrote && article()?.authorsWrote!.length) {
+        @if (article()?.authors && article()?.authors!.length) {
           <div>
             @for (
-              author of article()!.authorsWrote;
+              author of article()!.authors;
               track author.fullName;
               let last = $last
             ) {
@@ -31,29 +31,32 @@
                 track epidemiology
               ) {
                 @if (
-                  epidemiology.epidemiology_type &&
-                  epidemiology.epidemiology_type.length
+                  epidemiology.epidemiologyType &&
+                  epidemiology.epidemiologyType.length
                 ) {
                   <div>
                     <b>Epidemiology Type:</b><br />
-                    {{ epidemiology.epidemiology_type.join(', ') }}
+                    {{ epidemiology.epidemiologyType.join(', ') }}
                   </div>
                 }
                 @if (
-                  epidemiology.epidemiology_rate &&
-                  epidemiology.epidemiology_rate.length
+                  epidemiology.epidemiologyRate &&
+                  epidemiology.epidemiologyRate.length
                 ) {
                   <div>
                     <b>Epidemiology Rate:</b><br />
-                    @for (rate of epidemiology.epidemiology_rate; track rate) {
+                    @for (rate of epidemiology.epidemiologyRate; track rate) {
                       <span>{{ rate }}<br /></span>
                     }
                   </div>
                 }
-                @if (epidemiology.location && epidemiology.location.length) {
+                @if (
+                  epidemiology.studyLocation &&
+                  epidemiology.studyLocation.length
+                ) {
                   <div>
                     <b>Location: </b><br />{{
-                      epidemiology.location.join(', ')
+                      epidemiology.studyLocation.join(', ')
                     }}
                   </div>
                 }
@@ -82,7 +85,7 @@
             </div>
           }
         </div>
-        <!--     @if (article()?.substances && article()?.substances?.length) {
+        @if (article()?.substances && article()?.substances?.length) {
           <div>
             <div class="primary-chip-outlined">Substances</div>
             <br />
@@ -94,7 +97,7 @@
             <br />
             <br />
           </div>
-        }-->
+        }
         @if (article()?.keywords && article()?.keywords?.length) {
           <div>
             <div class="primary-chip-outlined">Keywords</div>
@@ -118,7 +121,7 @@
         <div class="project-content-wrapper">
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
-              Other Diseases Mentioned:
+              Mentioned Disease:
               {{ article()?.diseases ? article()?.diseases?.length : 0 }}
             </div>
             <br />
@@ -168,9 +171,6 @@
                   </div>
                 }
                 <br />
-                <!--
-            <div class="list-item-content">Found In: {{annotation.type}}</div>
-    -->
               }
             }
           </mat-card>
@@ -185,7 +185,7 @@
                 @for (term of article()!.meshTerms; track term) {
                   <div>
                     <div class="list-item-content">
-                      {{ term.qualifierName }}
+                      {{ term.meshTerm }}
                     </div>
                     <div class="list-item-content">{{ term.abbreviation }}</div>
                     <div class="list-item-content">

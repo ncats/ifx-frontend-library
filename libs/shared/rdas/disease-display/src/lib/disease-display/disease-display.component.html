@@ -45,13 +45,13 @@
   </div>
   <div class="disease-display-panel" id="genes" #genes #scrollSection>
     <mat-expansion-panel
-      [disabled]="!disease()?.geneAssociations"
-      [expanded]="disease()?.geneAssociations"
+      [disabled]="!disease()!.countGenes"
+      [expanded]="disease()!.countGenes > 0"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Associated Genes {{ disease()?.geneAssociations?.length }}</span
+            >Associated Genes {{ disease()?.countGenes }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -61,13 +61,13 @@
   </div>
   <div class="disease-display-panel" id="phenotypes" #phenotypes #scrollSection>
     <mat-expansion-panel
-      [disabled]="!disease()?.phenotypeAssociations"
-      [expanded]="disease()?.phenotypeAssociations"
+      [disabled]="!disease()!.countPhenotypes"
+      [expanded]="disease()!.countPhenotypes > 0"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Phenotypes {{ disease()?.phenotypeAssociations?.length }}</span
+            >Phenotypes {{ disease()?.countPhenotypes }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -104,6 +104,8 @@
         [count]="articlesCount().currentArticlesCount"
         [filters]="filterMap().get('articles')!"
         [message]="'No Articles Found'"
+        [disease]="disease()"
+        [loaded]="loaded()"
         (listChange)="fetchList($event, 'articles')"
       >
         <div class="data-list">
@@ -120,14 +122,16 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >NIH-funded Projects {{ projectsCount() }}</span
+            >NIH-funded Projects
+            {{ projectsCount().currentProjectsCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
       <lib-rdas-panel-template
         [_id]="'projects'"
-        [count]="projectsCount()"
+        [count]="projectsCount().currentProjectsCount"
         [message]="'No NIH Funded Projects Available'"
+        [disease]="disease()"
         (listChange)="fetchList($event, 'projects')"
       >
         <div class="data-list">
@@ -137,26 +141,31 @@
     </mat-expansion-panel>
   </div>
   <div class="disease-display-panel" id="trials" #trials #scrollSection>
-    <mat-expansion-panel [disabled]="!trialsCount()" [expanded]="trialsCount()">
+    <mat-expansion-panel
+      [disabled]="!clinicalTrialsCount()"
+      [expanded]="clinicalTrialsCount()"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Clinical Trials {{ trialsCount().allTrialCount }}</span
+            >Clinical Trials
+            {{ clinicalTrialsCount().currentClinicalTrialsCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <lib-rdas-panel-template
         [_id]="'trials'"
-        [count]="trialsCount().count"
+        [count]="clinicalTrialsCount().currentClinicalTrialsCount"
         [filters]="filterMap().get('trials')!"
         [loaded]="loaded()"
+        [disease]="disease()"
         [message]="'No Clinical Trial Data Available'"
         (listChange)="fetchList($event, 'trials')"
       >
         <div class="data-list">
           <lib-clinical-trials-list
-            [trials]="trialsList()"
+            [trials]="clinicalTrialsList()"
           ></lib-clinical-trials-list>
         </div>
       </lib-rdas-panel-template>

@@ -4,9 +4,9 @@ import {
   inject,
   input,
   viewChild,
+  DOCUMENT,
   ViewEncapsulation,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';

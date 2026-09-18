@@ -16,17 +16,17 @@ export class AnnotationsDisplayComponent {
   annotationsMap = computed(() => {
     const aMap: Map<string, string[]> = new Map<string, string[]>();
     this.annotations()?.forEach((annotation: Annotation) => {
-      annotation.semantic_types_names?.forEach((type: string) => {
+      annotation.semanticTypeNames?.forEach((type: string) => {
         if (aMap.has(type)) {
           let types = aMap.get(type);
           if (types) {
-            types.push(<string>annotation.umls_concept);
+            types.push(<string>annotation.umlsConcept);
           } else {
-            types = [<string>annotation.umls_concept];
+            types = [<string>annotation.umlsConcept];
           }
           aMap.set(type, types);
         } else {
-          aMap.set(type, [<string>annotation.umls_concept]);
+          aMap.set(type, [<string>annotation.umlsConcept]);
         }
       });
     });

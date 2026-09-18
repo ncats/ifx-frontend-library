@@ -1,9 +1,39 @@
 scalar JSON
 extend schema @mutation(operations: [])
 
+type FilterCountObject @node {
+  diseaseArticleByEpi: [FilterCount!]
+  diseaseArticleByNHS: [FilterCount!]
+  diseaseArticleByYear: [FilterCount!]
+  diseaseProjectsByYear: [FilterCount!]
+  diseaseTrialsByPhase: [FilterCount!]
+  diseaseTrialsByStatus: [FilterCount!]
+  diseaseTrialsByType: [FilterCount!]
+}
+
+type AllFilterCountObject @node {
+  allEpiArticlesByYear: [FilterCount!]
+  allNHSArticlesByYear: [FilterCount!]
+  allArticlesByYear: [FilterCount!]
+  allProjectsByYear: [FilterCount!]
+  allTrialsByPhase: [FilterCount!]
+  allTrialsByStatus: [FilterCount!]
+  allTrialsByType: [FilterCount!]
+}
+
+type FieldCounts @node {
+  fieldCounts: AllFilterCountObject!
+}
+
+type FilterCount @node {
+  term: String
+  count: Int
+  label: String
+}
+
 type Agent @node {
   _idx_key: String
-  contactEmail: String
+  contactEmail: [String!]
   orc_id: String
   lastName: String
   fullName: String
@@ -16,43 +46,43 @@ type Agent @node {
 type Annotation @node {
   umlsCui: String
   umlsConcept: String
-  semanticTypes: String
-  semanticTypeNames: String
-  semanticTypesNames: String
+  semanticTypes: [String!]
+  semanticTypeNames: [String!]
+  semanticTypesNames: [String!]
 }
 
 type Article @node {
   abstractText: String
   volume: String
-  pubmedId: String
-  publicationYear: String
+  pubmedId: Int
+  publicationYear: Int
   pubType: String
   lastUpdatedDateByRDAS: String
-  isEpidemiologicalStudy: String
+  isEpidemiologicalStudy: Boolean
   inEPMC: String
   dateCreatedByRDAS: String
   fullTextUrls: String
   isOpenAccess: String
   hasPDF: String
-  citationCount: String
+  citationCount: Int
   issue: String
   firstPublicationDate: String
   inPMC: String
-  isNaturalHistoryStudy: String
+  isNaturalHistoryStudy: Boolean
   doi: String
   title: String
   hasKeyword: [Keyword!]! @relationship(type: "has_keyword", direction: OUT)
   hasOMIMReference: [OMIMRef!]!
     @relationship(type: "has_omim_reference", direction: OUT)
-  hasEpidemiologyAnnotation: [EpidemiologyAnnotation!]!
-    @relationship(type: "has_epidemiology_annotation", direction: OUT)
-  hasMeshTerm: [MeshTerm!]! @relationship(type: "has_mesh_term", direction: OUT)
-
+  hasEpidemiologicalAnnotation: [EpidemiologyAnnotation!]!
+    @relationship(type: "has_epidemiological_annotation", direction: OUT)
+  hasMentionIn: [Disease!]! @relationship(type: "has_mention_in", direction: IN)
+  hasMeshTerm: [MeshTerm!]! @relationship(type: "has_mesh_term", direction: IN)
   hasPubtatorAnnotation: [PubtatorAnnotation!]!
     @relationship(type: "has_pubtator_annotation", direction: OUT)
   hasAuthor: [Agent!]! @relationship(type: "has_author", direction: OUT)
-  hasAnnotatedSubstance: [Substance!]!
-    @relationship(type: "has_annotated_substance", direction: OUT)
+  hasSubstance: [Substance!]!
+    @relationship(type: "has_substance", direction: OUT)
   hasJournal: [Journal!]! @relationship(type: "has_journal", direction: OUT)
 }
 
@@ -103,36 +133,38 @@ type ClinicalTrial @node {
     @relationship(type: "has_intervention", direction: OUT)
   hasPrimaryOutcome: [PrimaryOutcome!]!
     @relationship(type: "has_primary_outcome", direction: OUT)
-  hasParticipant: [Participant!]!
-    @relationship(type: "has_participant", direction: OUT)
+  hasParticipantInfo: [Participant!]!
+    @relationship(type: "has_participant_info", direction: OUT)
   hasOrganization: [Organization!]!
     @relationship(type: "has_associated_organization", direction: OUT)
   hasTrialLocation: [Location!]!
     @relationship(type: "has_trial_location", direction: OUT)
   hasInvestigatedCondition: [Condition!]!
     @relationship(type: "has_investigated_condition", direction: OUT)
+  hasClinicalTrial: [Disease!]!
+    @relationship(type: "has_clinical_trial", direction: IN)
 }
 
 type Condition @node {
   condition: String
+  hasClinicalTrial: [ClinicalTrial!]!
+    @relationship(type: "has_clinical_trial", direction: IN)
+  hasMappedCondition: [Disease!]!
+    @relationship(type: "has_mapped_condition", direction: OUT)
 }
 
 type CoreProject @node {
   coreProjectNumber: String
-  totalCost: String
-  applicationId: String
-  hasPublishedArticle: [Article!]!
-    @relationship(type: "has_published_article", direction: OUT)
+  totalCost: Int
+  hasPublication: [Article!]!
+    @relationship(type: "has_publication", direction: OUT)
   hasFundingOrganization: [Organization!]!
     @relationship(type: "has_funding_organization", direction: OUT)
   hasPatent: [Patent!]! @relationship(type: "has_patent", direction: OUT)
-  hasContact: [Agent!]! @relationship(type: "has_contact", direction: OUT)
-  hasInvestigator: [Agent!]!
-    @relationship(type: "has_investigator", direction: OUT)
-  hasClinicalStudy: [ClinicalStudy!]!
-    @relationship(type: "has_clinical_study", direction: OUT)
   hasSubproject: [Project!]!
     @relationship(type: "has_subproject", direction: OUT)
+  hasCoreProject: [Disease!]!
+    @relationship(type: "has_core_project", direction: IN)
 }
 
 type Disease @node {
@@ -140,9 +172,13 @@ type Disease @node {
   countArticles: Int!
   countTrials: Int!
   countProjects: Int
+  countCoreProjects: Int
   countGenes: Int!
   countPhenotypes: Int!
+  countEpiArticles: Int
+  countNhsArticles: Int
   disorderType: [String!]
+  filterCounts: FilterCountObject
   gardId: String!
   gardName: String!
   icd10cm: [String!]
@@ -150,7 +186,7 @@ type Disease @node {
   omim: String
   orphanet: String
   synonyms: [String!]
-  umls: String!
+  umls: String
   doid: [String!]
   ncit: [String!]
   sctid: [String!]
@@ -168,7 +204,6 @@ type Disease @node {
       direction: OUT
       properties: "AssociatedWithGeneProperties"
     )
-
   hasPhenotype: [Phenotype!]!
     @relationship(
       type: "has_phenotype"
@@ -178,9 +213,13 @@ type Disease @node {
   hasClinicalTrial: [ClinicalTrial!]!
     @relationship(type: "has_clinical_trial", direction: OUT)
   hasMappedCondition: [Condition!]!
-    @relationship(type: "has_mapped_condition", direction: OUT)
+    @relationship(type: "has_mapped_condition", direction: IN)
   hasMentionIn: [Article!]!
     @relationship(type: "has_mention_in", direction: OUT)
+  hasCoreProject: [CoreProject!]!
+    @relationship(type: "has_core_project", direction: OUT)
+  hasResearchedProject: [Project!]!
+    @relationship(type: "has_researched_disease", direction: IN)
 }
 
 type Drug @node {
@@ -207,12 +246,12 @@ type Drug @node {
 
 type EpidemiologyAnnotation @node {
   lastUpdatedByRDAS: String
-  sex: String
-  studyDate: String
-  epidemiologyRate: String
-  ethnicity: String
-  studyLocation: String
-  epidemiologyType: String
+  sex: [String!]
+  studyDate: [String!]
+  epidemiologyRate: [String!]
+  ethnicity: [String!]
+  studyLocation: [String!]
+  epidemiologyType: [String!]
   _composite_key: String
   dateCreatedByRDAS: String
 }
@@ -232,19 +271,18 @@ type Gene @node {
   umls: String
   geneUrl: String
   reference: [String!]
-  diseaseAssociatedWithGene: [Disease!]!
+  diseaseHasAssociatedGene: [Disease!]!
     @relationship(
-      type: "associated_with_gene"
+      type: "has_associated_gene"
       direction: IN
       properties: "AssociatedWithGeneProperties"
     )
 }
 
 type HasPhenotypeProperties @relationshipProperties {
-  Evidence: String
-  HPOFrequency: String
-  Reference: [String!]
-  ValidationStatus: Boolean
+  evidence: String
+  hpoTermFrequency: String
+  reference: [String!]
 }
 
 type IndividualPatientData @node {
@@ -287,6 +325,7 @@ type Location @node {
 
 type MeshTerm @node {
   meshTerm: String
+  hasMeshTerm: [Article!]! @relationship(type: "has_mesh_term", direction: OUT)
 }
 
 type OMIMRef @node {
@@ -309,7 +348,7 @@ type Participant @node {
   healthyVolunteers: String
   enrollmentType: String
   maximumAge: String
-  stdAges: String
+  stdAges: [String!]
   eligibilityCriteria: String
   minimumAge: String
 }
@@ -331,31 +370,39 @@ type Phenotype @node {
 }
 
 type Project @node {
-  fundingMechanism: String
-  supportYear: String
-  serialNumber: String
-  coreProjectNumber: String
-  applicationType: String
-  activity: String
-  cfdaCode: String
-  totalCost: String
-  terms: String
-  fundingYear: String
-  fullProjectNumber: String
-  applicationId: String
   abstract: String
-  title: String
+  activity: String
+  applicationId: Int
+  applicationType: String
+  cfdaCode: String
+  coreProjectNumber: String
   dateCreatedRDAS: String
-  phr: String
-  studySectionName: String
-  studySection: String
   foaNumber: String
+  fullProjectNumber: String
+  fundingMechanism: String
+  fundingYear: Int
+  phr: String
+  serialNumber: String
+  studySection: String
+  studySectionName: String
+  supportYear: String
+  terms: String
+  title: String
+  totalCost: String
+
   hasAnnotation: [Annotation!]!
     @relationship(type: "has_annotation", direction: OUT)
+  hasInvestigator: [Agent!]!
+    @relationship(type: "has_investigator", direction: OUT)
+  hasContact: [Agent!]! @relationship(type: "has_contact", direction: OUT)
+  hasCoreProject: [CoreProject!]!
+    @relationship(type: "has_subproject", direction: OUT)
+  hasResearchedDisease: [Disease!]!
+    @relationship(type: "has_researched_disease", direction: OUT)
 }
 
 type PubtatorAnnotation @node {
-  annotation: String
+  annotation: [String!]
   annotationType: String
   annotationIdentifier: String
   lastUpdatedByRDAS: String
@@ -384,6 +431,8 @@ type StudyDesign @node {
 
 type Substance @node {
   registryNumber: String
+  name: String
+  hasSubstance: [Disease!]! @relationship(type: "has_substance", direction: IN)
 }
 
 type Query {
@@ -395,5 +444,141 @@ type Query {
       RETURN node ORDER BY score DESC, node.countArticles DESC limit $limit
       """
       columnName: "node"
+    )
+}
+
+type Query {
+  diseaseArticleByYear(
+    where: DiseaseWhere
+    articleWhere: ArticleWhere
+  ): [FilterCount]
+    @cypher(
+      statement: """
+      match (d:Disease)-[has_mention_in]-(a:Article)
+      WHERE d.gardId = $where.gardId.eq
+      AND (a.isNaturalHistoryStudy = $articleWhere.isNaturalHistoryStudy.eq OR $articleWhere.isNaturalHistoryStudy.eq IS NULL)
+      AND (a.isEpidemiologyStudy = $articleWhere.isEpidemiologyStudy.eq OR $articleWhere.isEpidemiologyStudy.eq IS NULL)
+      WITH toString(a.publicationYear) as year
+      with count(year) as ct, year
+      RETURN {term: year, count: ct} as yearCounts order by year DESC
+      """
+      columnName: "yearCounts"
+    )
+}
+
+type Query {
+  diseaseArticleByEpi(
+    where: DiseaseWhere
+    articleWhere: ArticleWhere
+  ): [FilterCount]
+    @cypher(
+      statement: """
+      match (d:Disease)-[has_mention_in]-(a:Article)
+      WHERE d.gardId = $where.gardId.eq
+      AND (a.isNaturalHistoryStudy = $articleWhere.isNaturalHistoryStudy.eq OR $articleWhere.isNaturalHistoryStudy.eq IS NULL)
+      AND (a.publicationYear IN $articleWhere.publicationYear.in OR $articleWhere.publicationYear.in IS NULL)
+      WITH a.isEpidemiologicalStudy as isEpi
+      with count(isEpi) as ct, isEpi
+      RETURN {term: isEpi, count: ct} as epiCounts order by isEpi DESC
+      """
+      columnName: "epiCounts"
+    )
+}
+
+type Query {
+  diseaseArticleByNHS(
+    where: DiseaseWhere
+    articleWhere: ArticleWhere
+  ): [FilterCount]
+    @cypher(
+      statement: """
+      match (d:Disease)-[has_mention_in]-(a:Article)
+      WHERE d.gardId = $where.gardId.eq
+      AND (a.isEpidemiologyStudy = $articleWhere.isEpidemiologyStudy.eq OR $articleWhere.isEpidemiologyStudy.eq IS NULL)
+      AND (a.publicationYear IN $articleWhere.publicationYear.in OR $articleWhere.publicationYear.in IS NULL)
+      WITH a.isNaturalHistoryStudy as isNhs
+      with count(isNhs) as ct, isNhs
+      RETURN {term: isNhs, count: ct} as nhsCounts order by isNhs DESC
+      """
+      columnName: "nhsCounts"
+    )
+}
+
+type Query {
+  diseaseProjectsByYear(where: DiseaseWhere): [FilterCount]
+    @cypher(
+      statement: """
+      MATCH (d:Disease)-[]-(p:Project)
+      WHERE d.gardId = $where.gardId.eq
+      WITH toString(p.fundingYear) as year, count(p) as ct
+      return {term: year, count:ct} as yearCounts order by year DESC
+      """
+      columnName: "yearCounts"
+    )
+}
+
+type Query {
+  diseaseProjectCostByYear(where: DiseaseWhere): [FilterCount]
+    @cypher(
+      statement: """
+      MATCH (d: Disease)-[]-(p:Project)
+      WHERE d.gardId = $where.gardId.eq
+      WITH toString(p.fundingYear) as year, sum(p.totalCost) as ct
+      return {term: year, count:ct} as yearCounts order by year DESC
+      """
+      columnName: "yearCounts"
+    )
+}
+type Query {
+  trialCountsByStatus(
+    where: DiseaseWhere
+    clinicalTrialWhere: ClinicalTrialWhere
+  ): [FilterCount]
+    @cypher(
+      statement: """
+      MATCH (n:Disease)-[m:has_clinical_trial]->(cl:ClinicalTrial)
+      WHERE n.gardId = $where.gardId.eq
+      AND (cl.studyType IN $clinicalTrialWhere.studyType.in OR $clinicalTrialWhere.studyType.in IS NULL)
+      AND (cl.phase IN $clinicalTrialWhere.phase.in OR $clinicalTrialWhere.phase.in IS NULL)
+      WITH cl.overallStatus as status, count(distinct(cl)) as ct
+      return {term: status, count:ct} as data order by ct DESC
+      """
+      columnName: "data"
+    )
+}
+
+type Query {
+  trialCountsByPhase(
+    where: DiseaseWhere
+    clinicalTrialWhere: ClinicalTrialWhere
+  ): [FilterCount]
+    @cypher(
+      statement: """
+      MATCH (n:Disease)-[m:has_clinical_trial]->(cl:ClinicalTrial)
+      WHERE n.gardId = $where.gardId.eq
+      AND (cl.studyType IN $clinicalTrialWhere.studyType.in OR $clinicalTrialWhere.studyType.in IS NULL)
+      AND (cl.overallStatus IN $clinicalTrialWhere.overallStatus.in OR $clinicalTrialWhere.overallStatus.in IS NULL)
+      WITH cl.phase as phase, count(distinct(cl)) as ct
+      return {term: phase, count:ct} as data order by ct DESC
+      """
+      columnName: "data"
+    )
+}
+
+type Query {
+  trialCountsByType(
+    where: DiseaseWhere
+    clinicalTrialWhere: ClinicalTrialWhere
+  ): [FilterCount]
+    @cypher(
+      statement: """
+      MATCH (n:Disease)-[m:has_clinical_trial]->(cl:ClinicalTrial)
+      WHERE n.gardId = $where.gardId.eq
+      AND (cl.overallStatus IN $clinicalTrialWhere.overallStatus.in OR $clinicalTrialWhere.overallStatus.in IS NULL)
+      AND (cl.phase IN $clinicalTrialWhere.phase.in OR $clinicalTrialWhere.phase.in IS NULL)
+      WITH cl.studyType as studyType, count(distinct(cl)) as ct
+      return {term: studyType, count:ct} as data order by ct DESC
+      """
+      columnName: "data"
     )
 }

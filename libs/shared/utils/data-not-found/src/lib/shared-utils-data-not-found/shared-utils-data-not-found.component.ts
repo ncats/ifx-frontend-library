@@ -18,6 +18,7 @@ import { SubscribeButtonComponent } from 'subscribe-button';
 })
 export class SharedUtilsDataNotFoundComponent {
   message = input<string>();
+  subscription = input<{ [key: string]: unknown }>();
   subscribed = false;
 
   setSub(sub: boolean) {

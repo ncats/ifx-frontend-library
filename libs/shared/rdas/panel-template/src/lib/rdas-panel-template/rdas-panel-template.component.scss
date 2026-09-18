@@ -1,0 +1,26 @@
+.filter-viewport {
+  height: 400px;
+  max-height: 400px;
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.filter-grid {
+  display: grid;
+  grid-auto-rows: 1fr;
+  grid-template-columns: 1fr 5fr 2fr;
+  gap: 0 4px;
+  justify-content: left;
+  align-content: start;
+  justify-items: start;
+  align-items: start;
+  border-bottom: 1px #f0f0f0 solid;
+  min-height: 50px;
+  padding: 5px 0 0 0;
+  width: 100%;
+}
+
+.filter-grid:hover {
+  background-color: #fafafa;
+}

@@ -6,7 +6,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { ActivatedRoute } from '@angular/router';
 import { ARTICLE_STORE_FEATURE_KEY, articlesReducer } from 'article-store';
-import { PROJECTS_FEATURE_KEY, projectsReducer } from 'grant-store';
+import { PROJECTS_FEATURE_KEY, projectsReducer } from 'project-store';
 import { TRIALS_FEATURE_KEY, trialsReducer } from 'trial-store';
 import { DISEASELISTMOCK } from '../../test-setup';
 import { DISEASES_FEATURE_KEY, diseasesReducer } from 'disease-store';

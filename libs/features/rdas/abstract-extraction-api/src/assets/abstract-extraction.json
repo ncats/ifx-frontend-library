@@ -1,0 +1,395 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Clinical Abstract Extraction API",
+    "description": "Extract structured characteristics from clinical trial and natural history study abstracts using LLM (supports Llama-3.1-70B-Instruct and Gemma3-27b)",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://rdas.ncats.nih.gov/api/article_prediction"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root",
+        "description": "Root endpoint with API information",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Root  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Check if the API and model are ready",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HealthCheckResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/models": {
+      "get": {
+        "summary": "List Models",
+        "description": "List all available models and their loaded status",
+        "operationId": "list_models_models_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/extract": {
+      "post": {
+        "summary": "Extract Characteristics",
+        "description": "Extract structured characteristics from a single clinical abstract.\n\nReturns disease name, study details, clinical outcomes, treatments, and more.\nOptionally enhances outcomes with HPO IDs and treatments with RxNorm IDs.\n\nSupports models: Llama-3.1-70B-Instruct (default), gemma3-27b",
+        "operationId": "extract_characteristics_extract_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AbstractRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExtractionResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/extract/batch": {
+      "post": {
+        "summary": "Extract Batch Characteristics",
+        "description": "Extract structured characteristics from multiple clinical abstracts in batch.\n\nMore efficient for processing multiple abstracts at once.\n\nSupports models: Llama-3.1-70B-Instruct (default), gemma3-27b",
+        "operationId": "extract_batch_characteristics_extract_batch_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BatchAbstractRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchExtractionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats": {
+      "get": {
+        "summary": "Get Terminology Stats",
+        "description": "Get current terminology enhancement statistics",
+        "operationId": "get_terminology_stats_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AbstractRequest": {
+        "properties": {
+          "abstract": {
+            "type": "string",
+            "title": "Abstract",
+            "description": "The clinical trial or natural history study abstract to process"
+          },
+          "enhance_terminology": {
+            "type": "boolean",
+            "title": "Enhance Terminology",
+            "description": "Whether to enhance with HPO and RxNorm IDs",
+            "default": true
+          },
+          "model_name": {
+            "type": "string",
+            "enum": ["Llama-3.1-70B-Instruct", "gemma3-27b"],
+            "title": "Model Name",
+            "description": "Model to use for extraction",
+            "default": "Llama-3.1-70B-Instruct"
+          }
+        },
+        "type": "object",
+        "required": ["abstract"],
+        "title": "AbstractRequest",
+        "example": {
+          "abstract": "A retrospective cohort study...",
+          "enhance_terminology": true,
+          "model_name": "Llama-3.1-70B-Instruct"
+        }
+      },
+      "BatchAbstractRequest": {
+        "properties": {
+          "abstracts": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Abstracts",
+            "description": "List of abstracts to process"
+          },
+          "enhance_terminology": {
+            "type": "boolean",
+            "title": "Enhance Terminology",
+            "description": "Whether to enhance with HPO and RxNorm IDs",
+            "default": true
+          },
+          "batch_size": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Batch Size",
+            "description": "Batch size for processing",
+            "default": 10
+          },
+          "model_name": {
+            "type": "string",
+            "enum": ["Llama-3.1-70B-Instruct", "gemma3-27b"],
+            "title": "Model Name",
+            "description": "Model to use for extraction",
+            "default": "Llama-3.1-70B-Instruct"
+          }
+        },
+        "type": "object",
+        "required": ["abstracts"],
+        "title": "BatchAbstractRequest"
+      },
+      "BatchExtractionResponse": {
+        "properties": {
+          "success": { "type": "boolean", "title": "Success" },
+          "total_abstracts": { "type": "integer", "title": "Total Abstracts" },
+          "successful_extractions": {
+            "type": "integer",
+            "title": "Successful Extractions"
+          },
+          "failed_extractions": {
+            "type": "integer",
+            "title": "Failed Extractions"
+          },
+          "results": {
+            "items": { "$ref": "#/components/schemas/ExtractionResponse" },
+            "type": "array",
+            "title": "Results"
+          },
+          "total_processing_time_seconds": {
+            "type": "number",
+            "title": "Total Processing Time Seconds"
+          },
+          "terminology_stats": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Terminology Stats"
+          },
+          "model_used": { "type": "string", "title": "Model Used" }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "total_abstracts",
+          "successful_extractions",
+          "failed_extractions",
+          "results",
+          "total_processing_time_seconds",
+          "model_used"
+        ],
+        "title": "BatchExtractionResponse"
+      },
+      "ExtractedCharacteristics": {
+        "properties": {
+          "disease_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Disease Name"
+          },
+          "study_purpose": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Study Purpose"
+          },
+          "study_type": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Study Type"
+          },
+          "participants_count": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Participants Count"
+          },
+          "data_collection_period": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Data Collection Period"
+          },
+          "inclusion_criteria": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Inclusion Criteria"
+          },
+          "exclusion_criteria": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Exclusion Criteria"
+          },
+          "clinical_outcomes": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Clinical Outcomes"
+          },
+          "treatments_received": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Treatments Received"
+          },
+          "study_duration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Study Duration"
+          },
+          "results": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Results"
+          },
+          "parse_error": {
+            "type": "boolean",
+            "title": "Parse Error",
+            "default": false
+          },
+          "raw_response": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Raw Response"
+          }
+        },
+        "type": "object",
+        "title": "ExtractedCharacteristics"
+      },
+      "ExtractionResponse": {
+        "properties": {
+          "success": { "type": "boolean", "title": "Success" },
+          "abstract": { "type": "string", "title": "Abstract" },
+          "extracted_characteristics": {
+            "$ref": "#/components/schemas/ExtractedCharacteristics"
+          },
+          "processing_time_seconds": {
+            "type": "number",
+            "title": "Processing Time Seconds"
+          },
+          "enhanced_with_terminology": {
+            "type": "boolean",
+            "title": "Enhanced With Terminology"
+          },
+          "model_used": { "type": "string", "title": "Model Used" }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "abstract",
+          "extracted_characteristics",
+          "processing_time_seconds",
+          "enhanced_with_terminology",
+          "model_used"
+        ],
+        "title": "ExtractionResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthCheckResponse": {
+        "properties": {
+          "status": { "type": "string", "title": "Status" },
+          "loaded_models": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Loaded Models"
+          },
+          "available_models": {
+            "items": { "type": "string" },
+            "type": "array",
+            "title": "Available Models"
+          },
+          "default_model": { "type": "string", "title": "Default Model" },
+          "timestamp": { "type": "number", "title": "Timestamp" }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "loaded_models",
+          "available_models",
+          "default_model",
+          "timestamp"
+        ],
+        "title": "HealthCheckResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

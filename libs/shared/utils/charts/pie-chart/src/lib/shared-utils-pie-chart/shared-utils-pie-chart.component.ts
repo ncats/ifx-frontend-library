@@ -69,7 +69,7 @@ export class SharedUtilsPieChartComponent
         .value((d) => d.count);
 
       this.color = scaleOrdinal()
-        .domain(this.dataSignal()!.values.map((d) => d.term))
+        .domain(this.dataSignal()!.values.map((d) => <string>d.term))
         .range(
           quantize(
             interpolate('#93278f', '#6e4c8f'),
@@ -112,7 +112,7 @@ export class SharedUtilsPieChartComponent
       //@ts-expect-error dumb
       .data(() => this.pieChart(this.dataSignal().values))
       .join('path')
-      .attr('fill', (d: { data: Filter }) => this.color(d.data.term))
+      .attr('fill', (d: { data: Filter }) => this.color(<string>d.data.term))
       .attr('class', 'slice')
       .attr('d', this.arcShape())
       .on('mouseover', (event: Event, d: { data: Filter }) => {
@@ -172,7 +172,7 @@ export class SharedUtilsPieChartComponent
       .append('circle')
       .attr('class', 'toolCircle')
       .attr('r', this.radius() * 0.65) // radius of tooltip circle
-      .style('fill', this.color(d.term)) // colour based on category mouse is over
+      .style('fill', this.color(<string>d.term)) // colour based on category mouse is over
       .style('fill-opacity', 0.35);
     this.svg
       .append('text')

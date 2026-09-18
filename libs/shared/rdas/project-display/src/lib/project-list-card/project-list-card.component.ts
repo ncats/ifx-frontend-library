@@ -12,5 +12,5 @@ import { CoreProject } from 'rdas-models';
   encapsulation: ViewEncapsulation.None,
 })
 export class ProjectListCardComponent {
-  grant = input<CoreProject>();
+  project = input<CoreProject>();
 }

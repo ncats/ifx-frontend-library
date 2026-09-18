@@ -1,6 +1,6 @@
 <div class="row centered-row">
   <div class="width-75">
-    @for (disease of subscriptions(); track disease.gardId) {
+    @for (disease of diseases(); track disease.gardId) {
       <div>
         <lib-disease-list-card [disease]="disease"></lib-disease-list-card>
         <br />

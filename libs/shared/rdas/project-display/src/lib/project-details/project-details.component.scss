@@ -23,19 +23,19 @@ lib-project-details {
     font-size: 12px;
   }
 
-  .grant-content-wrapper {
+  .project-content-wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 3%;
     grid-auto-rows: minmax(100px, auto);
   }
 
-  .grant-content-wrapper > mat-card {
+  .project-content-wrapper > mat-card {
     max-height: 50vh;
     overflow: scroll;
   }
 
-  .grant-sub-header {
+  .project-sub-header {
     font-size: 20px;
     text-align: center;
     align-self: center;

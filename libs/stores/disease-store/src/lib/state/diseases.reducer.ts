@@ -16,7 +16,6 @@ export interface State extends EntityState<Disease> {
   loaded: boolean | undefined; // has the Diseases list been loaded
   error?: string | null; // last known error (if any)
   typeahead?: Disease[];
-  disease?: Disease;
   page?: Page;
   diseases?: Disease[];
   tree?: DiseaseNode[];
@@ -65,7 +64,12 @@ export const reducer = createReducer(
   on(
     BrowseDiseaseListActions.fetchDiseaseListSuccess,
     (state, { diseases, page }) =>
-      diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true }),
+      diseasesAdapter.setAll(diseases, {
+        ...state,
+        page: page,
+        loaded: true,
+        selectedId: undefined,
+      }),
   ),
 
   on(
@@ -102,7 +106,7 @@ export const reducer = createReducer(
   ),
 
   on(
-    FetchDiseaseListActions.fetchAllDiseaseFiltersSuccess,
+    BrowseDiseaseListActions.fetchAllDiseaseFiltersSuccess,
     (state, { filters }) => ({
       ...state,
       allDiseaseFilters: filters,
@@ -117,7 +121,6 @@ export const reducer = createReducer(
   on(FetchDiseaseActions.clearDisease, (state) => ({
     ...state,
     selectedId: undefined,
-    disease: undefined,
   })),
 
   on(SearchDiseasesActions.searchDiseasesSuccess, (state, { typeahead }) => ({
@@ -135,7 +138,7 @@ export const reducer = createReducer(
     SearchDiseasesActions.searchDiseasesFailure,
     FetchDiseaseActions.fetchDiseaseFailure,
     FetchDiseaseListActions.fetchDiseaseListFailure,
-    FetchDiseaseListActions.fetchAllDiseaseFiltersFailure,
+    BrowseDiseaseListActions.fetchAllDiseaseFiltersFailure,
     FetchDiseaseActions.fetchDiseaseFiltersFailure,
     FetchDiseaseActions.fetchStaticDiseaseFiltersFailure,
     BrowseDiseaseListActions.fetchDiseaseTreeFailure,

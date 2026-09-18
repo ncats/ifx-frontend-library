@@ -35,17 +35,17 @@ export class ArticleDetailsDisplayComponent {
     const art = this.article();
     if (art && art.annotations) {
       art.annotations.forEach((annotation: PubtatorAnnotation) => {
-        if (annotation.text) {
-          if (aMap.has(annotation.infons_type)) {
-            let types = aMap.get(annotation.infons_type);
+        if (annotation.annotation) {
+          if (aMap.has(annotation.annotationType)) {
+            let types = aMap.get(annotation.annotationType);
             if (types) {
-              types = [...types, ...annotation.text];
+              types = [...types, ...annotation.annotation];
             } else {
-              types = annotation.text;
+              types = annotation.annotation;
             }
-            aMap.set(annotation.infons_type, [...new Set(types)]);
+            aMap.set(annotation.annotationType, [...new Set(types)]);
           } else {
-            aMap.set(annotation.infons_type, annotation.text);
+            aMap.set(annotation.annotationType, annotation.annotation);
           }
         }
       });

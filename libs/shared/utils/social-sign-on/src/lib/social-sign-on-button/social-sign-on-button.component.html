@@ -2,7 +2,7 @@
   <div class="signon-spacer"></div>
   <div class="profile-section signin-button" [matMenuTriggerFor]="profileMenu">
     <mat-icon class="missing-url" fontIcon="account_circle"></mat-icon>
-    <span class="user-name">{{ user().displayName }}</span>
+    <span class="user-name">{{ user()!.displayName }}</span>
   </div>
   <mat-menu #profileMenu="matMenu">
     <button mat-menu-item routerLink="/subscriptions">My Subscriptions</button>

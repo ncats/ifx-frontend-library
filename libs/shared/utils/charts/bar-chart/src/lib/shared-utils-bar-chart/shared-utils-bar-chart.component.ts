@@ -107,7 +107,7 @@ export class SharedUtilsBarChartComponent
   makeChart() {
     // Determine the series that need to be stacked.
     this.keys = [...new Set(this.dataSignal().values.map((d) => d.term))].sort(
-      (a: string, b: string) => a?.localeCompare(b),
+      (a: string, b: string) => a?.toString().localeCompare(b.toString()),
     );
     const seriesIndex: InternMap = index(
       this.dataSignal().values,

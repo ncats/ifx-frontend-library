@@ -23,7 +23,7 @@ export class ClinicalTrialsListComponent {
   navigate(id: string): void {
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        nctid: id,
+        nctId: id,
       },
     };
     this.router.navigate(['/trial'], navigationExtras);

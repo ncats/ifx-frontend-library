@@ -105,6 +105,10 @@ export class AppComponent {
           link: 'apis/history',
           label: 'Natural History',
         },
+        /*        {
+          link: 'apis/abstract-abstraction',
+          label: 'Abstract Extraction',
+        },*/
       ],
     },
   ];
@@ -112,19 +116,21 @@ export class AppComponent {
   selectDisease(event: Disease): void {
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        id: event.gardId,
+        gardId: event.gardId,
       },
     };
     this.router.navigate(['/disease'], navigationExtras);
   }
 
   searchDiseaseString(event: string): void {
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        q: event,
-      },
-    };
-    this.router.navigate(['/diseases'], navigationExtras);
+    if (event) {
+      const navigationExtras: NavigationExtras = {
+        queryParams: {
+          q: event,
+        },
+      };
+      this.router.navigate(['/diseases'], navigationExtras);
+    }
   }
 
   closeSidenav() {

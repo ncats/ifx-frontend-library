@@ -31,18 +31,18 @@ export class ProjectDetailsComponent {
   breakpointObserver = inject(BreakpointObserver);
   fullAbstract = true;
 
-  grant = input<CoreProject>();
-  latestGrant = computed<Project>(() => {
-    const g = this.grant();
-    if (g && g.projects) {
-      return g.projects[0];
+  project = input<CoreProject>();
+  latestProject = computed<Project>(() => {
+    const g = this.project();
+    if (g && g.subProjects) {
+      return g.subProjects[0];
     } else {
       return {} as Project;
     }
   });
 
   truncatedAbstract = computed(() => {
-    const abs = this.latestGrant()?.abstract;
+    const abs = this.latestProject()?.abstract;
     let ret = abs;
     if (abs && abs.length > 800) {
       this.fullAbstract = false;
@@ -58,9 +58,9 @@ export class ProjectDetailsComponent {
   });
 
   funding = computed(() => {
-    const gr = this.grant();
-    if (gr && gr.fundedByAgents) {
-      return gr.fundedByAgents.map((obj) => obj.name).join(', ');
-    } else return null;
+    const gr = this.latestProject();
+    /*    if (gr && gr?.fundedByAgents) {
+      return gr?.fundedByAgents.map((obj) => obj.name).join(', ');
+    } else return null;*/
   });
 }

@@ -8,11 +8,11 @@ import {
   inject,
   InjectionToken,
   PLATFORM_ID,
+  viewChild,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import SwaggerUI  from 'swagger-ui';
-
+import SwaggerUI from 'swagger-ui';
 
 @Component({
   selector: 'lib-ramp-ramp-api',
@@ -24,7 +24,7 @@ import SwaggerUI  from 'swagger-ui';
   imports: [],
 })
 export class RampApiComponent implements AfterViewInit {
-  @ViewChild('documentation') el!: ElementRef;
+  el = viewChild<ElementRef>('documentation');
   platformId: InjectionToken<NonNullable<unknown>> = inject(
     PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
@@ -35,8 +35,8 @@ export class RampApiComponent implements AfterViewInit {
     if (this.isBrowser()) {
       SwaggerUI({
         url: this.url,
-        domNode: this.el.nativeElement,
+        domNode: this.el()?.nativeElement,
       });
-      }
+    }
   }
 }

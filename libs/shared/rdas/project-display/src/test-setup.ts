@@ -16,7 +16,7 @@ getTestBed().initTestEnvironment(
 
 export const PROJECTMOCK: CoreProject = new CoreProject({
   core_project_num: 'K01OH000018',
-  rd_total_cost: '66528',
+  totalCost: '66528',
   fundedByAgents: [
     {
       name: 'National Institute for Occupational Safety and Health',

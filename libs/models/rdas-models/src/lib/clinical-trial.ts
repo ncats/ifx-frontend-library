@@ -1,7 +1,7 @@
 import { Disease } from './disease';
+import { Location } from './shared-models';
 
 export class ClinicalTrial {
-  [key: string]: unknown;
   acronym?: string;
   briefSummary?: string;
   briefTitle?: string;
@@ -11,7 +11,7 @@ export class ClinicalTrial {
   lastUpdatePostDate?: string;
   lastUpdatePostDateType?: string;
   lastUpdateSubmitDate?: string;
-  NCTId!: string;
+  nctId!: string;
   NCTIdAlias?: string[];
   officialTitle?: string;
   overallStatus?: string;
@@ -80,6 +80,7 @@ export class ClinicalTrial {
 export class Intervention {
   interventionName?: string;
   interventionType?: string;
+  interventionDescription?: string;
 
   constructor(obj: Partial<Intervention> = {}) {
     Object.assign(this, obj);
@@ -89,6 +90,15 @@ export class Intervention {
 export class ParticipantInfo {
   eligibilityCriteria?: string;
   eligibilityCriteriaList?: string[];
+
+  maximumAge?: string;
+  healthyVolunteers?: string;
+  stdAges?: string;
+  minimumAge?: string;
+  enrollmentCount?: string;
+  nctId?: string;
+  enrollmentType?: string;
+
   constructor(obj: Partial<ParticipantInfo> = {}) {
     Object.assign(this, obj);
     if (obj.eligibilityCriteria) {
@@ -97,23 +107,17 @@ export class ParticipantInfo {
   }
 }
 
-export class Location {
-  locationCity?: string;
-  locationCountry?: string;
-  locationFacility?: string;
-  locationState?: string;
-  locationStatus?: string;
-  locationZip?: string;
-
-  constructor(obj: Partial<Location> = {}) {
-    Object.assign(this, obj);
-  }
-}
-
 export class Condition {
   condition?: string;
+  mappedDiseases?: Disease[];
   constructor(obj: Partial<Condition> = {}) {
     Object.assign(this, obj);
+
+    if (obj.mappedDiseases) {
+      this.mappedDiseases = obj.mappedDiseases.map(
+        (disease) => new Disease(disease),
+      );
+    }
   }
 }
 

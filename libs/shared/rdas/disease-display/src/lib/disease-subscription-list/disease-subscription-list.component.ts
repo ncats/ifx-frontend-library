@@ -2,8 +2,7 @@ import { Component, Input, Signal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { Disease } from 'rdas-models';
-import { Subscription } from 'utils-models';
+import { Disease, Subscription } from 'rdas-models';
 
 import { Subject } from 'rxjs';
 import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card.component';
@@ -34,7 +33,7 @@ export class DiseaseSubscriptionListComponent {
       const diseaseArr: Disease[] = [];
       subscriptions.forEach((sub) => {
         diseaseArr.push(
-          new Disease({ gardId: sub.gardID, gardName: sub.diseaseName }),
+          new Disease({ gardId: sub.gardId, gardName: sub.diseaseName }),
         );
         this.diseases = signal<Disease[]>(diseaseArr);
       });

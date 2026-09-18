@@ -5,5 +5,8 @@
   "type": "module",
   "main": "./index.mjs",
   "types": "./index.d.ts",
-  "dependencies": {}
+  "dependencies": {
+    "@nx/vite": "^23.1.0",
+    "vitest": "^4.0.8"
+  }
 }

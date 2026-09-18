@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -19,19 +20,17 @@
       "graphql-sandbox": ["libs/features/rdas/graphql-sandbox/src/index.ts"],
       "history-api": ["libs/features/rdas/history-api/src/index.ts"],
       "rdas-about": ["libs/features/rdas/rdas-about/src/index.ts"],
-      "rdas-article-page": [
-        "libs/features/rdas/rdas-article-page/src/index.ts"
-      ],
+      "article-page": ["libs/features/rdas/article-page/src/index.ts"],
       "rdas-browse": ["libs/features/rdas/rdas-browse/src/index.ts"],
       "rdas-disease-page": [
         "libs/features/rdas/rdas-disease-page/src/index.ts"
       ],
-      "rdas-grant-page": ["libs/features/rdas/rdas-grant-page/src/index.ts"],
+      "project-page": ["libs/features/rdas/project-page/src/index.ts"],
       "rdas-home": ["libs/features/rdas/rdas-home/src/index.ts"],
       "rdas-subscriptions": [
         "libs/features/rdas/rdas-subscriptions/src/index.ts"
       ],
-      "rdas-trial-page": ["libs/features/rdas/rdas-trial-page/src/index.ts"],
+      "trial-page": ["libs/features/rdas/trial-page/src/index.ts"],
       "rdas-models": ["libs/models/rdas-models/src/index.ts"],
       "utils-models": ["libs/models/utils/src/index.ts"],
       "file-upload": ["libs/shared/forms/file-upload/src/index.ts"],
@@ -73,7 +72,7 @@
       "article-store": ["libs/stores/article-store/src/index.ts"],
       "disease-store": ["libs/stores/disease-store/src/index.ts"],
       "filter-store": ["libs/stores/filter-store/src/index.ts"],
-      "grant-store": ["libs/stores/grant-store/src/index.ts"],
+      "project-store": ["libs/stores/project-store/src/index.ts"],
       "trial-store": ["libs/stores/trial-store/src/index.ts"],
       "user-store": ["libs/stores/user-store/src/index.ts"],
       "ramp-about": ["libs/features/ramp/ramp-about/src/index.ts"],
@@ -146,7 +145,12 @@
       "visualization-panel": [
         "libs/shared/ramp/panels/visualization-panel/src/index.ts"
       ],
-      "schemas": ["libs/schemas/src/index.ts"]
+      "schemas": ["libs/schemas/src/index.ts"],
+      "gene-store": ["libs/stores/gene-store/src/index.ts"],
+      "phenotype-store": ["libs/stores/phenotype-store/src/index.ts"],
+      "abstract-extraction-api": [
+        "./libs/features/rdas/abstract-extraction-api/src/index.ts"
+      ]
     },
     "allowSyntheticDefaultImports": true
   },

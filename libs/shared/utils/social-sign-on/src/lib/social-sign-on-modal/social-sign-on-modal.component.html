@@ -1,96 +1,146 @@
-<mat-dialog-content>
-  <div class="row centered-row">
-    <mat-list class="buttons-list">
-      <mat-list-item>
-        <div
-          matRipple
-          role="button"
-          tabindex="0"
-          (click)="login('google')"
-          (keydown.enter)="login('google')"
-          class="login-button google"
-        >
-          <img
-            src="./assets/social-sign-on/ggl.png"
-            class="login-icon"
-            alt="Google sign in"
+<div class="row right-justified-row">
+  <div>
+    <button mat-icon-button (click)="closeModal()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<div class="row centered-row">
+  <h2>Sign In</h2>
+</div>
+<div class="row centered-row">
+  <h3>Sign in to your account</h3>
+</div>
+
+<div class="sign-in-background">
+  <mat-dialog-content>
+    <form (keydown.enter)="loginEmail()" [formGroup]="signOnForm">
+      <div class="row centered-row">
+        <mat-form-field appearance="outline" class="sign-in-form">
+          <mat-label>Enter your email</mat-label>
+          <input
+            matInput
+            type="email"
+            [placeholder]="'Email Sign in'"
+            [formControlName]="'email'"
           />
-          &nbsp; &nbsp; Sign In with Google
-        </div>
-      </mat-list-item>
-      <mat-list-item>
-        <div
-          role="button"
-          tabindex="0"
-          matRipple
-          (click)="login('facebook')"
-          (keydown.enter)="login('facebook')"
-          class="login-button facebook"
-        >
-          <img
-            src="./assets/social-sign-on/fbk.png"
-            class="login-icon"
-            alt="Facebook sign in"
-          />
-          &nbsp; &nbsp; Sign In with Facebook
-        </div>
-      </mat-list-item>
-      <!--      <mat-list-item >
-        <div (click)="login('twitter')" class="login-button twitter">
-        <img src="/assets/social-sign-on/ttr.png" class="login-icon">
-          &nbsp;
-          &nbsp;
-        Sign In with Twitter
+          @if (signOnForm.controls['email'].invalid) {
+            <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+          }
+        </mat-form-field>
       </div>
-      </mat-list-item >-->
-      <!--      <mat-list-item >
-        <div (click)="openEmailLinkModal()" class="login-button primary-background">
-          <mat-icon class="login-icon">mail</mat-icon>
-          &nbsp;
-          &nbsp;
-          Send Me a Link
-        </div>
-      </mat-list-item>-->
-      <!--      <mat-list-item>
-        <div (click)="login('email')" class="login-button primary-background">
-          <mat-icon class="login-icon">lock</mat-icon>
-          &nbsp;
-          &nbsp;
-        Use an Email and Password
-        </div>
-      </mat-list-item >-->
-      <mat-list-item>
-        <div
-          matRipple
+      <div class="row centered-row">
+        <mat-form-field appearance="outline" class="sign-in-form">
+          <input
+            matInput
+            type="password"
+            [placeholder]="'Password'"
+            [formControlName]="'pw'"
+          />
+          @if (signOnForm.controls['pw'].invalid) {
+            <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="row centered-row no-padding">
+        <a
           role="button"
           tabindex="0"
-          (click)="loginEmail()"
-          (keydown.enter)="loginEmail()"
-          class="login-button primary-background"
+          (click)="forgotPassword()"
+          (keydown.enter)="forgotPassword()"
+          class="modal-button clickable-area"
+          >Forgot password?</a
         >
-          <mat-icon class="login-icon">lock</mat-icon>
-          &nbsp; &nbsp; Use an Email and Password
-        </div>
-      </mat-list-item>
-    </mat-list>
-  </div>
-  <div class="row centered-row">
-    <p class="disclaimer">
-      By continuing, you are indicating that you accept our
+      </div>
+    </form>
+    <div class="row centered-row">
+      @if (loginError()) {
+        <mat-error>{{ loginError()! }}</mat-error>
+      }
+      @if (formError) {
+        <mat-error>{{ formError }}</mat-error>
+      }
+    </div>
+    <div class="row centered-row">
+      <mat-list class="buttons-list">
+        <mat-list-item>
+          <div
+            matRipple
+            role="button"
+            tabindex="0"
+            (click)="loginEmail()"
+            (keydown.enter)="loginEmail()"
+            class="login-button email"
+          >
+            &nbsp; &nbsp; Sign In
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+
+    <div class="row centered-row">Don't have an account?</div>
+    <div class="row centered-row">
       <a
-        href="https://ncats.nih.gov/disclaimer"
-        target="_blank"
-        rel="noreferrer"
-        >Terms of Service</a
+        role="button"
+        tabindex="0"
+        (click)="register()"
+        (keydown.enter)="register()"
+        class="clickable-area"
+        >Register Now</a
       >
-      and
-      <a href="https://ncats.nih.gov/privacy" target="_blank" rel="noreferrer"
-        >Privacy Policy</a
-      >.
-    </p>
-    <br />
-  </div>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="closeModal()">Cancel</button>
-</mat-dialog-actions>
+    </div>
+
+    <div class="row centered-row">
+      <p class="disclaimer">
+        By continuing, you are indicating that you accept our
+        <a href="/privacy" target="_blank" rel="noreferrer">Terms of Service</a>
+        and
+        <a href="/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>.
+      </p>
+      <br />
+    </div>
+    <div class="row centered-row">
+      <div class="width-45"><mat-divider></mat-divider></div>
+      <div>OR</div>
+      <div class="width-45"><mat-divider></mat-divider></div>
+    </div>
+    <div class="row centered-row">
+      <mat-list class="buttons-list">
+        <mat-list-item>
+          <div
+            matRipple
+            role="button"
+            tabindex="0"
+            (click)="login('google')"
+            (keydown.enter)="login('google')"
+            class="login-button google"
+          >
+            <img
+              src="./assets/social-sign-on/ggl.png"
+              class="login-icon"
+              alt="Google sign in"
+            />
+            &nbsp; &nbsp; Sign In with Google
+          </div>
+        </mat-list-item>
+        <mat-list-item>
+          <div
+            role="button"
+            tabindex="0"
+            matRipple
+            (click)="login('facebook')"
+            (keydown.enter)="login('facebook')"
+            class="login-button facebook"
+          >
+            <img
+              src="./assets/social-sign-on/fbk.png"
+              class="login-icon"
+              alt="Facebook sign in"
+            />
+            &nbsp; &nbsp; Sign In with Facebook
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-dialog-content>
+</div>

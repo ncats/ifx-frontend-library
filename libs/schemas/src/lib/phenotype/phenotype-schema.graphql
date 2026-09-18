@@ -5,7 +5,6 @@ type HasPhenotypeProperties @relationshipProperties {
   evidence: String
   hpoFrequency: String
   reference: [String!]
-  validationStatus: Boolean
 }
 
 type Phenotype @node {

@@ -4,22 +4,22 @@
     @if (article()?.journals && article()?.journals!.length) {
       @for (journal of article()!.journals; track journal.title) {
         <div>
-          <i>{{ journal.title }}, </i>
-          {{ journal.dateOfPublication || journal.printPublicationDate }}
+          <i>{{ journal.title }} </i>
+          {{ article()?.firstPublicationDate | date }}
         </div>
       }
     }
   </div>
   <div class="width-sm-100 width-25 right-text">
     <div class="mat-h3 right-text">
-      @if (article()?.pubmed_id) {
+      @if (article()?.pubmedId) {
         PMID:
         <a
-          href="https://pubmed.ncbi.nlm.nih.gov/{{ article()?.pubmed_id }}"
+          href="https://pubmed.ncbi.nlm.nih.gov/{{ article()?.pubmedId }}"
           target="_blank"
           rel="noreferrer"
           aria-label="Link to publication in PubMed"
-          >{{ article()?.pubmed_id }}</a
+          >{{ article()?.pubmedId }}</a
         >
       }
       <br />
@@ -40,7 +40,7 @@
       <span>
         <span>{{ pubType }}</span>
         @if (!last) {
-          <span> , </span>
+          <span>, </span>
         }
       </span>
     }

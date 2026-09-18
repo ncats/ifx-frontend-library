@@ -37,9 +37,9 @@ export class ProjectListComponent {
   navigate(id: string): void {
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        projectid: id,
+        projectNumber: id,
       },
     };
-    this.router.navigate(['/grant'], navigationExtras);
+    this.router.navigate(['/project'], navigationExtras);
   }
 }
