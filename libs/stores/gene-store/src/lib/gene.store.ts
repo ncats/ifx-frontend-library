@@ -91,7 +91,7 @@ export const GeneStore = signalStore(
                           isLoading: false,
                           page: 0,
                         };
-                      });
+                      })
                     }
                   }
                 },

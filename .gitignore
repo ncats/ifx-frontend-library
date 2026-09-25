@@ -69,3 +69,4 @@ Thumbs.db
 apps/rdas-e2e
 .env*
 vitest.config.*.timestamp*
+/apps/rdas-frontend/src/assets/environments/

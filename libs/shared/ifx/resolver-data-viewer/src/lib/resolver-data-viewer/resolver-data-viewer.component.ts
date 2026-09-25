@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { DataProperty } from 'utils-models';
+import { DataProperty, Filter } from 'utils-models';
 import { LoadingSpinnerComponent } from 'loading-spinner';
 import { ResolverResponse } from 'ifx';
 import { IfxDatatableComponent } from 'ifx-datatable';
@@ -23,8 +23,7 @@ import { IfxDatatableComponent } from 'ifx-datatable';
     MatIconModule,
     MatSlideToggleModule,
     MatMenuModule,
-    IfxDatatableComponent,
-    LoadingSpinnerComponent,
+    IfxDatatableComponent
   ],
   templateUrl: './resolver-data-viewer.component.html',
   styleUrl: './resolver-data-viewer.component.scss',
@@ -65,8 +64,12 @@ export class ResolverDataViewerComponent {
     }
   });
 
-  params = input<string[]>([]);
-  headers = computed(() => ['input', 'source', 'url'].concat(this.params()));
+  params = input<Filter[]>([]);
+
+  headers = computed(() => {
+    const params = this.params().map(filter=> <string>filter.value);
+   return  ['input', 'source', 'url'].concat(params)
+  });
 
   fields = computed(() => {
     const fieldsArr = [] as DataProperty[];
@@ -118,11 +121,13 @@ export class ResolverDataViewerComponent {
   _toJSON(data: string): { [key: string]: string } {
     const split = data.split('\t');
     const retObj: { [key: string]: string } = {};
-    this.params()?.forEach((field: string, index: number) => {
-      const r = (retObj[field as keyof typeof retObj] =
-        split[index] || 'undefined');
-      return r;
-    });
+    this.params()?.forEach(
+      (field: Filter, index: number) => {
+        const r = (retObj[field.value as keyof typeof retObj] =
+          split[index] || 'undefined');
+        return r;
+      },
+    );
     return retObj;
   }
 

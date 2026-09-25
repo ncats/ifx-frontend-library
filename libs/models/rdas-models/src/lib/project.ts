@@ -5,7 +5,7 @@ import { Article } from './article';
 
 export class CoreProject {
   coreProjectNumber!: string;
-  totalCost!: number | string;
+  totalCost?: number | string | null;
   subProjects?: Project[];
   subProjectsCount?: number;
   _subProjectsCount?: { totalCount: number };
