@@ -9,5 +9,5 @@ import { IfxHeaderComponent } from 'ifx-header';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'NCATSFind Resolver';
+  title = 'Resolver';
 }

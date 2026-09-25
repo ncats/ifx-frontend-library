@@ -10,7 +10,7 @@ export const GENEFILTERSQUERY = gql`
     $sort: [GeneSort!]
     $allGenesWhere: GeneWhere
   ) {
-    filters: genes(
+    allFilters: genes(
       where: $allGenesWhere
       sort: $sort
       limit: $limit

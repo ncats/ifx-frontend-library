@@ -42,21 +42,21 @@
         @for (filter of filteredSearchOptions(); track filter.label) {
           <mat-optgroup [label]="filter.label" multiple>
             @for (value of filter.values; track value.value) {
-              <mat-option (click)="selectValue(value)">
+              <mat-option>
                 <mat-checkbox
                   (change)="
                     $event
-                      ? subscriptionSelectionSignal().toggle(value.value)
+                      ? subscriptionSelection.toggle(value)
                       : null
                   "
                   [checked]="
-                    subscriptionSelectionSignal().isSelected(value.value)
+                    subscriptionSelection.isSelected(value)
                   "
                   (click)="$event.stopPropagation()"
                 >
                   <span
                     class="main-value"
-                    [innerHTML]="value.term | highlight: filterSearchCtrl.value"
+                    [innerHTML]="value.term.toString() | highlight: filterSearchCtrl.value"
                   ></span>
                 </mat-checkbox>
                 @if (value.description) {
@@ -82,7 +82,7 @@
           <button
             mat-flat-button
             class="remove-button"
-            [disabled]="subscriptionSelectionSignal().isEmpty()"
+            [disabled]="subscriptionSelection.isEmpty()"
             (click)="clearParams()"
           >
             Remove All
@@ -90,16 +90,15 @@
         </div>
       </div>
       <div class="chip-list-wrapper">
-        @for (
-          filterCategory of selectedFiltersSignal() | keyvalue;
-          track filterCategory.key
+      @for (
+          filterCategory of selectedSearchOptions(); track filterCategory.label
         ) {
-          @if (filterCategory.value.length) {
+          @if (filterCategory.values.length) {
             <div class="row">
-              <h3>{{ filterCategory.key }}</h3>
+              <h3>{{ filterCategory.label }}</h3>
             </div>
             <mat-chip-listbox>
-              @for (filter of filterCategory.value; track filter.term) {
+              @for (filter of filterCategory!.values; track filter.term) {
                 <mat-chip (click)="removeChip(filter)">
                   {{ filter.term }}
                   <mat-icon class="mat-chip-remove">cancel</mat-icon>
@@ -125,10 +124,9 @@
       <h2>Results</h2>
     </div>
   </div>
-  @if (clicked() && !loading()) {
+  @if (loading()) {
     <lib-loading-spinner [isLoaded]="false"></lib-loading-spinner>
   }
-
   <div class="row space-around-row top-align">
     <div class="width-90">
       @if (badData() && badData().length) {
@@ -144,7 +142,7 @@
       @if (resolvedData() && resolvedData().length) {
         <lib-resolver-data-viewer
           [data]="filteredResolvedData()"
-          [params]="sortedSelection()"
+          [params]="subscriptionSelection.selected"
         ></lib-resolver-data-viewer>
       }
     </div>

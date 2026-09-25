@@ -148,7 +148,7 @@ export function _parseFilters(
         filters.push(
           new FilterCategory({
             parent: 'articles',
-            label: 'Natural Health Study Articles',
+            label: 'Natural History Study Articles',
             field: 'isNHS',
             formType: 'boolean',
             values: key[1].map((fil: Partial<Filter>) => {

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ResolverForm, ResolverResponse } from 'ifx';
+import { ResolverForm, ResolverOption, ResolverResponse } from 'ifx';
 import { Observable } from 'rxjs';
 
 const httpOptions = {
@@ -30,8 +30,8 @@ export class ResolverService {
     this.extraString = key;
   }
 
-  fetchOptions(): Observable<unknown> {
-    return this.http.get(this.optionsUrl);
+  fetchOptions(): Observable<ResolverOption[]> {
+    return this.http.get(this.optionsUrl) as Observable<ResolverOption[]>;
   }
 
   resolve(urlStub: string, form: ResolverForm) {

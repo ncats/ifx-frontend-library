@@ -13,7 +13,6 @@
         "outputPath": "dist/apps/resolver",
         "index": "apps/resolver/src/index.html",
         "browser": "apps/resolver/src/main.ts",
-        "polyfills": ["zone.js"],
         "tsConfig": "apps/resolver/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
