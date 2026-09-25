@@ -21,8 +21,11 @@ RUN NODE_OPTIONS=--max_old_space_size=8192 nx run ramp-client:build:production -
 FROM registry.ncats.nih.gov:5000/labshare/docker-base-web
 
 # Install NCATS required packages
-# Acquire::Check-Valid-Until=false works around expired InRelease files on the base image's apt mirrors
-RUN apt-get update -o Acquire::Check-Valid-Until=false && apt-get install -y net-tools
+# The base image is Debian bullseye, which is EOL and was removed from the regular
+# deb.debian.org/security.debian.org mirrors, so point apt at the Debian archive instead.
+# Acquire::Check-Valid-Until=false works around expired InRelease files on the archive mirror.
+RUN sed -i -e 's|deb.debian.org|archive.debian.org|g' -e 's|security.debian.org|archive.debian.org|g' /etc/apt/sources.list \
+    && apt-get update -o Acquire::Check-Valid-Until=false && apt-get install -y net-tools
 
 COPY --from=build /var/www/app/dist/apps/ramp-client/browser /var/www/app
 
