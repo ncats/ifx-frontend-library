@@ -1,3 +1,4 @@
+
 import { gql } from 'apollo-angular';
 import { inject, Injectable } from '@angular/core';
 import * as Apollo from 'apollo-angular';
@@ -7,6 +8,7 @@ import {
   ArticleQueryQuery,
   ArticleQueryQueryVariables,
 } from './generated-types';
+
 export const ArticleQueryDocument = gql`
     query ArticleQuery($articleWhere: ArticleWhere) {
   articles(where: $articleWhere) {
@@ -33,7 +35,7 @@ export const ArticleQueryDocument = gql`
       nlmid
       title
     }
-    diseases: hasMentionIn {
+    diseases: hasPublication {
       gardId
       gardName
     }
@@ -76,26 +78,23 @@ export const ArticleQueryDocument = gql`
     `;
 
   @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
   })
-  export class ArticleQueryGQL extends Apollo.Query<
-    ArticleQueryQuery,
-    ArticleQueryQueryVariables
-  > {
+  export class ArticleQueryGQL extends Apollo.Query<ArticleQueryQuery, ArticleQueryQueryVariables> {
     document = ArticleQueryDocument;
     override apollo = inject(Apollo.Apollo);
   }
 
 export const ArticleListQueryDocument = gql`
-    query ArticleListQuery($diseaseWhere: DiseaseWhere, $hasMentionInLimit: Int, $hasMentionInOffset: Int, $hasMentionInSort: [ArticleSort!], $articleWhere: ArticleWhere, $hasMentionInConnectionWhere: DiseaseHasMentionInConnectionWhere) {
+    query ArticleListQuery($diseaseWhere: DiseaseWhere, $hasPublicationLimit: Int, $hasPublicationInOffset: Int, $hasPublicationInSort: [ArticleSort!], $articleWhere: ArticleWhere, $hasPublicationConnectionWhere: DiseaseHasPublicationConnectionWhere) {
   diseases(where: $diseaseWhere) {
     allCount: countArticles
     countEpiArticles
     countNhsArticles
-    articles: hasMentionIn(
-      limit: $hasMentionInLimit
-      offset: $hasMentionInOffset
-      sort: $hasMentionInSort
+    articles: hasPublication(
+      limit: $hasPublicationLimit
+      offset: $hasPublicationInOffset
+      sort: $hasPublicationInSort
       where: $articleWhere
     ) {
       pubmedId
@@ -113,7 +112,7 @@ export const ArticleListQueryDocument = gql`
         title
       }
     }
-    filteredCount: hasMentionInConnection(where: $hasMentionInConnectionWhere) {
+    filteredCount: hasPublicationConnection(where: $hasPublicationConnectionWhere) {
       totalCount: aggregate {
         count {
           nodes

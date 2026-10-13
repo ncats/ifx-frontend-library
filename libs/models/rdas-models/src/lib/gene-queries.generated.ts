@@ -4,23 +4,18 @@ import * as Apollo from 'apollo-angular';
 import { GeneFiltersQuery, GeneFiltersQueryVariables } from './generated-types';
 
 export const GeneFiltersDocument = gql`
-  query GeneFilters(
-    $offset: Int
-    $limit: Int
-    $sort: [GeneSort!]
-    $allGenesWhere: GeneWhere
+    query GeneFilters($offset: Int, $limit: Int, $sort: [GeneSort!], $allGenesWhere: GeneWhere) {
+  allFilters: genes(
+    where: $allGenesWhere
+    sort: $sort
+    limit: $limit
+    offset: $offset
   ) {
-    allFilters: genes(
-      where: $allGenesWhere
-      sort: $sort
-      limit: $limit
-      offset: $offset
-    ) {
-      term: geneSymbol
-      count: countDiseases
-    }
+    term: geneSymbol
+    count: countDiseases
   }
-`;
+}
+    `;
 
   @Injectable({
     providedIn: 'root',

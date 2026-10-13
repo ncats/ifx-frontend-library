@@ -1,5 +1,5 @@
 import { gql } from 'apollo-angular';
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import * as Apollo from 'apollo-angular';
 import {
   DiseaseDynamicFiltersQueryQuery,
@@ -15,6 +15,7 @@ import {
   FieldCountsQuery,
   FieldCountsQueryVariables,
 } from './generated-types';
+
 export const FieldCountsDocument = gql`
     query FieldCounts {
   fieldCounts(limit: 1) {
@@ -243,6 +244,7 @@ export const DiseaseListQueryDocument = gql`
     document = DiseaseListQueryDocument;
     override apollo = inject(Apollo.Apollo);
   }
+
 export const DiseasesTypeaheadDocument = gql`
     query DiseasesTypeahead($searchString: String, $limit: Int) {
   diseaseSearch(searchString: $searchString, limit: $limit) {

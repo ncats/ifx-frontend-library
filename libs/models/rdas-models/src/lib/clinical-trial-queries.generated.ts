@@ -1,5 +1,5 @@
 import { gql } from 'apollo-angular';
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import * as Apollo from 'apollo-angular';
 import {
   ClinicalTrialListQueryQuery,

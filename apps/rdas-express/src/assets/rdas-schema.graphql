@@ -76,7 +76,7 @@ type Article @node {
     @relationship(type: "has_omim_reference", direction: OUT)
   hasEpidemiologicalAnnotation: [EpidemiologyAnnotation!]!
     @relationship(type: "has_epidemiological_annotation", direction: OUT)
-  hasMentionIn: [Disease!]! @relationship(type: "has_mention_in", direction: IN)
+  hasPublication: [Disease!]! @relationship(type: "has_publication", direction: IN)
   hasMeshTerm: [MeshTerm!]! @relationship(type: "has_mesh_term", direction: IN)
   hasPubtatorAnnotation: [PubtatorAnnotation!]!
     @relationship(type: "has_pubtator_annotation", direction: OUT)
@@ -150,7 +150,7 @@ type Condition @node {
   hasClinicalTrial: [ClinicalTrial!]!
     @relationship(type: "has_clinical_trial", direction: IN)
   hasMappedCondition: [Disease!]!
-    @relationship(type: "has_mapped_condition", direction: OUT)
+    @relationship(type: "has_mapped_condition", direction: IN)
 }
 
 type CoreProject @node {
@@ -213,9 +213,9 @@ type Disease @node {
   hasClinicalTrial: [ClinicalTrial!]!
     @relationship(type: "has_clinical_trial", direction: OUT)
   hasMappedCondition: [Condition!]!
-    @relationship(type: "has_mapped_condition", direction: IN)
-  hasMentionIn: [Article!]!
-    @relationship(type: "has_mention_in", direction: OUT)
+    @relationship(type: "has_mapped_condition", direction: OUT)
+  hasPublication: [Article!]!
+    @relationship(type: "has_publication", direction: OUT)
   hasCoreProject: [CoreProject!]!
     @relationship(type: "has_core_project", direction: OUT)
   hasResearchedProject: [Project!]!
@@ -454,7 +454,7 @@ type Query {
   ): [FilterCount]
     @cypher(
       statement: """
-      match (d:Disease)-[has_mention_in]-(a:Article)
+      match (d:Disease)-[has_publication]-(a:Article)
       WHERE d.gardId = $where.gardId.eq
       AND (a.isNaturalHistoryStudy = $articleWhere.isNaturalHistoryStudy.eq OR $articleWhere.isNaturalHistoryStudy.eq IS NULL)
       AND (a.isEpidemiologyStudy = $articleWhere.isEpidemiologyStudy.eq OR $articleWhere.isEpidemiologyStudy.eq IS NULL)
@@ -473,7 +473,7 @@ type Query {
   ): [FilterCount]
     @cypher(
       statement: """
-      match (d:Disease)-[has_mention_in]-(a:Article)
+      match (d:Disease)-[has_publication]-(a:Article)
       WHERE d.gardId = $where.gardId.eq
       AND (a.isNaturalHistoryStudy = $articleWhere.isNaturalHistoryStudy.eq OR $articleWhere.isNaturalHistoryStudy.eq IS NULL)
       AND (a.publicationYear IN $articleWhere.publicationYear.in OR $articleWhere.publicationYear.in IS NULL)
@@ -492,7 +492,7 @@ type Query {
   ): [FilterCount]
     @cypher(
       statement: """
-      match (d:Disease)-[has_mention_in]-(a:Article)
+      match (d:Disease)-[has_publication]-(a:Article)
       WHERE d.gardId = $where.gardId.eq
       AND (a.isEpidemiologyStudy = $articleWhere.isEpidemiologyStudy.eq OR $articleWhere.isEpidemiologyStudy.eq IS NULL)
       AND (a.publicationYear IN $articleWhere.publicationYear.in OR $articleWhere.publicationYear.in IS NULL)

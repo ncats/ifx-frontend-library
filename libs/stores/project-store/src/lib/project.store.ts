@@ -168,7 +168,7 @@ export const ProjectStore = signalStore(
             );
           }),
           map((r) => {
-            store.loadProjects(r.payload.routerState.root.queryParams);
+           // store.loadProjects(r.payload.routerState.root.queryParams);
           }),
         )
         .subscribe();

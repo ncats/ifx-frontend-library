@@ -136,7 +136,7 @@ export const ArticleStore = signalStore(
           switchMap((params) => {
             const query = queryFactory.getQuery(params);
             return articleQuery
-              .watch({ variables: query.params })
+              .watch({ variables: query.params, errorPolicy: "all" })
               .valueChanges.pipe(
                 tapResponse({
                   next: (articles) => {

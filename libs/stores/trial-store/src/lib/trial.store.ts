@@ -7,10 +7,6 @@ import {
   withState,
 } from '@ngrx/signals';
 import {
-  Article,
-  ArticleListQueryGQL,
-  ArticleQueryFactory,
-  ArticleQueryGQL,
   ClinicalTrial,
   ClinicalTrialListQueryGQL,
   ClinicalTrialQueryFactory,
@@ -82,7 +78,7 @@ export const ClinicalTrialStore = signalStore(
           switchMap((params) => {
             const query = queryFactory.getQuery(params);
             return clinicalTrialListQuery
-              .watch({ variables: query.params })
+              .watch({ variables: query.params})
               .valueChanges.pipe(
                 tapResponse({
                   next: (clinicalTrials) => {
@@ -107,7 +103,10 @@ export const ClinicalTrialStore = signalStore(
                     }
                   },
                   error: (err) => {
-                    patchState(store, { isLoading: false });
+                    patchState(store, {
+                      isLoading: false,
+                      clinicalTrials : []
+                    });
                     console.error(err);
                   },
                 }),
@@ -166,7 +165,8 @@ export const ClinicalTrialStore = signalStore(
             );
           }),
           map((r) => {
-            store.loadClinicalTrials(r.payload.routerState.root.queryParams);
+        console.log("on init")
+          //  store.loadClinicalTrials(r.payload.routerState.root.queryParams);
           }),
         )
         .subscribe();

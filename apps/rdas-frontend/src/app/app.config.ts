@@ -49,7 +49,7 @@ export const appConfig: ApplicationConfig = {
       return initializerFn();
     }),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
-    provideClientHydration(withEventReplay()),
+   // provideClientHydration(withEventReplay()),
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       appRoutes,
@@ -59,7 +59,7 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules),
+     // withPreloading(PreloadAllModules),
     ),
     provideZonelessChangeDetection(),
     provideStoreDevtools(),
