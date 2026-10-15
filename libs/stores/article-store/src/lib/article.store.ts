@@ -177,7 +177,7 @@ export const ArticleStore = signalStore(
             );
           }),
           map((r) => {
-            store.loadArticles(r.payload.routerState.root.queryParams);
+           // store.loadArticles(r.payload.routerState.root.queryParams);
           }),
         )
         .subscribe();

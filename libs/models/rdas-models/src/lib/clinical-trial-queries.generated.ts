@@ -89,38 +89,47 @@ export const ClinicalTrialQueryDocument = gql`
   }
 
 export const ClinicalTrialListQueryDocument = gql`
-    query ClinicalTrialListQuery($diseaseWhere: DiseaseWhere, $hasClinicalTrialLimit: Int, $hasClinicalTrialOffset: Int, $hasClinicalTrialSort: [ClinicalTrialSort!], $clinicalTrialWhere: ClinicalTrialWhere, $hasClinicalTrialConnectionWhere: DiseaseHasClinicalTrialConnectionWhere) {
-  diseases(where: $diseaseWhere) {
-    allCount: countTrials
-    clinicalTrials: hasClinicalTrial(
-      limit: $hasClinicalTrialLimit
-      offset: $hasClinicalTrialOffset
-      sort: $hasClinicalTrialSort
-      where: $clinicalTrialWhere
-    ) {
-      briefTitle
-      nctId
-      phase
-      studyType
-      overallStatus
-      officialTitle
-      startDate
-      completionDate
-      completionDateType
-      startDateType
-    }
-    filteredCount: hasClinicalTrialConnection(
-      where: $hasClinicalTrialConnectionWhere
-    ) {
-      totalCount: aggregate {
-        count {
-          nodes
+  query ClinicalTrialListQuery(
+    $diseaseWhere: DiseaseWhere
+    $hasClinicalTrialLimit: Int
+    $hasClinicalTrialOffset: Int
+    $hasClinicalTrialSort: [ClinicalTrialSort!]
+    $clinicalTrialWhere: ClinicalTrialWhere
+    $hasClinicalTrialConnectionWhere: DiseaseHasClinicalTrialConnectionWhere
+  ) {
+    diseases(where: $diseaseWhere) {
+      gardId
+      gardName
+      allCount: countTrials
+      clinicalTrials: hasClinicalTrial(
+        limit: $hasClinicalTrialLimit
+        offset: $hasClinicalTrialOffset
+        sort: $hasClinicalTrialSort
+        where: $clinicalTrialWhere
+      ) {
+        briefTitle
+        nctId
+        phase
+        studyType
+        overallStatus
+        officialTitle
+        startDate
+        completionDate
+        completionDateType
+        startDateType
+      }
+      filteredCount: hasClinicalTrialConnection(
+        where: $hasClinicalTrialConnectionWhere
+      ) {
+        totalCount: aggregate {
+          count {
+            nodes
+          }
         }
       }
     }
   }
-}
-    `;
+`;
 
   @Injectable({
     providedIn: 'root',

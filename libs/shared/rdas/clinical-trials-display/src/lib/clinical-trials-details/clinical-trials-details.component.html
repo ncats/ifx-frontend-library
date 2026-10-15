@@ -260,7 +260,7 @@
                 <div class="accent-chip-outlined">
                   Study Disease
                 </div>
-                @for (disease of trial()!.studyDiseases; track disease.gardId) {
+                @for (disease of trial()!.studyDiseases; track disease) {
                   <mat-list-item>
                     @if (disease.gardId) {
                       <div #link>
@@ -287,7 +287,7 @@
                   </div>
                 @for (
                   condition of trial()!.conditions;
-                  track condition.condition
+                  track condition
                   ) {
                   <mat-list-item>
                     {{ condition.condition }}
@@ -295,7 +295,7 @@
                       mapped to:
                       @for (
                         disease of condition.mappedDiseases;
-                        track disease.gardId
+                        track disease
                         ) {
                         @if (disease.gardId) {
                           <div #link>
@@ -377,7 +377,7 @@
             >
               @for (
                 intervention of trial()?.interventions;
-                track intervention.interventionName
+                track intervention
               ) {
                 <div>
                   @if (intervention.interventionType) {

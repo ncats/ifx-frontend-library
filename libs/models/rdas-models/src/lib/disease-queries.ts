@@ -176,14 +176,9 @@ export const DISEASELISTQUERY = gql`
     $limit: Int
     $offset: Int
     $sort: [DiseaseSort!]
-    $diseaseWhere: DiseaseWhere
+    $where: DiseaseWhere
   ) {
-    diseases(
-      limit: $limit
-      offset: $offset
-      sort: $sort
-      where: $diseaseWhere
-    ) {
+    diseases(limit: $limit, offset: $offset, sort: $sort, where: $where) {
       gardName
       gardId
       classificationLevel
@@ -196,7 +191,7 @@ export const DISEASELISTQUERY = gql`
       countGenes
       countPhenotypes
     }
-    total: diseasesConnection(where: $diseaseWhere) {
+    total: diseasesConnection(where: $where) {
       count: totalCount
     }
   }

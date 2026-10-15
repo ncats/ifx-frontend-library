@@ -165,8 +165,7 @@ export const ClinicalTrialStore = signalStore(
             );
           }),
           map((r) => {
-        console.log("on init")
-          //  store.loadClinicalTrials(r.payload.routerState.root.queryParams);
+         // store.loadClinicalTrials(r.payload.routerState.root.queryParams);
           }),
         )
         .subscribe();

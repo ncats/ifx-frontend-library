@@ -91,6 +91,8 @@ export const ArticleListQueryDocument = gql`
     allCount: countArticles
     countEpiArticles
     countNhsArticles
+    gardId
+    gardName
     articles: hasPublication(
       limit: $hasPublicationLimit
       offset: $hasPublicationInOffset

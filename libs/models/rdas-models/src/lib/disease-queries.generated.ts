@@ -134,41 +134,43 @@ export const DiseaseQueryDocument = gql`
   }
 
 export const DiseaseStaticFiltersQueryDocument = gql`
-    query DiseaseStaticFiltersQuery($where: DiseaseWhere) {
-  diseases(where: $where) {
-    filterCounts {
-      diseaseArticleByYear {
-        count
-        term
-      }
-      diseaseArticleByEpi {
-        count
-        term
-      }
-      diseaseArticleByNHS {
-        count
-        term
-      }
-      diseaseProjectsByYear {
-        count
-        term
-      }
-      diseaseTrialsByPhase {
-        count
-        term
-      }
-      diseaseTrialsByStatus {
-        count
-        term
-      }
-      diseaseTrialsByType {
-        count
-        term
+  query DiseaseStaticFiltersQuery($where: DiseaseWhere) {
+    diseases(where: $where) {
+      gardName
+      gardId
+      filterCounts {
+        diseaseArticleByYear {
+          count
+          term
+        }
+        diseaseArticleByEpi {
+          count
+          term
+        }
+        diseaseArticleByNHS {
+          count
+          term
+        }
+        diseaseProjectsByYear {
+          count
+          term
+        }
+        diseaseTrialsByPhase {
+          count
+          term
+        }
+        diseaseTrialsByStatus {
+          count
+          term
+        }
+        diseaseTrialsByType {
+          count
+          term
+        }
       }
     }
   }
-}
-    `;
+`;
 
   @Injectable({
     providedIn: 'root',
@@ -214,25 +216,30 @@ export const DiseaseDynamicFiltersQueryDocument = gql`
   }
 
 export const DiseaseListQueryDocument = gql`
-    query DiseaseListQuery($limit: Int, $offset: Int, $sort: [DiseaseSort!], $diseaseWhere: DiseaseWhere) {
-  diseases(limit: $limit, offset: $offset, sort: $sort, where: $diseaseWhere) {
-    gardName
-    gardId
-    classificationLevel
-    disorderType
-    synonyms
-    countArticles
-    countTrials
-    countProjects
-    countCoreProjects
-    countGenes
-    countPhenotypes
+  query DiseaseListQuery(
+    $limit: Int
+    $offset: Int
+    $sort: [DiseaseSort!]
+    $where: DiseaseWhere
+  ) {
+    diseases(limit: $limit, offset: $offset, sort: $sort, where: $where) {
+      gardName
+      gardId
+      classificationLevel
+      disorderType
+      synonyms
+      countArticles
+      countTrials
+      countProjects
+      countCoreProjects
+      countGenes
+      countPhenotypes
+    }
+    total: diseasesConnection(where: $where) {
+      count: totalCount
+    }
   }
-  total: diseasesConnection(where: $diseaseWhere) {
-    count: totalCount
-  }
-}
-    `;
+`;
 
   @Injectable({
     providedIn: 'root',
