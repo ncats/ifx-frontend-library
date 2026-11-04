@@ -7,16 +7,12 @@ import {
   withState,
 } from '@ngrx/signals';
 import {
-  Article,
-  ArticleListQueryGQL,
-  ArticleQueryFactory,
-  ArticleQueryGQL,
   ClinicalTrial,
   ClinicalTrialListQueryGQL,
   ClinicalTrialQueryFactory,
   ClinicalTrialQueryGQL,
 } from 'rdas-models';
-import { Filter, FilterCategory, FilterResponse } from 'utils-models';
+import { Filter, FilterCategory, FilterResponse, Page } from 'utils-models';
 import { computed, inject } from '@angular/core';
 import { Params } from '@angular/router';
 import { switchMap, pipe, tap, filter, map } from 'rxjs';
@@ -46,6 +42,7 @@ type ClinicalTrialState = {
   clinicalTrials: ClinicalTrial[];
   allClinicalTrialsCount: number;
   clinicalTrialsCount: number;
+  page: Page;
 };
 
 const initialState: ClinicalTrialState = {
@@ -55,6 +52,12 @@ const initialState: ClinicalTrialState = {
   isLoading: false,
   allClinicalTrialsCount: 0,
   clinicalTrialsCount: 0,
+  page: {
+    pageIndex: 0,
+    pageSize: 10,
+    totalCount: 0,
+    filteredCount: 0,
+  },
 };
 
 export const ClinicalTrialStore = signalStore(
@@ -74,12 +77,15 @@ export const ClinicalTrialStore = signalStore(
       clinicalTrialListQuery = inject(ClinicalTrialListQueryGQL),
       clinicalTrialQuery = inject(ClinicalTrialQueryGQL),
     ) => ({
-      loadClinicalTrials: rxMethod<Params>(
+      loadClinicalTrials: rxMethod<{ params: Params; fragment: string | null }>(
         pipe(
+          filter((params) => params.fragment === 'trials' || !params.fragment),
+
           tap(() => {
             patchState(store, { isLoading: true });
           }),
-          switchMap((params) => {
+          switchMap((paramsObj) => {
+            const params = paramsObj.params;
             const query = queryFactory.getQuery(params);
             return clinicalTrialListQuery
               .watch({ variables: query.params })
@@ -95,10 +101,23 @@ export const ClinicalTrialStore = signalStore(
                         (clinicalTrial: Partial<ClinicalTrial>) =>
                           new ClinicalTrial(clinicalTrial),
                       );
+                      const pageSize = params['size']
+                        ? <number>params['size']
+                        : 10;
+                      const page: Page = {
+                        pageIndex: params['offset']
+                          ? params['offset'] / pageSize
+                          : 0,
+                        pageSize: pageSize,
+                        totalCount: disease.allCount,
+                        filteredCount:
+                          disease.filteredCount.totalCount.count.nodes,
+                      };
                       patchState(store, (state) => {
                         return {
                           clinicalTrials: clinicalTrialsList,
                           isLoading: false,
+                          page: page,
                           allClinicalTrialsCount: disease.allCount,
                           clinicalTrialsCount:
                             disease.filteredCount.totalCount.count.nodes,
@@ -107,7 +126,10 @@ export const ClinicalTrialStore = signalStore(
                     }
                   },
                   error: (err) => {
-                    patchState(store, { isLoading: false });
+                    patchState(store, {
+                      isLoading: false,
+                      clinicalTrials: [],
+                    });
                     console.error(err);
                   },
                 }),
@@ -166,7 +188,7 @@ export const ClinicalTrialStore = signalStore(
             );
           }),
           map((r) => {
-            store.loadClinicalTrials(r.payload.routerState.root.queryParams);
+            // store.loadClinicalTrials(r.payload.routerState.root.queryParams);
           }),
         )
         .subscribe();

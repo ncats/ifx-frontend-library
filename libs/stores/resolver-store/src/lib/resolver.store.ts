@@ -22,7 +22,6 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { ResolverService } from './resolver.service';
 import { ResolverForm, ResolverOption, ResolverResponse } from 'ifx';
 
-
 type ResolverState = {
   isLoading: boolean; // has the Resolver list been loaded
   error?: string | null; // last known error (if any)
@@ -31,7 +30,7 @@ type ResolverState = {
   selectedOptions: FilterCategory[];
   selectedOptionsList: Filter[];
   previousOptions?: string[];
-  data: ResolverResponse[]
+  data: ResolverResponse[];
 };
 
 const initialState: ResolverState = {
@@ -40,7 +39,7 @@ const initialState: ResolverState = {
   filteredOptionCategories: [],
   selectedOptions: [],
   selectedOptionsList: [],
-  data: []
+  data: [],
 };
 
 export const ResolverStore = signalStore(
@@ -109,17 +108,17 @@ export const ResolverStore = signalStore(
                     term: <string>opt['title'],
                   });
                 });
-                if(params && params.has('options')) {
-                  const filters = <string>params.get('options')
-                  const filtersArr= filters.split(';');
+                if (params && params.has('options')) {
+                  const filters = <string>params.get('options');
+                  const filtersArr = filters.split(';');
                   filtersArr.forEach((filter) => {
-                   retArr.forEach((fil) => {
-                     if(fil.value === filter){
-                       fil.selected = true;
-                       selectedFilters.push(fil);
-                     }
-                   })
-                  })
+                    retArr.forEach((fil) => {
+                      if (fil.value === filter) {
+                        fil.selected = true;
+                        selectedFilters.push(fil);
+                      }
+                    });
+                  });
                 }
                 patchState(store, (state) => {
                   return {
@@ -154,7 +153,7 @@ export const ResolverStore = signalStore(
                 patchState(store, (state) => {
                   return {
                     data: data,
-                    isLoading: false
+                    isLoading: false,
                   };
                 });
               },
@@ -175,7 +174,6 @@ export const ResolverStore = signalStore(
   }),
 );
 
-
 function _mapFilterCategoriesFromArray(
   filterArr: Filter[] | undefined,
 ): FilterCategory[] {
@@ -192,10 +190,7 @@ function _mapFilterCategoriesFromArray(
             parentArr.values.push(opt);
             retMap.set(tag, parentArr);
           } else {
-            retMap.set(
-              tag,
-              new FilterCategory({ parent: tag, values: [opt] }),
-            );
+            retMap.set(tag, new FilterCategory({ parent: tag, values: [opt] }));
           }
         });
       }

@@ -4,7 +4,7 @@ import { Params } from '@angular/router';
 import {
   ArticleSort,
   ArticleWhere,
-  DiseaseHasMentionInConnectionWhere,
+  DiseaseHasPublicationConnectionWhere,
   DiseaseWhere,
   SortDirection,
 } from './generated-types';
@@ -35,7 +35,7 @@ export const ARTICLEQUERY = gql`
         nlmid
         title
       }
-      diseases: hasMentionIn {
+      diseases: hasPublication {
         gardId
         gardName
       }
@@ -80,20 +80,20 @@ export const ARTICLEQUERY = gql`
 export const ARTICLELISTQUERY = gql`
   query ArticleListQuery(
     $diseaseWhere: DiseaseWhere
-    $hasMentionInLimit: Int
-    $hasMentionInOffset: Int
-    $hasMentionInSort: [ArticleSort!]
+    $hasPublicationLimit: Int
+    $hasPublicationOffset: Int
+    $hasPublicationSort: [ArticleSort!]
     $articleWhere: ArticleWhere
-    $hasMentionInConnectionWhere: DiseaseHasMentionInConnectionWhere
+    $hasPublicationConnectionWhere: DiseaseHasPublicationConnectionWhere
   ) {
     diseases(where: $diseaseWhere) {
       allCount: countArticles
       countEpiArticles
       countNhsArticles
-      articles: hasMentionIn(
-        limit: $hasMentionInLimit
-        offset: $hasMentionInOffset
-        sort: $hasMentionInSort
+      articles: hasPublication(
+        limit: $hasPublicationLimit
+        offset: $hasPublicationOffset
+        sort: $hasPublicationSort
         where: $articleWhere
       ) {
         pubmedId
@@ -111,8 +111,8 @@ export const ARTICLELISTQUERY = gql`
           title
         }
       }
-      filteredCount: hasMentionInConnection(
-        where: $hasMentionInConnectionWhere
+      filteredCount: hasPublicationConnection(
+        where: $hasPublicationConnectionWhere
       ) {
         totalCount: aggregate {
           count {
@@ -127,12 +127,12 @@ export const ARTICLELISTQUERY = gql`
 export class ArticleQueryFactory {
   query!: TypedDocumentNode<unknown, unknown>;
   params: {
-    hasMentionInLimit?: number;
-    hasMentionInOffset?: number;
-    hasMentionInSort?: ArticleSort[];
+    hasPublicationLimit?: number;
+    hasPublicationOffset?: number;
+    hasPublicationSort?: ArticleSort[];
     diseaseWhere?: DiseaseWhere;
     articleWhere?: ArticleWhere;
-    hasMentionInConnectionWhere?: DiseaseHasMentionInConnectionWhere;
+    hasPublicationConnectionWhere?: DiseaseHasPublicationConnectionWhere;
   } = {};
 
   getQuery(params: Params) {
@@ -146,9 +146,9 @@ export class ArticleQueryFactory {
       return ARTICLEQUERY;
     } else {
       this.params = {
-        hasMentionInLimit: 10,
-        hasMentionInOffset: 0,
-        hasMentionInSort: [{ publicationYear: 'DESC' }],
+        hasPublicationLimit: 10,
+        hasPublicationOffset: 0,
+        hasPublicationSort: [{ publicationYear: 'DESC' }],
       };
       return ARTICLELISTQUERY;
     }
@@ -158,17 +158,17 @@ export class ArticleQueryFactory {
     Object.entries(params).forEach((key) => {
       switch (key[0]) {
         case 'pageSize': {
-          this.params.hasMentionInOffset = params['pageSize']
+          this.params.hasPublicationOffset = params['pageSize']
             ? +(params['pageSize'] as number)
             : 10;
           break;
         }
         case 'offset': {
-          this.params.hasMentionInOffset = +params['offset'];
+          this.params.hasPublicationOffset = +params['offset'];
           break;
         }
         case 'sort': {
-          this.params.hasMentionInSort = [
+          this.params.hasPublicationSort = [
             {
               [params['sort']]: params['direction']
                 ? (params['direction'] as SortDirection)
@@ -190,16 +190,16 @@ export class ArticleQueryFactory {
             if (!this.params.articleWhere) {
               this.params.articleWhere = {};
             }
-            if (!this.params.hasMentionInConnectionWhere) {
-              this.params.hasMentionInConnectionWhere = {};
+            if (!this.params.hasPublicationConnectionWhere) {
+              this.params.hasPublicationConnectionWhere = {};
             }
-            if (!this.params.hasMentionInConnectionWhere.node) {
-              this.params.hasMentionInConnectionWhere.node = {};
+            if (!this.params.hasPublicationConnectionWhere.node) {
+              this.params.hasPublicationConnectionWhere.node = {};
             }
             this.params.articleWhere.isEpidemiologicalStudy = {
               eq: params['isEpi'] === 'true',
             };
-            this.params.hasMentionInConnectionWhere.node.isEpidemiologicalStudy =
+            this.params.hasPublicationConnectionWhere.node.isEpidemiologicalStudy =
               { eq: params['isEpi'] === 'true' };
           }
           break;
@@ -209,17 +209,17 @@ export class ArticleQueryFactory {
             if (!this.params.articleWhere) {
               this.params.articleWhere = {};
             }
-            if (!this.params.hasMentionInConnectionWhere) {
-              this.params.hasMentionInConnectionWhere = {};
+            if (!this.params.hasPublicationConnectionWhere) {
+              this.params.hasPublicationConnectionWhere = {};
             }
-            if (!this.params.hasMentionInConnectionWhere.node) {
-              this.params.hasMentionInConnectionWhere.node = {};
+            if (!this.params.hasPublicationConnectionWhere.node) {
+              this.params.hasPublicationConnectionWhere.node = {};
             }
 
             this.params.articleWhere.isNaturalHistoryStudy = {
               eq: JSON.parse(params['isNHS']),
             };
-            this.params.hasMentionInConnectionWhere.node.isNaturalHistoryStudy =
+            this.params.hasPublicationConnectionWhere.node.isNaturalHistoryStudy =
               { eq: JSON.parse(params['isNHS']) };
           }
           break;
@@ -236,11 +236,11 @@ export class ArticleQueryFactory {
           if (!this.params.articleWhere) {
             this.params.articleWhere = {};
           }
-          if (!this.params.hasMentionInConnectionWhere) {
-            this.params.hasMentionInConnectionWhere = { node: {} };
+          if (!this.params.hasPublicationConnectionWhere) {
+            this.params.hasPublicationConnectionWhere = { node: {} };
           }
           this.params.articleWhere.publicationYear = { in: val };
-          this.params.hasMentionInConnectionWhere.node = {
+          this.params.hasPublicationConnectionWhere.node = {
             publicationYear: { in: val },
           };
           break;

@@ -13,7 +13,7 @@ import {
   CoreProjectQueryGQL,
   CoreProject,
 } from 'rdas-models';
-import { Filter, FilterCategory, FilterResponse } from 'utils-models';
+import { Filter, FilterCategory, FilterResponse, Page } from 'utils-models';
 import { computed, inject } from '@angular/core';
 import { Params } from '@angular/router';
 import { switchMap, pipe, tap, filter, map } from 'rxjs';
@@ -44,6 +44,7 @@ type ProjectState = {
   projects: CoreProject[];
   allProjectsCount: number;
   projectsCount: number;
+  page: Page;
 };
 
 const initialState: ProjectState = {
@@ -53,6 +54,12 @@ const initialState: ProjectState = {
   isLoading: false,
   allProjectsCount: 0,
   projectsCount: 0,
+  page: {
+    pageIndex: 0,
+    pageSize: 10,
+    totalCount: 0,
+    filteredCount: 0,
+  },
 };
 
 export const ProjectStore = signalStore(
@@ -72,15 +79,20 @@ export const ProjectStore = signalStore(
       projectListQuery = inject(CoreProjectListQueryGQL),
       projectQuery = inject(CoreProjectQueryGQL),
     ) => ({
-      loadProjects: rxMethod<Params>(
+      loadProjects: rxMethod<{ params: Params; fragment: string | null }>(
         pipe(
+          filter(
+            (params) => params.fragment === 'projects' || !params.fragment,
+          ),
+
           tap(() => {
             patchState(store, { isLoading: true });
           }),
-          switchMap((params) => {
+          switchMap((paramsObj) => {
+            const params = paramsObj.params;
             const query = queryFactory.getQuery(params);
             return projectListQuery
-              .watch({ variables: query.params })
+              .watch({ variables: query.params, errorPolicy: 'ignore' })
               .valueChanges.pipe(
                 tapResponse({
                   next: (projects) => {
@@ -96,10 +108,23 @@ export const ProjectStore = signalStore(
                               project._subProjectsCount!.totalCount,
                           }),
                       );
+                      const pageSize = params['size']
+                        ? <number>params['size']
+                        : 10;
+                      const page: Page = {
+                        pageIndex: params['offset']
+                          ? params['offset'] / pageSize
+                          : 0,
+                        pageSize: pageSize,
+                        totalCount: data.countCoreProjects,
+                        filteredCount: data.countCoreProjects,
+                      };
+
                       patchState(store, (state) => {
                         return {
                           projects: coreProjectsList,
                           isLoading: false,
+                          page: page,
                           projectsCount: data.countCoreProjects,
                           allProjectsCount: data.countCoreProjects,
                         };
@@ -168,7 +193,7 @@ export const ProjectStore = signalStore(
             );
           }),
           map((r) => {
-            store.loadProjects(r.payload.routerState.root.queryParams);
+            // store.loadProjects(r.payload.routerState.root.queryParams);
           }),
         )
         .subscribe();

@@ -123,6 +123,7 @@ export class RdasDiseasePageComponent implements OnInit {
           oldParams[key] = this.route.snapshot.queryParams[key];
         }
       });
+      console.log('navigate');
       this.router.navigate(['disease'], {
         fragment: event.fragment,
         queryParams: { ...oldParams, ...event.params },

@@ -36,6 +36,16 @@ export const articleResolver: ResolveFn<any> = (
   return articleStore.loadArticle(route.queryParams);
 };
 
+export const articleListResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot,
+) => {
+  const articleStore = inject(ArticleStore);
+  return articleStore.loadArticles({
+    params: route.queryParams,
+    fragment: route.fragment,
+  });
+};
+
 export const projectResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
 ) => {
@@ -43,11 +53,31 @@ export const projectResolver: ResolveFn<any> = (
   return projectStore.loadProject(route.queryParams);
 };
 
+export const projectListResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot,
+) => {
+  const projectStore = inject(ProjectStore);
+  return projectStore.loadProjects({
+    params: route.queryParams,
+    fragment: route.fragment,
+  });
+};
+
 export const clinicalTrialResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
 ) => {
   const clinicalTrialStore = inject(ClinicalTrialStore);
   return clinicalTrialStore.loadClinicalTrial(route.queryParams);
+};
+
+export const clinicalTrialListResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot,
+) => {
+  const clinicalTrialStore = inject(ClinicalTrialStore);
+  return clinicalTrialStore.loadClinicalTrials({
+    params: route.queryParams,
+    fragment: route.fragment,
+  });
 };
 
 export const allStaticDiseaseFiltersResolver: ResolveFn<any> = (

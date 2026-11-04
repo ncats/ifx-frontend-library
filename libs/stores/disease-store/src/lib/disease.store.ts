@@ -1,9 +1,4 @@
-import {
-  patchState,
-  signalStore,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import {
   Disease,
   DiseaseDynamicFiltersQueryGQL,
@@ -14,12 +9,7 @@ import {
   DiseasesTypeaheadGQL,
   FieldCountsGQL,
 } from 'rdas-models';
-import {
-  _parseFilters,
-  Filter,
-  FilterCategory,
-  Page,
-} from 'utils-models';
+import { _parseFilters, Filter, FilterCategory, Page } from 'utils-models';
 import { inject } from '@angular/core';
 import { Params } from '@angular/router';
 import { switchMap, pipe, tap } from 'rxjs';
@@ -73,7 +63,7 @@ export const DiseaseStore = signalStore(
         pipe(
           tap(() => {
             patchState(store, {
-              disease: {} as Disease,
+              //  disease: {} as Disease,
               isLoading: true,
             });
           }),
@@ -327,6 +317,8 @@ function _makePage(params: Params, total: { count: number } | number) {
     pageSize: pageSize,
     pageIndex: pageIndex,
     total: typeof total !== 'number' ? total.count : total,
+    totalCount: typeof total !== 'number' ? total.count : total,
+    filteredCount: typeof total !== 'number' ? total.count : total,
   };
   return page;
 }

@@ -23,6 +23,7 @@ import {
   BrowserModule,
   provideClientHydration,
   withEventReplay,
+  withHttpTransferCacheOptions,
 } from '@angular/platform-browser';
 import { UserStore } from 'user-store';
 import { initializeApp } from 'firebase/app';
@@ -33,6 +34,7 @@ import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache } from '@apollo/client';
 import { provideStore } from '@ngrx/store';
+import { cache } from './apollo-cache';
 
 export function rdasInit(userStore = inject(UserStore)) {
   const app = initializeApp(environment.firebase);
@@ -49,7 +51,7 @@ export const appConfig: ApplicationConfig = {
       return initializerFn();
     }),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
-    provideClientHydration(withEventReplay()),
+    provideClientHydration(),
     provideBrowserGlobalErrorListeners(),
     provideRouter(
       appRoutes,
@@ -71,7 +73,7 @@ export const appConfig: ApplicationConfig = {
       const httpLink = inject(HttpLink);
       return {
         ssrMode: true,
-        cache: new InMemoryCache(),
+        cache: cache,
         link: httpLink.create({
           uri: environment.baseUrl + '/api/diseases',
         }),

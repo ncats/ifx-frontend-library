@@ -13,16 +13,24 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { Filter, FilterCategory } from 'utils-models';
+import { Filter, FilterCategory, Page } from 'utils-models';
 import { Disease } from 'rdas-models';
 import { SharedUtilsDataNotFoundComponent } from 'data-not-found';
 import { SharedUtilsListFilterRowComponent } from 'list-filter-row';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatDrawer, MatDrawerContainer, MatDrawerContent } from '@angular/material/sidenav';
+import {
+  MatDrawer,
+  MatDrawerContainer,
+  MatDrawerContent,
+} from '@angular/material/sidenav';
 import { SharedUtilsFilterPanelComponent } from 'filter-panel';
-import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader } from '@angular/material/expansion';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import {
   CdkFixedSizeVirtualScroll,
@@ -32,8 +40,8 @@ import {
 import { HighlightPipe } from 'highlight-pipe';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
-import { form, FormField } from '@angular/forms/signals';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormField } from '@angular/forms/signals';
+import { LoadingSpinnerComponent } from 'loading-spinner';
 
 @Component({
   selector: 'lib-rdas-panel-template',
@@ -60,6 +68,7 @@ import { FormControl, FormGroup } from '@angular/forms';
     HighlightPipe,
     MatCheckbox,
     FormField,
+    LoadingSpinnerComponent,
   ],
   templateUrl: './rdas-panel-template.component.html',
   styleUrl: './rdas-panel-template.component.scss',
@@ -69,9 +78,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class RdasPanelTemplateComponent {
   filters = input<FilterCategory[]>();
   _id = input<string>();
-  loaded = input<boolean | undefined>();
+  isLoading = input<boolean | undefined>();
   message = input<string>();
   disease = input<Disease>();
+  page = input<Page>({} as Page);
   diseaseSubscription = computed(() => {
     return {
       gardName: this.disease()?.gardName,
@@ -98,12 +108,12 @@ export class RdasPanelTemplateComponent {
       label: string;
       term?: string | number | boolean;
       values: (string | number | boolean)[];
-    }[]
+    }[],
   ) {
     const retObj: { [key: string]: (string | number | boolean)[] } = {};
-    event.forEach(filter => {
-      retObj[<string>filter.term] = filter.values
-    })
+    event.forEach((filter) => {
+      retObj[<string>filter.term] = filter.values;
+    });
     this.listChange.emit(retObj);
   }
 

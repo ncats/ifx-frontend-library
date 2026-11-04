@@ -252,15 +252,11 @@
             </mat-tab>
             <mat-tab
               [label]="getLabel('studyDiseases')"
-              [disabled]="
-                !trial()?.studyDiseases && trial()!.conditions
-              "
+              [disabled]="!trial()?.studyDiseases && trial()!.conditions"
             >
               <mat-list>
-                <div class="accent-chip-outlined">
-                  Study Disease
-                </div>
-                @for (disease of trial()!.studyDiseases; track disease.gardId) {
+                <div class="accent-chip-outlined">Study Disease</div>
+                @for (disease of trial()!.studyDiseases; track disease) {
                   <mat-list-item>
                     @if (disease.gardId) {
                       <div #link>
@@ -280,44 +276,42 @@
                   </mat-list-item>
                 }
               </mat-list>
-                @if(trial()!.conditions){
-                  <mat-list>
-                  <div class="accent-chip-outlined">
-                    Conditions
-                  </div>
-                @for (
-                  condition of trial()!.conditions;
-                  track condition.condition
-                  ) {
-                  <mat-list-item>
-                    {{ condition.condition }}
-                    @if(condition.mappedDiseases && condition.mappedDiseases.length){
-                      mapped to:
-                      @for (
-                        disease of condition.mappedDiseases;
-                        track disease.gardId
+              @if (trial()!.conditions) {
+                <mat-list>
+                  <div class="accent-chip-outlined">Conditions</div>
+                  @for (condition of trial()!.conditions; track condition) {
+                    <mat-list-item>
+                      {{ condition.condition }}
+                      @if (
+                        condition.mappedDiseases &&
+                        condition.mappedDiseases.length
+                      ) {
+                        mapped to:
+                        @for (
+                          disease of condition.mappedDiseases;
+                          track disease
                         ) {
-                        @if (disease.gardId) {
-                          <div #link>
-                            <a
-                              href="/disease?id={{ disease.gardId }}"
-                              target="_blank"
-                              rel="noreferrer"
-                              aria-label="Link to disease details page"
-                            >{{ disease.gardName }}</a
-                            >
-                          </div>
-                        } @else {
-                          <div #nolink>
-                            {{ disease.gardName }}
-                          </div>
+                          @if (disease.gardId) {
+                            <div #link>
+                              <a
+                                href="/disease?id={{ disease.gardId }}"
+                                target="_blank"
+                                rel="noreferrer"
+                                aria-label="Link to disease details page"
+                                >{{ disease.gardName }}</a
+                              >
+                            </div>
+                          } @else {
+                            <div #nolink>
+                              {{ disease.gardName }}
+                            </div>
+                          }
                         }
                       }
-                    }
-                  </mat-list-item>
-                }
-              </mat-list>
-                }
+                    </mat-list-item>
+                  }
+                </mat-list>
+              }
             </mat-tab>
             <mat-tab
               [label]="getLabel('locations')"
@@ -377,7 +371,7 @@
             >
               @for (
                 intervention of trial()?.interventions;
-                track intervention.interventionName
+                track intervention
               ) {
                 <div>
                   @if (intervention.interventionType) {

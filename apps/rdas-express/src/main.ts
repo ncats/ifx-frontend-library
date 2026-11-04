@@ -85,7 +85,7 @@ fs.readFile(assetPath, 'utf8', async (err, data) => {
   }
 
   try {
-    const server = app.listen(process.env.MEMGRAPH_PORT, () => {
+    const server = app.listen(4000, () => {
       logger.info(
         `RDAS API listening to port ${process.env.MEMGRAPH_PORT} at ${process.env.MEMGRAPH_HOST}`,
       );

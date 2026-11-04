@@ -4,12 +4,17 @@
     (filterChange)="fetchList($event)"
   ></lib-shared-utils-list-filter-row>
 }-->
+@if (isLoading() === true) {
+  <lib-loading-spinner [isLoaded]="false"></lib-loading-spinner>
+}
 @if (count() > 0) {
   <div class="row space-between-row">
     @if (filters() && filters()?.length) {
-    <div>
-      <button matButton (click)="filterDrawer.toggle()"><mat-icon>filter_alt</mat-icon>Filters</button>
-    </div>
+      <div>
+        <button matButton (click)="filterDrawer.toggle()">
+          <mat-icon>filter_alt</mat-icon>Filters
+        </button>
+      </div>
     } @else {
       <div></div>
     }
@@ -17,9 +22,9 @@
       <div>
         <mat-paginator
           #paginator
-          [length]="count()"
-          [pageIndex]="0"
-          [pageSize]="10"
+          [length]="page().filteredCount"
+          [pageIndex]="page().pageIndex"
+          [pageSize]="page().pageSize"
           [hidePageSize]="true"
           (page)="pageList($event)"
         ></mat-paginator>
@@ -28,23 +33,26 @@
   </div>
   <mat-drawer-container class="example-container">
     <mat-drawer mode="over" #filterDrawer>
-      <button mat-icon-button (click)="filterDrawer.toggle()"><mat-icon>close</mat-icon></button>
+      <button mat-icon-button (click)="filterDrawer.toggle()">
+        <mat-icon>close</mat-icon>
+      </button>
 
-      @for(filter of filters(); track filter.label){
-
+      @for (filter of filters(); track filter.label) {
         <lib-shared-utils-filter-panel
           [filter]="filter"
           [showSearch]="false"
-          [fullList] = true
+          [fullList]="true"
           (filterSelectionChange)="filterChange($event)"
         ></lib-shared-utils-filter-panel>
-          @if(filter.values.length === 2){
-          <mat-slide-toggle (change)="toggleField(filter.field, $event.checked)">{{filter.values[0].label}} only</mat-slide-toggle>
-          } @else {
- <!--           <div>
-              &lt;!&ndash;    <lib-loading-spinner
+        @if (filter.values.length === 2) {
+          <mat-slide-toggle (change)="toggleField(filter.field, $event.checked)"
+            >{{ filter.values[0].label }} only</mat-slide-toggle
+          >
+        } @else {
+          <!-- <div>
+            <lib-loading-spinner
               [isLoaded]="!loading"
-            ></lib-loading-spinner>&ndash;&gt;
+            ></lib-loading-spinner>
               <cdk-virtual-scroll-viewport
                 appendOnly
                 itemSize="5"
@@ -84,18 +92,19 @@
                   </div>
                 </div>
               </cdk-virtual-scroll-viewport>
-            </div>-->
-          }
+            </div>&ndash;&gt;-->
         }
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <button matButton="filled" (click)="filterDrawer.toggle()">Apply Filters</button>
+      }
+      <br />
+      <br />
+      <br />
+      <br />
+      <button matButton="filled" (click)="filterDrawer.toggle()">
+        Apply Filters
+      </button>
     </mat-drawer>
     <mat-drawer-content>
       <ng-content select=".data-list"></ng-content>
-
     </mat-drawer-content>
   </mat-drawer-container>
 } @else {
