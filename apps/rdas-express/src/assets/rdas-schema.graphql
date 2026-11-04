@@ -76,7 +76,8 @@ type Article @node {
     @relationship(type: "has_omim_reference", direction: OUT)
   hasEpidemiologicalAnnotation: [EpidemiologyAnnotation!]!
     @relationship(type: "has_epidemiological_annotation", direction: OUT)
-  hasPublication: [Disease!]! @relationship(type: "has_publication", direction: IN)
+  hasPublication: [Disease!]!
+    @relationship(type: "has_publication", direction: IN)
   hasMeshTerm: [MeshTerm!]! @relationship(type: "has_mesh_term", direction: IN)
   hasPubtatorAnnotation: [PubtatorAnnotation!]!
     @relationship(type: "has_pubtator_annotation", direction: OUT)
@@ -89,7 +90,7 @@ type Article @node {
 type AssociatedWithGeneProperties @relationshipProperties {
   associationStatus: String
   associationType: String
-  reference: [String!]
+  references: [String!]
 }
 
 type ClinicalStudy @node {
@@ -282,7 +283,8 @@ type Gene @node {
 type HasPhenotypeProperties @relationshipProperties {
   evidence: String
   hpoTermFrequency: String
-  reference: [String!]
+  onset: String
+  references: [String!]
 }
 
 type IndividualPatientData @node {

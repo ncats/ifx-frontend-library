@@ -22,7 +22,8 @@ import { appRoutes } from './app.routes';
 import {
   BrowserModule,
   provideClientHydration,
-  withEventReplay, withHttpTransferCacheOptions,
+  withEventReplay,
+  withHttpTransferCacheOptions,
 } from '@angular/platform-browser';
 import { UserStore } from 'user-store';
 import { initializeApp } from 'firebase/app';

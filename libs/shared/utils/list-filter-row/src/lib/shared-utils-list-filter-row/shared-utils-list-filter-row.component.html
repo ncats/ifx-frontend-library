@@ -3,63 +3,69 @@
     <div class="filter-grid">
       @for (filter of filters(); track filter.field) {
         @if (filter.values && filter.field) {
-          @switch (filter.formType){
-            @case ('boolean'){
-              <mat-slide-toggle [formControlName]="filter.field" >{{filter.values[0].label}} only</mat-slide-toggle>
+          @switch (filter.formType) {
+            @case ('boolean') {
+              <mat-slide-toggle [formControlName]="filter.field"
+                >{{ filter.values[0].label }} only</mat-slide-toggle
+              >
             }
             @default {
-          <div>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ filter?.label }}</mat-label>
-              <mat-select [formControlName]="filter.field" multiple>
-                <mat-select-trigger>
-                  {{
-                    filterFormControls().controls[filter.field].value[0]?.term
-                  }}
-                  @if (
-                    (filterFormControls().controls[filter.field].value.length ||
-                      0) > 1
-                  ) {
-                    <span class="filter-description">
-                      (+{{
-                        (filterFormControls().controls[filter.field].value
-                          ?.length || 0) - 1
-                      }}
+              <div>
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ filter?.label }}</mat-label>
+                  <mat-select [formControlName]="filter.field" multiple>
+                    <mat-select-trigger>
                       {{
-                        filterFormControls().controls[filter.field].value
-                          ?.length === 2
-                          ? 'other'
-                          : 'others'
-                      }})
-                    </span>
-                  }
-                </mat-select-trigger>
-                @for (value of filter?.values; track value.term) {
-                  <mat-option [value]="value"
-                    ><div class="row space-between-row option-row">
-                      <div class="text-left">{{ value.term }}</div>
-                      @if (showCount()) {
-                        <div class="text-right">{{ value.count }}</div>
+                        filterFormControls().controls[filter.field].value[0]
+                          ?.term
+                      }}
+                      @if (
+                        (filterFormControls().controls[filter.field].value
+                          .length || 0) > 1
+                      ) {
+                        <span class="filter-description">
+                          (+{{
+                            (filterFormControls().controls[filter.field].value
+                              ?.length || 0) - 1
+                          }}
+                          {{
+                            filterFormControls().controls[filter.field].value
+                              ?.length === 2
+                              ? 'other'
+                              : 'others'
+                          }})
+                        </span>
                       }
-                    </div>
-                    @if (value.description) {
-                      <div class="space-between-row filter-description">
-                        {{ value.description }}
-                      </div>
+                    </mat-select-trigger>
+                    @for (value of filter?.values; track value.term) {
+                      <mat-option [value]="value"
+                        ><div class="row space-between-row option-row">
+                          <div class="text-left">{{ value.term }}</div>
+                          @if (showCount()) {
+                            <div class="text-right">{{ value.count }}</div>
+                          }
+                        </div>
+                        @if (value.description) {
+                          <div class="space-between-row filter-description">
+                            {{ value.description }}
+                          </div>
+                        }
+                      </mat-option>
                     }
-                  </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                @if (showSelected()) {
+                  @for (
+                    selected of filterFormControls().controls[filter.field]
+                      .value;
+                    track selected.term
+                  ) {
+                    <div class="primary-chip full-width">
+                      {{ selected.term }}
+                    </div>
+                  }
                 }
-              </mat-select>
-            </mat-form-field>
-            @if (showSelected()) {
-              @for (
-                selected of filterFormControls().controls[filter.field].value;
-                track selected.term
-              ) {
-                <div class="primary-chip full-width">{{ selected.term }}</div>
-              }
-            }
-          </div>
+              </div>
             }
           }
         }

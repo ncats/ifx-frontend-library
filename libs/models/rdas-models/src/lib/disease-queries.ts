@@ -76,6 +76,7 @@ export const DISEASEQUERY = gql`
             geneIdentifier
             geneSymbol
             geneSynonyms
+            geneTitle
             geneUrl
             omim
             reference
@@ -83,7 +84,7 @@ export const DISEASEQUERY = gql`
           properties {
             associationStatus
             associationType
-            reference
+            _references: references
           }
         }
       }
@@ -96,7 +97,7 @@ export const DISEASEQUERY = gql`
           properties {
             _evidence: evidence
             hpoTermFrequency
-            reference
+            _references: references
           }
         }
       }
@@ -214,26 +215,6 @@ export const DISEASETYPEAHEAD = gql`
     }
   }
 `;
-
-export class PhenotypeParameter {
-  some:
-    | {
-        hpoTerm: {
-          in: string[];
-        };
-      }
-    | undefined;
-}
-
-export class GeneParameter {
-  some:
-    | {
-        geneSymbol: {
-          in: string[];
-        };
-      }
-    | undefined;
-}
 
 export class DiseaseQueryFactory {
   query!: TypedDocumentNode<unknown, unknown>;

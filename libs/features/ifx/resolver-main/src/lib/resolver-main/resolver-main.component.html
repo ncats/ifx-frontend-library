@@ -44,19 +44,15 @@
             @for (value of filter.values; track value.value) {
               <mat-option>
                 <mat-checkbox
-                  (change)="
-                    $event
-                      ? subscriptionSelection.toggle(value)
-                      : null
-                  "
-                  [checked]="
-                    subscriptionSelection.isSelected(value)
-                  "
+                  (change)="$event ? subscriptionSelection.toggle(value) : null"
+                  [checked]="subscriptionSelection.isSelected(value)"
                   (click)="$event.stopPropagation()"
                 >
                   <span
                     class="main-value"
-                    [innerHTML]="value.term.toString() | highlight: filterSearchCtrl.value"
+                    [innerHTML]="
+                      value.term.toString() | highlight: filterSearchCtrl.value
+                    "
                   ></span>
                 </mat-checkbox>
                 @if (value.description) {
@@ -90,8 +86,9 @@
         </div>
       </div>
       <div class="chip-list-wrapper">
-      @for (
-          filterCategory of selectedSearchOptions(); track filterCategory.label
+        @for (
+          filterCategory of selectedSearchOptions();
+          track filterCategory.label
         ) {
           @if (filterCategory.values.length) {
             <div class="row">

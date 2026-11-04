@@ -9,84 +9,84 @@ import {
 } from './generated-types';
 
 export const ClinicalTrialQueryDocument = gql`
-    query ClinicalTrialQuery($clinicalTrialWhere: ClinicalTrialWhere) {
-  clinicalTrials(where: $clinicalTrialWhere) {
-    briefTitle
-    briefSummary
-    nctId
-    phase
-    studyType
-    overallStatus
-    officialTitle
-    startDate
-    completionDate
-    completionDateType
-    startDateType
-    lastUpdatePostDate
-    studyDesigns: hasStudyDesign {
-      designAllocation
-      designInterventionModelDescription
-      designInterventionModel
-      designMasking
-      designObservationalModel
-      designPrimaryPurpose
-      designTimePerspective
-      detailedDescription
-      hasExpandedAccess
+  query ClinicalTrialQuery($clinicalTrialWhere: ClinicalTrialWhere) {
+    clinicalTrials(where: $clinicalTrialWhere) {
+      briefTitle
+      briefSummary
+      nctId
+      phase
       studyType
-    }
-    participantInfo: hasParticipantInfo {
-      eligibilityCriteria
-      enrollmentCount
-      enrollmentType
-      healthyVolunteers
-      maximumAge
-      minimumAge
-      stdAges
-    }
-    studyDiseases: hasClinicalTrial {
-      gardId
-      gardName
-    }
-    conditions: hasInvestigatedCondition {
-      condition
-      mappedDiseases: hasMappedCondition {
+      overallStatus
+      officialTitle
+      startDate
+      completionDate
+      completionDateType
+      startDateType
+      lastUpdatePostDate
+      studyDesigns: hasStudyDesign {
+        designAllocation
+        designInterventionModelDescription
+        designInterventionModel
+        designMasking
+        designObservationalModel
+        designPrimaryPurpose
+        designTimePerspective
+        detailedDescription
+        hasExpandedAccess
+        studyType
+      }
+      participantInfo: hasParticipantInfo {
+        eligibilityCriteria
+        enrollmentCount
+        enrollmentType
+        healthyVolunteers
+        maximumAge
+        minimumAge
+        stdAges
+      }
+      studyDiseases: hasClinicalTrial {
         gardId
         gardName
       }
-    }
-    locations: hasTrialLocation {
-      address
-      city
-      country
-      facility
-      state
-      zip
-    }
-    interventions: hasIntervention {
-      interventionType
-      interventionName
-      interventionDescription
-      hasDrug {
-        unii
-        rxnormName
-        rxnormID
+      conditions: hasInvestigatedCondition {
+        condition
+        mappedDiseases: hasMappedCondition {
+          gardId
+          gardName
+        }
+      }
+      locations: hasTrialLocation {
+        address
+        city
+        country
+        facility
+        state
+        zip
+      }
+      interventions: hasIntervention {
+        interventionType
+        interventionName
+        interventionDescription
+        hasDrug {
+          unii
+          rxnormName
+          rxnormID
+        }
       }
     }
   }
-}
-    `;
+`;
 
-  @Injectable({
-    providedIn: 'root',
-  })
-  export class ClinicalTrialQueryGQL extends Apollo.Query<
-    ClinicalTrialQueryQuery,
-    ClinicalTrialQueryQueryVariables
-  > {
-    document = ClinicalTrialQueryDocument;
-    override apollo = inject(Apollo.Apollo);
-  }
+@Injectable({
+  providedIn: 'root',
+})
+export class ClinicalTrialQueryGQL extends Apollo.Query<
+  ClinicalTrialQueryQuery,
+  ClinicalTrialQueryQueryVariables
+> {
+  document = ClinicalTrialQueryDocument;
+  override apollo = inject(Apollo.Apollo);
+}
 
 export const ClinicalTrialListQueryDocument = gql`
   query ClinicalTrialListQuery(
@@ -131,13 +131,13 @@ export const ClinicalTrialListQueryDocument = gql`
   }
 `;
 
-  @Injectable({
-    providedIn: 'root',
-  })
-  export class ClinicalTrialListQueryGQL extends Apollo.Query<
-    ClinicalTrialListQueryQuery,
-    ClinicalTrialListQueryQueryVariables
-  > {
-    document = ClinicalTrialListQueryDocument;
-    override apollo = inject(Apollo.Apollo);
-  }
+@Injectable({
+  providedIn: 'root',
+})
+export class ClinicalTrialListQueryGQL extends Apollo.Query<
+  ClinicalTrialListQueryQuery,
+  ClinicalTrialListQueryQueryVariables
+> {
+  document = ClinicalTrialListQueryDocument;
+  override apollo = inject(Apollo.Apollo);
+}

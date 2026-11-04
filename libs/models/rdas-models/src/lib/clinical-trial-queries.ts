@@ -10,7 +10,6 @@ import {
   SortDirection,
 } from './generated-types';
 
-
 const CLINICALTRIALQUERY = gql`
   query ClinicalTrialQuery($clinicalTrialWhere: ClinicalTrialWhere) {
     clinicalTrials(where: $clinicalTrialWhere) {

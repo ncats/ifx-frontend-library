@@ -12,7 +12,7 @@ import {
   ArticleQueryFactory,
   ArticleQueryGQL,
 } from 'rdas-models';
-import { Filter, FilterCategory, FilterResponse } from 'utils-models';
+import { Filter, FilterCategory, FilterResponse, Page } from 'utils-models';
 import { computed, inject } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
@@ -54,6 +54,7 @@ type ArticleState = {
   articlesCount: number;
   epiArticlesCount: number;
   nhsArticlesCount: number;
+  page: Page;
 };
 
 const initialState: ArticleState = {
@@ -65,6 +66,12 @@ const initialState: ArticleState = {
   articlesCount: 0,
   epiArticlesCount: 0,
   nhsArticlesCount: 0,
+  page: {
+    pageIndex: 0,
+    pageSize: 10,
+    totalCount: 0,
+    filteredCount: 0,
+  },
 };
 
 export const ArticleStore = signalStore(
@@ -83,15 +90,21 @@ export const ArticleStore = signalStore(
   withMethods(
     (
       store,
+      route = inject(ActivatedRoute),
+      router = inject(Router),
       articleListQuery = inject(ArticleListQueryGQL),
       articleQuery = inject(ArticleQueryGQL),
     ) => ({
-      loadArticles: rxMethod<Params>(
+      loadArticles: rxMethod<{ params: Params; fragment: string | null }>(
         pipe(
+          filter(
+            (params) => params.fragment === 'articles' || !params.fragment,
+          ),
           tap(() => {
             patchState(store, { isLoading: true });
           }),
-          switchMap((params) => {
+          switchMap((paramsObj) => {
+            const params = paramsObj.params;
             const query = queryFactory.getQuery(params);
             return articleListQuery
               .watch({ variables: query.params })
@@ -106,10 +119,24 @@ export const ArticleStore = signalStore(
                       const articlesList = disease.articles.map(
                         (article: Partial<Article>) => new Article(article),
                       );
+                      const pageSize = params['size']
+                        ? <number>params['size']
+                        : 10;
+                      const page: Page = {
+                        pageIndex: params['offset']
+                          ? params['offset'] / pageSize
+                          : 0,
+                        pageSize: pageSize,
+                        totalCount: disease.allCount,
+                        filteredCount:
+                          disease.filteredCount.totalCount.count.nodes,
+                      };
+
                       patchState(store, (state) => {
                         return {
                           articles: articlesList,
                           isLoading: false,
+                          page: page,
                           allArticlesCount: disease.allCount,
                           articlesCount:
                             disease.filteredCount.totalCount.count.nodes,
@@ -136,7 +163,7 @@ export const ArticleStore = signalStore(
           switchMap((params) => {
             const query = queryFactory.getQuery(params);
             return articleQuery
-              .watch({ variables: query.params, errorPolicy: "all" })
+              .watch({ variables: query.params, errorPolicy: 'all' })
               .valueChanges.pipe(
                 tapResponse({
                   next: (articles) => {
@@ -165,22 +192,7 @@ export const ArticleStore = signalStore(
       ),
     }),
   ),
-  withHooks({
-    onInit(store, actions$ = inject(Actions)) {
-      actions$
-        .pipe(
-          ofType(ROUTER_NAVIGATED),
-          filter((r) => {
-            return (
-              !r.payload.routerState.url.includes('/diseases') &&
-              r.payload.routerState.url.includes('/disease')
-            );
-          }),
-          map((r) => {
-           // store.loadArticles(r.payload.routerState.root.queryParams);
-          }),
-        )
-        .subscribe();
-    },
-  }),
+  /*  withHooks({
+
+  }),*/
 );

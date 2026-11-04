@@ -19,9 +19,10 @@ export class Gene {
 export class GeneAssociation {
   associationStatus!: string;
   associationType!: string;
-  reference?: Reference[];
+  references?: Reference[];
+  onset?: string;
   gene!: Gene;
-  _reference?: string[];
+  _references?: string[];
 
   constructor(obj: {
     gene?: Partial<Gene>;
@@ -33,17 +34,17 @@ export class GeneAssociation {
       this.gene = new Gene(obj.gene);
     }
 
-    if (obj.properties && obj.properties._reference) {
-      this.reference = obj.properties._reference.map(
-        (ref) => new Reference({ code: ref }),
-      );
-      delete this._reference;
+    if (obj.properties && obj.properties._references) {
+      this.references = obj.properties._references
+        .filter((ref) => ref.length)
+        .map((ref) => new Reference({ code: ref }));
+      delete this._references;
     }
   }
 
   _toString() {
     return `${this.gene.geneSymbol}\t ${this.associationStatus}\t${
       this.associationType
-    }\t${this.reference?.map((ref) => ref._toString()).join('|')}`;
+    }\t${this.references?.map((ref) => ref._toString()).join('|')}`;
   }
 }

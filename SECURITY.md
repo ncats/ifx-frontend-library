@@ -15,6 +15,7 @@ Your report will be received securely, kept confidential, and routed to the righ
 > **Note:** The HHS VDP also accepts reports at [hhs.responsibledisclosure.com](https://hhs.responsibledisclosure.com). For vulnerabilities in this repository or NIH systems hosted here, use the GitHub report link above so the responsible team is notified directly.
 
 Please include:
+
 - What the vulnerability is and its potential impact
 - Where it was found
 - Steps to reproduce (proof-of-concept scripts or screenshots are helpful)
@@ -23,7 +24,7 @@ Please include:
 
 ## Authorization
 
-*Issued under the [HHS VDP — Authorization](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#authorization).*
+_Issued under the [HHS VDP — Authorization](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#authorization)._
 
 Good faith research conducted under this policy is authorized. NIH and HHS will work with you to resolve issues quickly and will not pursue legal action related to your research.
 
@@ -31,7 +32,7 @@ Good faith research conducted under this policy is authorized. NIH and HHS will 
 
 ## Guidelines
 
-*Issued under the [HHS VDP — Guidelines](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#guidelines).*
+_Issued under the [HHS VDP — Guidelines](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#guidelines)._
 
 Authorized research means you:
 
@@ -47,7 +48,7 @@ If you discover a vulnerability or encounter any sensitive data (PII, financial,
 
 ## Scope
 
-*Issued under the [HHS VDP — Scope](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#scope).*
+_Issued under the [HHS VDP — Scope](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#scope)._
 
 `nih.gov` and all its subdomains are in scope. Vendor systems are out of scope — report those to the vendor directly.
 
@@ -57,9 +58,10 @@ Unsure if a system is in scope? Contact [support@responsibledisclosure.com](mail
 
 ## Rules of Engagement
 
-*Issued under the [HHS VDP — Rules of Engagement](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#rules-engagement).*
+_Issued under the [HHS VDP — Rules of Engagement](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#rules-engagement)._
 
 **Must not:**
+
 - Test systems outside the scope above
 - Disclose vulnerability information except as described in this policy
 - Conduct physical testing, social engineering, or phishing
@@ -71,9 +73,11 @@ Unsure if a system is in scope? Contact [support@responsibledisclosure.com](mail
 - Use an exploit to establish access, persistence, or pivot to other systems
 
 **May:**
+
 - View or store NIH nonpublic data only as necessary to document a potential vulnerability
 
 **Must:**
+
 - Cease testing and immediately report any vulnerability or nonpublic data exposure via the GitHub private vulnerability report
 - Purge any stored NIH nonpublic data upon reporting
 
@@ -81,7 +85,7 @@ Unsure if a system is in scope? Contact [support@responsibledisclosure.com](mail
 
 ## Disclosure
 
-*Issued under the [HHS VDP — Disclosure](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#disclosure).*
+_Issued under the [HHS VDP — Disclosure](https://www.hhs.gov/vulnerability-disclosure-policy/index.html#disclosure)._
 
 Do not share details about discovered vulnerabilities for **90 calendar days** after receiving our acknowledgment. If you believe earlier disclosure is warranted, coordinate with us in advance.
 

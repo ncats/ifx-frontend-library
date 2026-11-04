@@ -81,8 +81,8 @@ export const ARTICLELISTQUERY = gql`
   query ArticleListQuery(
     $diseaseWhere: DiseaseWhere
     $hasPublicationLimit: Int
-    $hasPublicationInOffset: Int
-    $hasPublicationInSort: [ArticleSort!]
+    $hasPublicationOffset: Int
+    $hasPublicationSort: [ArticleSort!]
     $articleWhere: ArticleWhere
     $hasPublicationConnectionWhere: DiseaseHasPublicationConnectionWhere
   ) {
@@ -92,8 +92,8 @@ export const ARTICLELISTQUERY = gql`
       countNhsArticles
       articles: hasPublication(
         limit: $hasPublicationLimit
-        offset: $hasPublicationInOffset
-        sort: $hasPublicationInSort
+        offset: $hasPublicationOffset
+        sort: $hasPublicationSort
         where: $articleWhere
       ) {
         pubmedId

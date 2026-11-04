@@ -12,8 +12,8 @@ export class Phenotype {
 export class PhenotypeAssociation {
   evidence!: { code: string; value: string };
   hpoTermFrequency!: string;
-  reference?: Reference[];
-  _reference?: string[];
+  references?: Reference[];
+  _references?: string[];
   phenotype!: Phenotype;
   frequencyRank = 0;
   _evidence?: string;
@@ -33,11 +33,11 @@ export class PhenotypeAssociation {
       );
     }
 
-    if (obj.properties && obj.properties._reference) {
-      this.reference = obj.properties._reference.map(
+    if (obj.properties && obj.properties._references) {
+      this.references = obj.properties._references.map(
         (ref) => new Reference({ code: ref }),
       );
-      delete this._reference;
+      delete this._references;
     }
 
     if (obj.properties && obj.properties._evidence) {
@@ -51,7 +51,7 @@ export class PhenotypeAssociation {
   }
 
   _toString() {
-    return `${this.phenotype.hpoTerm}\t ${this.hpoTermFrequency}\t${[Object.values(this.evidence)].join(':')}\t${this.reference
+    return `${this.phenotype.hpoTerm}\t ${this.hpoTermFrequency}\t${[Object.values(this.evidence)].join(':')}\t${this.references
       ?.map((ref) => ref._toString())
       .join('|')}`;
   }

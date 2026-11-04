@@ -7,14 +7,8 @@ import {
   inject,
   ViewEncapsulation,
 } from '@angular/core';
-import {
-  FormControl,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import {
-  MatAutocompleteModule
-} from '@angular/material/autocomplete';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
@@ -29,9 +23,7 @@ import { HighlightPipe } from 'highlight-pipe';
 import { LoadingSpinnerComponent } from 'loading-spinner';
 import { ResolverForm } from 'ifx';
 import { ResolverDataViewerComponent } from 'resolver-data-viewer';
-import {
-  ResolverStore,
-} from 'resolver-store';
+import { ResolverStore } from 'resolver-store';
 import { debounceTime } from 'rxjs';
 
 @Component({
@@ -107,7 +99,7 @@ export class ResolverMainComponent {
     });
   }
 
-   resolve() {
+  resolve() {
     const formData: ResolverForm = new ResolverForm({
       structure: <string>this.inputCtrl.value,
       format: 'json',
@@ -148,8 +140,10 @@ export class ResolverMainComponent {
   }
 
   removeChip(filter: Filter) {
-    const sel: Filter | undefined = this.subscriptionSelection.selected.find((fil)=> fil.term === filter.term)
-    if(sel){
+    const sel: Filter | undefined = this.subscriptionSelection.selected.find(
+      (fil) => fil.term === filter.term,
+    );
+    if (sel) {
       this.subscriptionSelection.deselect(sel);
     }
   }

@@ -59,7 +59,8 @@ export class PhenotypeListComponent {
     return ds;
   });
 
-  displayColumns = ['Phenotype', 'Frequency', 'Evidence', 'Reference'];
+  displayColumns = ['Phenotype', 'Evidence', 'References'];
+  //displayColumns = ['Phenotype', 'Frequency', 'Evidence', 'References'];
 
   sortData(sort: Sort) {
     if (this.phenotypes()) {
