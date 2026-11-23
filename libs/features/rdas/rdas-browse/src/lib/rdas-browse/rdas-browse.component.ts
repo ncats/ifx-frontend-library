@@ -233,7 +233,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       navigationExtras = {
         queryParams: {
           sort: this.router.routerState.snapshot.root.queryParamMap.get('sort'),
-          direction: this.sort === 'GardName' ? 'ASC' : 'DESC',
+          direction: this.sort === 'gardName' ? 'ASC' : 'DESC',
         },
       };
     }

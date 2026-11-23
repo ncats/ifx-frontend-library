@@ -76,6 +76,7 @@ export const DISEASEQUERY = gql`
             geneIdentifier
             geneSymbol
             geneSynonyms
+            geneTitle
             geneUrl
             omim
             reference
@@ -83,7 +84,7 @@ export const DISEASEQUERY = gql`
           properties {
             associationStatus
             associationType
-            reference
+            _references: references
           }
         }
       }
@@ -96,7 +97,7 @@ export const DISEASEQUERY = gql`
           properties {
             _evidence: evidence
             hpoTermFrequency
-            reference
+            _references: references
           }
         }
       }
@@ -176,14 +177,9 @@ export const DISEASELISTQUERY = gql`
     $limit: Int
     $offset: Int
     $sort: [DiseaseSort!]
-    $diseaseWhere: DiseaseWhere
+    $where: DiseaseWhere
   ) {
-    diseases(
-      limit: $limit
-      offset: $offset
-      sort: $sort
-      where: $diseaseWhere
-    ) {
+    diseases(limit: $limit, offset: $offset, sort: $sort, where: $where) {
       gardName
       gardId
       classificationLevel
@@ -196,7 +192,7 @@ export const DISEASELISTQUERY = gql`
       countGenes
       countPhenotypes
     }
-    total: diseasesConnection(where: $diseaseWhere) {
+    total: diseasesConnection(where: $where) {
       count: totalCount
     }
   }
@@ -219,26 +215,6 @@ export const DISEASETYPEAHEAD = gql`
     }
   }
 `;
-
-export class PhenotypeParameter {
-  some:
-    | {
-        hpoTerm: {
-          in: string[];
-        };
-      }
-    | undefined;
-}
-
-export class GeneParameter {
-  some:
-    | {
-        geneSymbol: {
-          in: string[];
-        };
-      }
-    | undefined;
-}
 
 export class DiseaseQueryFactory {
   query!: TypedDocumentNode<unknown, unknown>;

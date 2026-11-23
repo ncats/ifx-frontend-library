@@ -5,4 +5,3 @@ export interface ResolverOption {
   tags: string[];
   title: string;
 }
-

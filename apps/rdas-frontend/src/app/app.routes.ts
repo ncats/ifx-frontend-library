@@ -26,6 +26,9 @@ export const appRoutes: Route[] = [
       staticFilters: Resolvers.staticDiseaseFiltersResolver,
       dynamicFilters: Resolvers.dynamicDiseaseFiltersResolver,
       disease: Resolvers.diseaseResolver,
+      articles: Resolvers.articleListResolver,
+      trials: Resolvers.clinicalTrialListResolver,
+      projects: Resolvers.projectListResolver,
     },
     loadComponent: () =>
       import('rdas-disease-page').then((m) => m.RdasDiseasePageComponent),

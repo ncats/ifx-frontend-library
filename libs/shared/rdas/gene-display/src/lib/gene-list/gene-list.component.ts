@@ -53,7 +53,8 @@ export class GeneListComponent {
     return ds;
   });
 
-  displayColumns = ['Gene', 'Gene Name', 'Association Type', 'Reference'];
+  displayColumns = ['Gene', 'Gene Name'];
+  //displayColumns = ['Gene', 'Gene Name', 'Association Type', 'References'];
 
   sortData(sort: Sort) {
     if (this.genes()) {

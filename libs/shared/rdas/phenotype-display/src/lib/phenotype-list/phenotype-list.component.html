@@ -100,11 +100,11 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="Reference">
-        <th mat-header-cell *matHeaderCellDef>Reference</th>
+      <ng-container matColumnDef="References">
+        <th mat-header-cell *matHeaderCellDef>References</th>
         <td mat-cell *matCellDef="let phenotypeAssociation">
           @for (
-            ref of phenotypeAssociation.reference;
+            ref of phenotypeAssociation.references;
             track ref;
             let last = $last
           ) {

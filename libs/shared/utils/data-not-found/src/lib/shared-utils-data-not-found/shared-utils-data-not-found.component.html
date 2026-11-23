@@ -1,6 +1,5 @@
 @if (!subscribed) {
   <div class="row right-justified-row">
-    {{ subscription() | json }}
     <lib-subscribe-button
       [subscriptionObject]="subscription()"
       (isSubscribed)="setSub($event)"

@@ -23,7 +23,7 @@ import { IfxDatatableComponent } from 'ifx-datatable';
     MatIconModule,
     MatSlideToggleModule,
     MatMenuModule,
-    IfxDatatableComponent
+    IfxDatatableComponent,
   ],
   templateUrl: './resolver-data-viewer.component.html',
   styleUrl: './resolver-data-viewer.component.scss',
@@ -67,8 +67,8 @@ export class ResolverDataViewerComponent {
   params = input<Filter[]>([]);
 
   headers = computed(() => {
-    const params = this.params().map(filter=> <string>filter.value);
-   return  ['input', 'source', 'url'].concat(params)
+    const params = this.params().map((filter) => <string>filter.value);
+    return ['input', 'source', 'url'].concat(params);
   });
 
   fields = computed(() => {
@@ -121,13 +121,11 @@ export class ResolverDataViewerComponent {
   _toJSON(data: string): { [key: string]: string } {
     const split = data.split('\t');
     const retObj: { [key: string]: string } = {};
-    this.params()?.forEach(
-      (field: Filter, index: number) => {
-        const r = (retObj[field.value as keyof typeof retObj] =
-          split[index] || 'undefined');
-        return r;
-      },
-    );
+    this.params()?.forEach((field: Filter, index: number) => {
+      const r = (retObj[field.value as keyof typeof retObj] =
+        split[index] || 'undefined');
+      return r;
+    });
     return retObj;
   }
 

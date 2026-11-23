@@ -61,9 +61,7 @@ import { ClinicalTrialStore } from 'trial-store';
     ChartWrapperComponent,
   ],
 })
-export class DiseaseDisplayComponent
-  implements OnInit, AfterViewInit, OnChanges
-{
+export class DiseaseDisplayComponent implements OnInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
   @ViewChildren(RdasPanelTemplateComponent)
   templates!: QueryList<RdasPanelTemplateComponent>;
@@ -79,14 +77,16 @@ export class DiseaseDisplayComponent
 
   disease = input<Disease>();
 
-  articlesCount = this.articleStore.articleCounts;
+  articlesCount = this.articleStore.page;
+  articlesStore = this.articleStore;
+  articlesLoading = this.articleStore.isLoading;
   articlesList = this.articleStore.articles;
-  projectsCount = this.projectStore.projectCounts;
+  projectsCount = this.projectStore.page;
   projectsList = this.projectStore.projects;
-  clinicalTrialsCount = this.clinicalTrialStore.clinicalTrialCounts;
+  clinicalTrialsCount = this.clinicalTrialStore.page;
   clinicalTrialsList = this.clinicalTrialStore.clinicalTrials;
+  clinicalTrialsLoading = this.clinicalTrialStore.isLoading;
 
-  loaded = input<boolean | undefined>();
   filters = input<FilterCategory[]>();
   staticFilters = input<FilterCategory[]>();
   fragment = input<string>();
@@ -140,37 +140,8 @@ export class DiseaseDisplayComponent
       });
   }
 
-  ngOnChanges(change: { disease: SimpleChange }) {
-    if (change['disease'] && !change['disease'].firstChange) {
-      this.setPage();
-    }
-  }
-
-  ngAfterViewInit() {
-    this.setPage();
-  }
-
   fetchList(params: { [key: string]: unknown }, fragment: string): void {
     this.optionsChange.emit({ params, fragment });
-  }
-
-  setPage() {
-    const template: RdasPanelTemplateComponent[] = this.templates.filter(
-      (template: RdasPanelTemplateComponent) =>
-        template._id() === this.route?.snapshot?.fragment,
-    );
-    if (template && template.length) {
-      if (
-        this.route.snapshot &&
-        this.route.snapshot.queryParamMap.has('offset')
-      ) {
-        const paginator = template[0].paginator() as MatPaginator;
-        paginator.pageIndex =
-          Number(this.route.snapshot.queryParamMap.get('offset')) / 10;
-      } else {
-        template[0].paginator()!.firstPage();
-      }
-    }
   }
 
   setFilterMap(filtersL: FilterCategory[] | undefined) {

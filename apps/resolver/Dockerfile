@@ -24,8 +24,11 @@ RUN NODE_OPTIONS=--max_old_space_size=8192 nx run resolver:build:production --ba
 FROM registry.ncats.nih.gov:5000/labshare/docker-base-web
 
 # Install NCATS required packages
-# Acquire::Check-Valid-Until=false works around expired InRelease files on the base image's apt mirrors
-RUN apt-get update -o Acquire::Check-Valid-Until=false && apt-get install -y net-tools
+# The base image is Debian bullseye, which is EOL: it was removed from deb.debian.org/security.debian.org
+# and the security suite isn't mirrored on archive.debian.org either, so drop that repo and use the archive for the rest.
+# Acquire::Check-Valid-Until=false works around expired InRelease files on the archive mirror.
+RUN sed -i -e '/bullseye-security/d' -e 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list \
+    && apt-get update -o Acquire::Check-Valid-Until=false && apt-get install -y net-tools
 
 COPY --from=build /var/www/app/dist/apps/resolver/browser /var/www/app
 

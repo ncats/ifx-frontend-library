@@ -5,9 +5,9 @@ const config: CodegenConfig = {
   schema: 'http://localhost:4000/graphql',
   documents: 'libs/models/rdas-models/src/lib/*.ts',
   generates: {
-    'libs/models/rdas-models/src/lib/generated-types.ts': {
+    /*    'libs/models/rdas-models/src/lib/generated-types.ts': {
       plugins: ['typescript-operations'],
-    },
+    },*/
     'libs/models/rdas-models/src/lib/**/': {
       preset: 'near-operation-file',
       presetConfig: {

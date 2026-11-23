@@ -95,17 +95,18 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Articles {{ articlesCount().allArticlesCount }}</span
+            >Articles {{ articlesCount().filteredCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
       <lib-rdas-panel-template
         [_id]="'articles'"
-        [count]="articlesCount().currentArticlesCount"
+        [page]="articlesCount()"
+        [count]="articlesCount().filteredCount"
         [filters]="filterMap().get('articles')!"
         [message]="'No Articles Found'"
         [disease]="disease()"
-        [loaded]="loaded()"
+        [isLoading]="articlesLoading()"
         (listChange)="fetchList($event, 'articles')"
       >
         <div class="data-list">
@@ -122,14 +123,14 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >NIH-funded Projects
-            {{ projectsCount().currentProjectsCount }}</span
+            >NIH-funded Projects {{ projectsCount().filteredCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
       <lib-rdas-panel-template
         [_id]="'projects'"
-        [count]="projectsCount().currentProjectsCount"
+        [page]="projectsCount()"
+        [count]="projectsCount().filteredCount"
         [message]="'No NIH Funded Projects Available'"
         [disease]="disease()"
         (listChange)="fetchList($event, 'projects')"
@@ -148,17 +149,17 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Clinical Trials
-            {{ clinicalTrialsCount().currentClinicalTrialsCount }}</span
+            >Clinical Trials {{ clinicalTrialsCount().filteredCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <lib-rdas-panel-template
         [_id]="'trials'"
-        [count]="clinicalTrialsCount().currentClinicalTrialsCount"
+        [page]="clinicalTrialsCount()"
+        [count]="clinicalTrialsCount().filteredCount"
         [filters]="filterMap().get('trials')!"
-        [loaded]="loaded()"
+        [isLoading]="clinicalTrialsLoading()"
         [disease]="disease()"
         [message]="'No Clinical Trial Data Available'"
         (listChange)="fetchList($event, 'trials')"

@@ -1,7 +1,7 @@
 @if (filter()) {
   <mat-card class="filter-card" [appearance]="'outlined'">
     <mat-card-header>
-    <mat-card-title>{{ filter()?.label | titlecase }}</mat-card-title>
+      <mat-card-title>{{ filter()?.label | titlecase }}</mat-card-title>
     </mat-card-header>
     @if (showSearch()) {
       <mat-form-field class="table-search">

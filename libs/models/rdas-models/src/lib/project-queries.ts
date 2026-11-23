@@ -69,17 +69,6 @@ export const COREPROJECTLISTQUERY = gql`
         offset: $hasMentionInOffset
       ) {
         coreProjectNumber
-        _subProjectsCount: hasSubprojectConnection {
-          totalCount
-        }
-        totalCost
-        subProjects: hasSubproject(
-          sort: $hasSubprojectSort
-          limit: $hasSubprojectLimit
-        ) {
-          title
-          fundingYear
-        }
       }
     }
   }

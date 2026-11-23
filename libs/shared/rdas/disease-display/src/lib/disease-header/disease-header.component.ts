@@ -1,6 +1,7 @@
 import { ScrollDispatcher } from '@angular/cdk/overlay';
 import {
-  LowerCasePipe, NgClass,
+  LowerCasePipe,
+  NgClass,
   NgOptimizedImage,
   ViewportScroller,
 } from '@angular/common';

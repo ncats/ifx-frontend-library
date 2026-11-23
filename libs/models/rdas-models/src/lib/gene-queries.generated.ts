@@ -22,13 +22,13 @@ export const GeneFiltersDocument = gql`
   }
 `;
 
-  @Injectable({
-    providedIn: 'root',
-  })
-  export class GeneFiltersGQL extends Apollo.Query<
-    GeneFiltersQuery,
-    GeneFiltersQueryVariables
-  > {
-    document = GeneFiltersDocument;
-    override apollo = inject(Apollo.Apollo);
-  }
+@Injectable({
+  providedIn: 'root',
+})
+export class GeneFiltersGQL extends Apollo.Query<
+  GeneFiltersQuery,
+  GeneFiltersQueryVariables
+> {
+  document = GeneFiltersDocument;
+  override apollo = inject(Apollo.Apollo);
+}
